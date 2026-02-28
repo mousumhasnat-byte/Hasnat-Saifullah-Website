@@ -21,6 +21,42 @@
     * { font-family: 'Inter', system-ui, sans-serif; }
     html { scroll-behavior: smooth; }
 
+    /* Animated background shapes (finance / dashboard themed) */
+    .animated-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .bg-shape {
+      position: absolute;
+      background: rgba(59, 130, 246, 0.1);
+      border-radius: 50%;
+      filter: blur(40px);
+      animation: floatShape 15s infinite ease-in-out;
+    }
+    .bg-shape-1 { width: 300px; height: 300px; top: 10%; left: 5%; background: rgba(59,130,246,0.15); animation-delay: 0s; }
+    .bg-shape-2 { width: 400px; height: 400px; bottom: 10%; right: 5%; background: rgba(139,92,246,0.1); animation-delay: -5s; }
+    .bg-shape-3 { width: 200px; height: 200px; top: 40%; left: 40%; background: rgba(16,185,129,0.1); animation-delay: -2s; }
+    @keyframes floatShape {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(30px, -20px) scale(1.1); }
+    }
+    /* Mini chart icons floating */
+    .chart-icon {
+      position: absolute;
+      font-size: 2rem;
+      color: rgba(255,255,255,0.1);
+      animation: floatIcon 20s linear infinite;
+    }
+    @keyframes floatIcon {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.3; }
+      90% { opacity: 0.3; }
+      100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+    }
+
     /* Custom animations */
     @keyframes float {
       0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -33,14 +69,6 @@
       50% { box-shadow: 0 0 25px 8px rgba(37, 99, 235, 0.3); }
     }
     .glow-hover:hover { animation: pulse-glow 2s infinite; }
-
-    /* gradient border cards */
-    .gradient-border {
-      border: double 1px transparent;
-      background-image: linear-gradient(white, white), radial-gradient(circle at top left, #3b82f6, #8b5cf6);
-      background-origin: border-box;
-      background-clip: padding-box, border-box;
-    }
 
     /* shiny underline */
     .shiny-underline {
@@ -72,18 +100,38 @@
       opacity: 0;
       pointer-events: none;
     }
+    /* Interactive card clickable */
+    .clickable-card {
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .clickable-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 40px -12px rgba(0,0,0,0.3);
+    }
+
+    /* Ensure the hero section is the relative container for the canvas */
+section.relative {
+  position: relative;
+}
+
+
   </style>
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased">
 
-<!-- ===== PRELOADER ===== -->
-<div id="preloader" class="fixed inset-0 bg-slate-900 z-[100] flex items-center justify-center transition-opacity duration-700">
-  <div class="text-center">
-    <div class="w-20 h-20 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-    <p class="text-white text-sm tracking-widest">LOADING Hasnat's Website...</p>
-    <p class="text-white text-sm tracking-widest">Keep Patience for experiencing his awsome works...</p>
-  </div>
-  </div>
+<!-- ===== ANIMATED BACKGROUND (FINANCE CLIP ART) ===== -->
+<div class="animated-bg">
+  <div class="bg-shape bg-shape-1"></div>
+  <div class="bg-shape bg-shape-2"></div>
+  <div class="bg-shape bg-shape-3"></div>
+  <!-- floating chart icons -->
+  <i class="fas fa-chart-line chart-icon" style="top: 10%; left: 5%; animation-duration: 18s;"></i>
+  <i class="fas fa-chart-pie chart-icon" style="top: 70%; left: 80%; animation-duration: 22s;"></i>
+  <i class="fas fa-coins chart-icon" style="top: 30%; left: 20%; animation-duration: 25s;"></i>
+  <i class="fas fa-chart-bar chart-icon" style="top: 80%; left: 10%; animation-duration: 20s;"></i>
+  <i class="fas fa-calculator chart-icon" style="top: 20%; left: 90%; animation-duration: 30s;"></i>
+  <i class="fas fa-file-invoice-dollar chart-icon" style="top: 50%; left: 40%; animation-duration: 28s;"></i>
 </div>
 
 <!-- ===== NAVBAR ===== -->
@@ -121,7 +169,10 @@
 </nav>
 
 <!-- ===== HERO SECTION ===== -->
+<canvas id="data-mesh" class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 1;"></canvas>
+
 <section class="relative pt-36 pb-24 px-6 overflow-hidden bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-white">
+  <!-- Background shapes already in animated-bg, but keep original pulse blobs for depth -->
   <div class="absolute inset-0 opacity-20 pointer-events-none">
     <div class="absolute top-20 left-10 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"></div>
     <div class="absolute bottom-10 right-10 w-80 h-80 bg-indigo-400 rounded-full mix-blend-multiply filter blur-3xl animate-pulse delay-1000"></div>
@@ -133,34 +184,34 @@
     <div class="text-center md:text-left order-2 md:order-1" data-aos="fade-up" data-aos-duration="1000">
       <span class="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-sm rounded-full text-xs font-mono tracking-widest text-blue-300 border border-white/20 mb-6"><i class="fas fa-chart-line mr-2"></i>6.5+ YEARS · CREDIT · ANALYTICS</span>
       <h1 class="text-4xl md:text-6xl leading-tight mb-6">
-  Turning <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">Data</span> into<br class="hidden md:block">
-  <span class="relative">
-    <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">Senior Management-Level</span> Decisions
-    <span class="absolute -bottom-2 left-0 w-full h-2 bg-blue-500/30 blur-md"></span>
-  </span>
-</h1>
+        Turning <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">Data</span> into<br class="hidden md:block">
+        <span class="relative">
+          <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">Senior Management-Level</span> Decisions
+          <span class="absolute -bottom-2 left-0 w-full h-2 bg-blue-500/30 blur-md"></span>
+        </span>
+      </h1>
 
       <p class="text-lg md:text-xl text-slate-300 mb-8 max-w-xl mx-auto md:mx-0 flex flex-wrap gap-2 justify-center md:justify-start">
-  <span class="bg-white/5 px-3 py-1 rounded-full text-sm"><i class="fas fa-shield-alt text-blue-400 mr-1"></i>Compliance</span>
-  <span class="bg-white/5 px-3 py-1 rounded-full text-sm"><i class="fas fa-building-columns text-blue-400 mr-1"></i>Credit Admin</span>
-  <span class="bg-white/5 px-3 py-1 rounded-full text-sm"><i class="fas fa-chart-pie text-blue-400 mr-1"></i>Power BI</span>
-  <span class="bg-white/5 px-3 py-1 rounded-full text-sm"><i class="fas fa-magnifying-glass text-blue-400 mr-1"></i>Internal Control</span>
-  <span class="bg-white/5 px-3 py-1 rounded-full text-sm"><i class="fas fa-chart-line text-blue-400 mr-1"></i>Data Analysis</span>
-</p>
+        <span class="bg-white/5 px-3 py-1 rounded-full text-sm"><i class="fas fa-shield-alt text-blue-400 mr-1"></i>Compliance</span>
+        <span class="bg-white/5 px-3 py-1 rounded-full text-sm"><i class="fas fa-building-columns text-blue-400 mr-1"></i>Credit Admin</span>
+        <span class="bg-white/5 px-3 py-1 rounded-full text-sm"><i class="fas fa-chart-pie text-blue-400 mr-1"></i>Power BI</span>
+        <span class="bg-white/5 px-3 py-1 rounded-full text-sm"><i class="fas fa-magnifying-glass text-blue-400 mr-1"></i>Internal Control</span>
+        <span class="bg-white/5 px-3 py-1 rounded-full text-sm"><i class="fas fa-chart-line text-blue-400 mr-1"></i>Data Analysis</span>
+      </p>
 
-     <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-  <a href="#contact" class="group px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full font-semibold shadow-xl hover:shadow-2xl transition-all flex items-center justify-center gap-2">
-    <i class="fas fa-comment-dots"></i>
-    <span>Let’s Talk</span>
-    <i class="fas fa-arrow-right group-hover:translate-x-1 transition"></i>
-  </a>
-  <a href="#achievements" class="px-8 py-3 bg-white/10 backdrop-blur-sm border border-white/30 rounded-full font-semibold hover:bg-white/20 transition flex items-center justify-center gap-2">
-    <i class="fas fa-trophy"></i> Achievements
-  </a>
-  <a href="#projects" class="px-8 py-3 bg-white/5 backdrop-blur-sm border border-white/20 rounded-full font-semibold hover:bg-white/15 transition flex items-center justify-center gap-2">
-    <i class="fas fa-code"></i> Projects
-  </a>
-</div>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+        <a href="#contact" class="group px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full font-semibold shadow-xl hover:shadow-2xl transition-all flex items-center justify-center gap-2">
+          <i class="fas fa-comment-dots"></i>
+          <span>Let’s Talk</span>
+          <i class="fas fa-arrow-right group-hover:translate-x-1 transition"></i>
+        </a>
+        <a href="#achievements" class="px-8 py-3 bg-white/10 backdrop-blur-sm border border-white/30 rounded-full font-semibold hover:bg-white/20 transition flex items-center justify-center gap-2">
+          <i class="fas fa-trophy"></i> Achievements
+        </a>
+        <a href="#projects" class="px-8 py-3 bg-white/5 backdrop-blur-sm border border-white/20 rounded-full font-semibold hover:bg-white/15 transition flex items-center justify-center gap-2">
+          <i class="fas fa-code"></i> Projects
+        </a>
+      </div>
     </div>
 
     <div class="flex justify-center items-center order-1 md:order-2 relative" data-aos="fade-left" data-aos-duration="1000">
@@ -176,7 +227,7 @@
 
         <!-- Profile image with grayscale hover -->
         <div class="absolute inset-8 rounded-full overflow-hidden shadow-2xl ring-4 ring-white/30">
-          <img src="assets/images/profile.jpg" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-700" alt="Hasnat Saifullah" onerror="this.src='https://via.placeholder.com/400?text=Hasnat'"/>
+          <img src="assets/images/profile.jpg" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-700" alt="Hasnat Saifullah" loading="lazy" onerror="this.src='https://via.placeholder.com/400?text=Hasnat'"/>
         </div>
 
         <!-- Floating badges -->
@@ -195,7 +246,6 @@
 <!-- ===== ABOUT + COUNTERS ===== -->
 <section id="about" class="py-28 px-6 bg-white relative">
   <div class="max-w-7xl mx-auto">
-    <!-- Heading with icon -->
     <div class="flex items-center gap-3 mb-12" data-aos="fade-right">
       <i class="fas fa-user text-4xl text-blue-600"></i>
       <h2 class="text-4xl font-bold shiny-underline">Career Overview</h2>
@@ -230,12 +280,12 @@
           <i class="fas fa-table text-purple-200 text-2xl mt-2"></i>
         </div>
         <div class="p-6 bg-slate-50 rounded-2xl shadow-sm border border-slate-200 text-center hover:scale-105 transition-transform">
-  <h3 class="text-4xl font-black text-red-600 inline-flex items-baseline">
-    <span class="counter" data-target="95">0</span>%
-  </h3>
-  <p class="font-medium text-slate-600">Accuracy <br>Compliance</p>
-  <i class="fas fa-bullseye text-red-200 text-2xl mt-2"></i>
-</div>
+          <h3 class="text-4xl font-black text-red-600 inline-flex items-baseline">
+            <span class="counter" data-target="95">0</span>%
+          </h3>
+          <p class="font-medium text-slate-600">Accuracy <br>Compliance</p>
+          <i class="fas fa-bullseye text-red-200 text-2xl mt-2"></i>
+        </div>
       </div>
     </div>
   </div>
@@ -250,7 +300,41 @@
     </div>
 
     <div class="grid md:grid-cols-2 gap-8 mb-12">
-      <div class="group p-7 bg-white rounded-2xl shadow-md hover:shadow-xl transition-all flex flex-col sm:flex-row gap-6 items-center sm:items-start border border-slate-100" data-aos="flip-up">
+      <!-- Achievement cards now clickable (link to certificate details) --> 
+    <a href="achievements.html#excel-power-tools" class="group p-7 bg-white rounded-2xl shadow-md hover:shadow-xl transition-all flex flex-col sm:flex-row gap-6 items-center sm:items-start border border-slate-100" data-aos="flip-up">
+        <div class="w-20 h-20 bg-gradient-to-br from-sky-100 to-blue-100 rounded-2xl flex items-center justify-center group-hover:scale-110 transition shrink-0">
+          <i class="fas fa-file-excel text-4xl text-sky-700"></i>
+        </div>
+    <div>
+      <h3 class="font-bold text-xl">Excel Power Tools for Data Analysis</h3>
+      <p class="text-slate-500">Macquarie University | Coursera</p>
+      <p class="text-sm text-blue-600 mt-2 flex items-center gap-1">
+        <i class="far fa-calendar"></i> February 2026</p>
+    <p class="text-slate-600 text-xs mt-3 leading-relaxed hidden sm:block">
+  Mastered Power Query for automated ETL, Power Pivot for advanced data modeling, and DAX for complex business logic.
+</p>
+        <span class="text-xs text-blue-500 group-hover:underline">View Certification Details →</span>
+    </div>
+ </a>
+
+ <a href="achievements.html#power-bi-masterclass" class="group p-7 bg-white rounded-2xl shadow-md hover:shadow-xl transition-all flex flex-col sm:flex-row gap-6 items-center sm:items-start border border-slate-100" data-aos="flip-up" data-aos-delay="300">
+  <div class="w-20 h-20 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-2xl flex items-center justify-center group-hover:scale-110 transition shrink-0">
+    <i class="fas fa-chart-bar text-4xl text-purple-700"></i>
+  </div>
+  <div>
+    <h3 class="font-bold text-xl">Power BI Masterclass & Business Analytics</h3>
+    <p class="text-slate-500">Ostad & Unbolt Academy</p>
+    <p class="text-sm text-blue-600 mt-2 flex items-center gap-1">
+      <i class="far fa-calendar"></i> November 2025
+    </p>
+    <p class="text-slate-600 text-xs mt-3 leading-relaxed hidden sm:block">
+      Specialized in DAX engineering, dynamic dashboard architecture, and KPI-aligned reporting workflows.
+    </p>
+    <span class="inline-block mt-3 text-xs text-blue-500 group-hover:underline">View Certification Details →</span>
+  </div>
+</a>
+  
+      <a href="achievements.html#jaibb-1st" class="group p-7 bg-white rounded-2xl shadow-md hover:shadow-xl transition-all flex flex-col sm:flex-row gap-6 items-center sm:items-start border border-slate-100" data-aos="flip-up">
         <div class="w-20 h-20 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center group-hover:scale-110 transition">
           <i class="fas fa-certificate text-4xl text-blue-700"></i>
         </div>
@@ -258,9 +342,13 @@
           <h3 class="font-bold text-xl">Banking Professional (JAIBB)</h3>
           <p class="text-slate-500">Institute of Bankers, Bangladesh</p>
           <p class="text-sm text-blue-600 mt-2 flex items-center gap-1"><i class="far fa-calendar"></i> October 2025</p>
+        <p class="text-slate-600 text-xs mt-3 leading-relaxed hidden sm:block">
+  Certified in core banking pillars including Monetary Systems, Governance, Financial Laws, and Organizational Management.
+</p>
+          <span class="inline-block mt-2 text-xs text-blue-500 group-hover:underline">View Certification Details →</span>
         </div>
-      </div>
-      <div class="group p-7 bg-white rounded-2xl shadow-md hover:shadow-xl transition-all flex flex-col sm:flex-row gap-6 items-center sm:items-start border border-slate-100" data-aos="flip-up" data-aos-delay="100">
+      </a>
+      <a href="achievements.html#bibm" class="group p-7 bg-white rounded-2xl shadow-md hover:shadow-xl transition-all flex flex-col sm:flex-row gap-6 items-center sm:items-start border border-slate-100" data-aos="flip-up" data-aos-delay="100">
         <div class="w-20 h-20 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center group-hover:scale-110 transition">
           <i class="fas fa-chart-line text-4xl text-indigo-700"></i>
         </div>
@@ -268,8 +356,12 @@
           <h3 class="font-bold text-xl">Project Appraisal & Credit Management</h3>
           <p class="text-slate-500">BIBM</p>
           <p class="text-sm text-blue-600 mt-2 flex items-center gap-1"><i class="far fa-calendar"></i> July 2025</p>
+        <p class="text-slate-600 text-xs mt-3 leading-relaxed hidden sm:block">
+  Specialized in risk assessment, credit scoring models, and financial feasibility analysis for large-scale investment projects.
+</p>
+          <span class="inline-block mt-2 text-xs text-blue-500 group-hover:underline">View Certification Details →</span>
         </div>
-      </div>
+      </a>
     </div>
 
     <div class="text-center" data-aos="fade-up">
@@ -293,11 +385,11 @@
             <h3 class="text-xl font-bold">Senior Officer – Internal Control & Compliance</h3>
             <p class="text-blue-700 font-semibold">Bay Leasing & Investment Ltd.</p>
           </div>
-          <img src="assets/images/blil%20logo.png" class="w-12 h-12 object-contain opacity-70 group-hover:opacity-100" onerror="this.src='https://via.placeholder.com/48?text=BLIL'">
+          <img src="assets/images/blil%20logo.png" class="w-12 h-12 object-contain opacity-70 group-hover:opacity-100" loading="lazy" onerror="this.src='https://via.placeholder.com/48?text=BLIL'">
         </div>
         <ul class="list-disc ml-5 mt-4 text-slate-600 space-y-1 text-sm">
           <li>Internal Audits & Compliance Frameworks</li>
-          <li>Bangladesh Bank reporting such as "ISS reports", "Monthly Disbursement" and Inspection and Compliance releted reply</li>
+          <li>Bangladesh Bank reporting such as "ISS reports", "Monthly Disbursement" and Inspection and Compliance related reply</li>
           <li>Critically evaluate the Large loan inspections, CIB Status, CRG Scores</li>
         </ul>
         <i class="fas fa-building-columns absolute bottom-3 right-3 text-5xl text-blue-100 -z-10 pointer-events-none"></i>
@@ -309,7 +401,7 @@
             <h3 class="text-xl font-bold">Officer – Branch Operations</h3>
             <p class="text-blue-700 font-semibold">Bay Leasing & Investment Ltd.</p>
           </div>
-          <img src="assets/images/blil%20logo.png" class="w-12 h-12 object-contain opacity-70 group-hover:opacity-100" onerror="this.src='https://via.placeholder.com/48?text=BLIL'">
+          <img src="assets/images/blil%20logo.png" class="w-12 h-12 object-contain opacity-70 group-hover:opacity-100" loading="lazy" onerror="this.src='https://via.placeholder.com/48?text=BLIL'">
         </div>
         <ul class="list-disc ml-5 mt-4 text-slate-600 space-y-1 text-sm">
           <li>Managed loan & deposit portfolio of Bangla Motor Branch</li>
@@ -325,7 +417,7 @@
             <h3 class="text-xl font-bold">Junior Executive – Digital Marketing</h3>
             <p class="text-blue-700 font-semibold">Electra International Ltd.</p>
           </div>
-          <img src="assets/images/electralogo.png" class="w-14 h-auto object-contain opacity-70 group-hover:opacity-100" onerror="this.src='https://via.placeholder.com/56?text=Electra'">
+          <img src="assets/images/electralogo.png" class="w-14 h-auto object-contain opacity-70 group-hover:opacity-100" loading="lazy" onerror="this.src='https://via.placeholder.com/56?text=Electra'">
         </div>
         <ul class="list-disc ml-5 mt-4 text-slate-600 space-y-1 text-sm">
           <li>Daraz marketplace: Initiated BDT 7.00+ lakh sales</li>
@@ -347,19 +439,19 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
       <div class="flex bg-white p-5 rounded-xl shadow-sm gap-4 items-center hover:shadow-md" data-aos="fade-right">
-        <img src="assets/images/ewulogo.png" class="w-14 h-14 object-contain" onerror="this.src='https://via.placeholder.com/56?text=EWU'">
+        <img src="assets/images/ewulogo.png" class="w-14 h-14 object-contain" loading="lazy" onerror="this.src='https://via.placeholder.com/56?text=EWU'">
         <div><h3 class="font-bold">MBA, Operation Management</h3><p class="text-sm text-slate-500">East West University · CGPA 3.33</p></div>
       </div>
       <div class="flex bg-white p-5 rounded-xl shadow-sm gap-4 items-center hover:shadow-md" data-aos="fade-right" data-aos-delay="50">
-        <img src="assets/images/ewulogo.png" class="w-14 h-14 object-contain" onerror="this.src='https://via.placeholder.com/56?text=EWU'">
+        <img src="assets/images/ewulogo.png" class="w-14 h-14 object-contain" loading="lazy" onerror="this.src='https://via.placeholder.com/56?text=EWU'">
         <div><h3 class="font-bold">BBA, Marketing</h3><p class="text-sm text-slate-500">East West University · CGPA 2.96</p></div>
       </div>
       <div class="flex bg-white p-5 rounded-xl shadow-sm gap-4 items-center hover:shadow-md" data-aos="fade-right" data-aos-delay="100">
-        <img src="assets/images/ipsc-logo.png" class="w-14 h-14 object-contain" onerror="this.src='https://via.placeholder.com/56?text=IPSC'">
+        <img src="assets/images/ipsc-logo.png" class="w-14 h-14 object-contain" loading="lazy" onerror="this.src='https://via.placeholder.com/56?text=IPSC'">
         <div><h3 class="font-bold">HSC (Business Studies)</h3><p class="text-sm text-slate-500">IPSC, Cumilla · GPA 5.00</p></div>
       </div>
       <div class="flex bg-white p-5 rounded-xl shadow-sm gap-4 items-center hover:shadow-md" data-aos="fade-right" data-aos-delay="150">
-        <img src="assets/images/ipsc-logo.png" class="w-14 h-14 object-contain" onerror="this.src='https://via.placeholder.com/56?text=IPSC'">
+        <img src="assets/images/ipsc-logo.png" class="w-14 h-14 object-contain" loading="lazy" onerror="this.src='https://via.placeholder.com/56?text=IPSC'">
         <div><h3 class="font-bold">SSC (Business Studies)</h3><p class="text-sm text-slate-500">IPSC, Cumilla · GPA 4.88</p></div>
       </div>
     </div>
@@ -373,22 +465,37 @@
       <i class="fas fa-code text-4xl text-blue-600"></i>
       <h2 class="text-4xl font-bold shiny-underline">Featured Projects</h2>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div class="group bg-gradient-to-br from-slate-50 to-white p-8 rounded-3xl shadow-md hover:shadow-2xl transition-all border border-slate-200 hover:-translate-y-2" data-aos="flip-left">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <!-- Clickable project cards -->
+       <a href="projects.html#bike-mileage" class="group bg-gradient-to-br from-slate-50 to-white p-8 rounded-3xl shadow-md hover:shadow-2xl transition-all border border-slate-200 hover:-translate-y-2" data-aos="flip-left" data-aos-delay="100">
+        <i class="fas fa-motorcycle text-4xl text-emerald-600 mb-5 group-hover:scale-110 transition"></i>
+        <h3 class="text-2xl font-bold mb-2">Bike Mileage Tracking</h3>
+        <p class="text-slate-600">Live dashboard for real-time automotive mileage tracking and analytics – monitor fuel efficiency, trip logs, and parts performance trends.</p>
+        <span class="inline-block mt-4 text-emerald-600 text-sm font-semibold group-hover:underline">View details →</span>
+      </a>
+
+      <a href="projects.html#portfolio-monitoring" class="group bg-gradient-to-br from-slate-50 to-white p-8 rounded-3xl shadow-md hover:shadow-2xl transition-all border border-slate-200 hover:-translate-y-2" data-aos="flip-left">
         <i class="fas fa-chart-pie text-4xl text-blue-600 mb-5 group-hover:scale-110 transition"></i>
         <h3 class="text-2xl font-bold mb-2">Financial Analytics</h3>
         <p class="text-slate-600">Power BI dashboards for portfolio monitoring & risk trigger.</p>
-      </div>
-      <div class="group bg-gradient-to-br from-slate-50 to-white p-8 rounded-3xl shadow-md hover:shadow-2xl transition-all border border-slate-200 hover:-translate-y-2" data-aos="flip-left" data-aos-delay="100">
-  <i class="fas fa-motorcycle text-4xl text-emerald-600 mb-5 group-hover:scale-110 transition"></i>
-  <h3 class="text-2xl font-bold mb-2">Bike Mileage Tracking</h3>
-  <p class="text-slate-600">Live dashboard for real-time automotive mileage tracking and analytics – monitor fuel efficiency, trip logs, and parts performance trends.</p>
-</div>
-      <div class="group bg-gradient-to-br from-slate-50 to-white p-8 rounded-3xl shadow-md hover:shadow-2xl transition-all border border-slate-200 hover:-translate-y-2" data-aos="flip-left" data-aos-delay="200">
+        <span class="inline-block mt-4 text-blue-600 text-sm font-semibold group-hover:underline">View details →</span>
+      </a>
+      
+      <a href="projects.html#portfolio-monitoring" class="group bg-gradient-to-br from-slate-50 to-white p-8 rounded-3xl shadow-md hover:shadow-2xl transition-all border border-slate-200 hover:-translate-y-2" data-aos="flip-left" data-aos-delay="200">
         <i class="fas fa-shield-halved text-4xl text-red-600 mb-5 group-hover:scale-110 transition"></i>
         <h3 class="text-2xl font-bold mb-2">Credit Risk</h3>
         <p class="text-slate-600">CRG frameworks and compliance audit workflows.</p>
-      </div>
+        <span class="inline-block mt-4 text-red-600 text-sm font-semibold group-hover:underline">View details →</span>
+      </a>
+      <!-- Corporate Branding & Creative Design -->
+<a href="projects.html#creative-design" class="group bg-gradient-to-br from-slate-50 to-white p-8 rounded-3xl shadow-md hover:shadow-2xl transition-all border border-slate-200 hover:-translate-y-2" data-aos="flip-left" data-aos-delay="200">
+  <i class="fas fa-paint-brush text-4xl text-indigo-600 mb-5 group-hover:scale-110 transition"></i>
+  <h3 class="text-2xl font-bold mb-2">Corporate Branding</h3>
+  <p class="text-slate-600">High‑impact visual assets for Bay Leasing & Investment Ltd. – banners, lift lets, and brand identity materials.</p>
+  <span class="inline-block mt-4 text-indigo-600 text-sm font-semibold group-hover:underline">View details →</span>
+</a>
+
+                 
     </div>
     <div class="text-center mt-12" data-aos="fade-up">
       <a href="projects.html" class="inline-flex gap-2 items-center px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-semibold shadow-lg hover:shadow-2xl transition-all"><i class="fas fa-diagram-project"></i> View All Projects</a>
@@ -404,12 +511,20 @@
       <h2 class="text-4xl font-bold shiny-underline">Core Competencies</h2>
     </div>
 
-    <!-- Main skills grid -->
+    <!-- Main skills grid with tooltips -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-5 mb-16">
-      <div class="bg-white p-6 rounded-2xl shadow-sm flex flex-col items-center gap-2 border border-slate-200 hover:shadow-xl hover:scale-105 transition" data-aos="zoom-in"><i class="fas fa-chart-simple text-3xl text-blue-600"></i><span class="font-semibold">Data Visualization</span></div>
-      <div class="bg-white p-6 rounded-2xl shadow-sm flex flex-col items-center gap-2 border border-slate-200 hover:shadow-xl hover:scale-105 transition" data-aos="zoom-in" data-aos-delay="50"><i class="fas fa-file-invoice text-3xl text-indigo-600"></i><span class="font-semibold">Credit Analysis</span></div>
-      <div class="bg-white p-6 rounded-2xl shadow-sm flex flex-col items-center gap-2 border border-slate-200 hover:shadow-xl hover:scale-105 transition" data-aos="zoom-in" data-aos-delay="100"><i class="fas fa-camera-retro text-3xl text-purple-600"></i><span class="font-semibold">Video/Photo Editing</span></div>
-      <div class="bg-white p-6 rounded-2xl shadow-sm flex flex-col items-center gap-2 border border-slate-200 hover:shadow-xl hover:scale-105 transition" data-aos="zoom-in" data-aos-delay="150"><i class="fas fa-shield text-3xl text-red-600"></i><span class="font-semibold">Internal Audit</span></div>
+      <div class="bg-white p-6 rounded-2xl shadow-sm flex flex-col items-center gap-2 border border-slate-200 hover:shadow-xl hover:scale-105 transition relative group" data-aos="zoom-in" title="Interactive dashboards with Power BI, Looker Studio, and Excel">
+        <i class="fas fa-chart-simple text-3xl text-blue-600"></i><span class="font-semibold">Data Visualization</span>
+      </div>
+      <div class="bg-white p-6 rounded-2xl shadow-sm flex flex-col items-center gap-2 border border-slate-200 hover:shadow-xl hover:scale-105 transition relative group" data-aos="zoom-in" data-aos-delay="50" title="Financial statement analysis, credit appraisal, risk scoring">
+        <i class="fas fa-file-invoice text-3xl text-indigo-600"></i><span class="font-semibold">Credit Analysis</span>
+      </div>
+      <div class="bg-white p-6 rounded-2xl shadow-sm flex flex-col items-center gap-2 border border-slate-200 hover:shadow-xl hover:scale-105 transition relative group" data-aos="zoom-in" data-aos-delay="100" title="Video & photo editing for corporate branding and digital content">
+        <i class="fas fa-camera-retro text-3xl text-purple-600"></i><span class="font-semibold">Video/Photo Editing</span>
+      </div>
+      <div class="bg-white p-6 rounded-2xl shadow-sm flex flex-col items-center gap-2 border border-slate-200 hover:shadow-xl hover:scale-105 transition relative group" data-aos="zoom-in" data-aos-delay="150" title="Internal audit frameworks, compliance checklists, risk mitigation">
+        <i class="fas fa-shield text-3xl text-red-600"></i><span class="font-semibold">Internal Audit</span>
+      </div>
     </div>
 
     <!-- Digital Presence / YouTube Channels -->
@@ -420,9 +535,9 @@
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Mousum Hasnat Channel -->
-        <div class="bg-white p-5 rounded-2xl shadow-md flex items-center justify-between flex-wrap gap-4">
+        <div class="bg-white p-5 rounded-2xl shadow-md flex items-center justify-between flex-wrap gap-4 hover:shadow-xl transition">
           <div class="flex items-center gap-3">
-            <img src="assets/images/mhmotovlogs.png" class="w-12 h-12 rounded-full object-cover" onerror="this.src='https://via.placeholder.com/48'">
+            <img src="assets/images/mhmotovlogs.png" class="w-12 h-12 rounded-full object-cover" loading="lazy" onerror="this.src='https://via.placeholder.com/48'">
             <div>
               <p class="font-bold">Mousum Hasnat Moto Vlogs</p>
               <p class="text-xs text-slate-500">Vlogs & Tech Gadgets</p>
@@ -431,9 +546,9 @@
           <a href="https://www.youtube.com/@MousumHasnat" target="_blank" class="bg-red-600 text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-red-700 transition shadow-md"><i class="fab fa-youtube mr-1"></i> Subscribe</a>
         </div>
         <!-- One Minute Deen MH Channel -->
-        <div class="bg-white p-5 rounded-2xl shadow-md flex items-center justify-between flex-wrap gap-4">
+        <div class="bg-white p-5 rounded-2xl shadow-md flex items-center justify-between flex-wrap gap-4 hover:shadow-xl transition">
           <div class="flex items-center gap-3">
-            <img src="assets/images/one%20minute%20deen%20logo.jpg" class="w-12 h-12 rounded-full object-cover" onerror="this.src='https://via.placeholder.com/48'">
+            <img src="assets/images/one%20minute%20deen%20logo.jpg" class="w-12 h-12 rounded-full object-cover" loading="lazy" onerror="this.src='https://via.placeholder.com/48'">
             <div>
               <p class="font-bold">One Minute Deen MH</p>
               <p class="text-xs text-slate-500">Islamic shorts</p>
@@ -446,9 +561,9 @@
 
     <!-- Additional tool stack -->
     <div class="flex flex-wrap justify-center gap-4 text-slate-500 text-sm mt-12">
-      <span class="px-4 py-2 bg-white rounded-full shadow-sm"><i class="fas fa-chart-pie text-yellow-600"></i> Power BI</span>
-      <span class="px-4 py-2 bg-white rounded-full shadow-sm"><i class="fas fa-chart-line text-blue-600"></i> Looker Studio</span>
-      <span class="px-4 py-2 bg-white rounded-full shadow-sm"><i class="fas fa-file-excel text-green-700"></i> Advanced Excel</span>
+      <span class="px-4 py-2 bg-white rounded-full shadow-sm" title="Business intelligence and dashboarding"><i class="fas fa-chart-pie text-yellow-600"></i> Power BI</span>
+      <span class="px-4 py-2 bg-white rounded-full shadow-sm" title="Google's data visualization platform"><i class="fas fa-chart-line text-blue-600"></i> Looker Studio</span>
+      <span class="px-4 py-2 bg-white rounded-full shadow-sm" title="Advanced Excel, Power Query, PivotTables"><i class="fas fa-file-excel text-green-700"></i> Advanced Excel</span>
     </div>
   </div>
 </section>
@@ -501,18 +616,10 @@
 <!-- SCRIPTS -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
-  // Preloader fade
-  window.addEventListener('load', () => {
-    document.getElementById('preloader').style.opacity = 0;
-    setTimeout(() => {
-      document.getElementById('preloader').style.display = 'none';
-    }, 700);
-  });
-
-  // AOS init
+  // Initialize AOS
   AOS.init({ duration: 800, once: true, offset: 80 });
 
-  // Mobile menu
+  // Mobile menu toggle
   const menuBtn = document.getElementById('menu-btn');
   const mobileMenu = document.getElementById('mobile-menu');
   const mobileLinks = document.querySelectorAll('.mobile-link');
@@ -520,44 +627,156 @@
   menuBtn.addEventListener('click', () => {
     mobileMenu.classList.toggle('hidden');
   });
-  mobileLinks.forEach(l => l.addEventListener('click', () => mobileMenu.classList.add('hidden')));
 
-  // ===== COUNTER ANIMATION (runs every time About appears) =====
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.add('hidden');
+    });
+  });
+
+  // Counter animation (runs every time About appears)
   const counters = document.querySelectorAll('.counter');
   const runCounters = () => {
     counters.forEach(counter => {
       const target = +counter.dataset.target;
       let count = 0;
-      const inc = target / 80;  // smooth increment per frame
+      const inc = target / 80;
       const update = () => {
         if (count < target) {
           count += inc;
-          // Keep decimal only if target has a decimal
           counter.innerText = target % 1 === 0 ? Math.floor(count) : count.toFixed(1);
           requestAnimationFrame(update);
         } else {
-          counter.innerText = target;  // final exact value
+          counter.innerText = target;
         }
       };
       update();
     });
   };
 
-  // Trigger every time #about enters viewport (threshold 50%)
   const observer = new IntersectionObserver(entries => {
     if (entries[0].isIntersecting) runCounters();
   }, { threshold: 0.5 });
-
   observer.observe(document.getElementById('about'));
 
-  // Back to top
+  // Back to top button
   const topBtn = document.getElementById('backToTop');
   window.onscroll = () => {
     if (document.documentElement.scrollTop > 400) {
-      topBtn.classList.remove('hidden'); topBtn.classList.add('flex');
-    } else { topBtn.classList.add('hidden'); topBtn.classList.remove('flex'); }
+      topBtn.classList.remove('hidden');
+      topBtn.classList.add('flex');
+    } else {
+      topBtn.classList.add('hidden');
+      topBtn.classList.remove('flex');
+    }
   };
   topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+ 
+  (function() {
+    const canvas = document.getElementById('data-mesh');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+    const PARTICLE_COUNT = 80;
+    const MAX_DISTANCE = 200;
+    const EDGE_OPACITY = 0.15;
+
+    function initParticles() {
+      particles = [];
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        particles.push({
+          x: Math.random(),
+          y: Math.random(),
+          vx: (Math.random() - 0.5) * 0.002,
+          vy: (Math.random() - 0.5) * 0.002,
+          size: Math.random() * 2 + 1,
+        });
+      }
+    }
+
+    function resizeCanvas() {
+      width = window.innerWidth;
+      height = document.querySelector('.relative.pt-36')?.offsetHeight || window.innerHeight;
+      // For projects/achievements pages, adjust selector accordingly
+      // Fallback to window height
+      canvas.width = width;
+      canvas.height = window.innerHeight;
+    }
+
+    function updateParticles() {
+      for (let p of particles) {
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // wrap around
+        if (p.x < 0) p.x = 1;
+        if (p.x > 1) p.x = 0;
+        if (p.y < 0) p.y = 1;
+        if (p.y > 1) p.y = 0;
+      }
+    }
+
+    function draw() {
+      if (!ctx) return;
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw edges first
+      ctx.strokeStyle = 'rgba(59, 130, 246, 0.15)'; // blue-500 with low opacity
+      ctx.lineWidth = 1.2;
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = (particles[i].x - particles[j].x) * width;
+          const dy = (particles[i].y - particles[j].y) * height;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < MAX_DISTANCE) {
+            const opacity = (1 - dist / MAX_DISTANCE) * EDGE_OPACITY;
+            ctx.strokeStyle = `rgba(59, 130, 246, ${opacity})`;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x * width, particles[i].y * height);
+            ctx.lineTo(particles[j].x * width, particles[j].y * height);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Draw nodes
+      for (let p of particles) {
+        ctx.beginPath();
+        ctx.arc(p.x * width, p.y * height, p.size * 1.2, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(96, 165, 250, 0.9)'; // blue-400
+        ctx.shadowColor = 'rgba(59,130,246,0.5)';
+        ctx.shadowBlur = 8;
+        ctx.fill();
+        // inner highlight
+        ctx.shadowBlur = 0;
+        ctx.beginPath();
+        ctx.arc(p.x * width, p.y * height, p.size * 0.6, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,0.5)';
+        ctx.fill();
+      }
+    }
+
+    function animate() {
+      updateParticles();
+      draw();
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+    });
+
+    // Wait for DOM to be ready
+    document.addEventListener('DOMContentLoaded', () => {
+      initParticles();
+      resizeCanvas();
+      animate();
+    });
+  })();
+</script>
 </script>
 </body>
 </html>
