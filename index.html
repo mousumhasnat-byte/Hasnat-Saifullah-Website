@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hasnat Saifullah · Compliance & Credit Analytics</title>
+  <link rel="icon" type="image/png" href="assets/images/Hasnat%20Saifullah%20Photo%20Favcon.jpg" />
+
+  <!-- META -->
+  <meta name="description" content="Hasnat Saifullah – Credit Administration, Internal Control, Financial Analytics, Power BI, SEO & Data-Driven Decision Making. 6.5+ years in NBFIs & digital growth." />
+
+  <!-- TAILWIND + FONTS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- AOS (ANIMATE ON SCROLL) -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+  <style>
+    * { font-family: 'Inter', system-ui, sans-serif; }
+    html { scroll-behavior: smooth; }
+
+    /* Custom animations */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(1deg); }
+    }
+    .float-slow { animation: float 7s ease-in-out infinite; }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+      50% { box-shadow: 0 0 25px 8px rgba(37, 99, 235, 0.3); }
+    }
+    .glow-hover:hover { animation: pulse-glow 2s infinite; }
+
+    /* gradient border cards */
+    .gradient-border {
+      border: double 1px transparent;
+      background-image: linear-gradient(white, white), radial-gradient(circle at top left, #3b82f6, #8b5cf6);
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
+    }
+
+    /* shiny underline */
+    .shiny-underline {
+      position: relative;
+      display: inline-block;
+    }
+    .shiny-underline::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #2563eb, #7c3aed, #2563eb);
+      border-radius: 4px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .shiny-underline:hover::after { transform: scaleX(1); }
+
+    /* mobile menu slide */
+    #mobile-menu {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s;
+      transform-origin: top;
+    }
+    #mobile-menu.hidden {
+      transform: scaleY(0);
+      opacity: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased">
+
+<!-- ===== PRELOADER ===== -->
+<div id="preloader" class="fixed inset-0 bg-slate-900 z-[100] flex items-center justify-center transition-opacity duration-700">
+  <div class="text-center">
+    <div class="w-20 h-20 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+    <p class="text-white text-sm tracking-widest">LOADING Hasnat's Website...</p>
+    <p class="text-white text-sm tracking-widest">Keep Patience for experiencing his awsome works...</p>
+  </div>
+  </div>
+</div>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="fixed w-full bg-white/80 backdrop-blur-xl border-b border-slate-200/60 shadow-sm z-50">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+    <span class="text-2xl font-black bg-gradient-to-r from-blue-700 to-indigo-600 bg-clip-text text-transparent float-slow inline-block">Hasnat Saifullah<span class="text-indigo-400">.</span></span>
+
+    <div class="hidden md:flex gap-8 font-medium text-slate-700">
+      <a href="#about" class="hover:text-blue-600 transition flex items-center gap-1"><i class="fas fa-user text-xs"></i> About</a>
+      <a href="#achievements" class="hover:text-blue-600 transition flex items-center gap-1"><i class="fas fa-medal text-xs"></i> Achievements</a>
+      <a href="#experience" class="hover:text-blue-600 transition flex items-center gap-1"><i class="fas fa-briefcase text-xs"></i> Experience</a>
+      <a href="#projects" class="hover:text-blue-600 transition flex items-center gap-1"><i class="fas fa-code text-xs"></i> Projects</a>
+      <a href="#skills" class="hover:text-blue-600 transition flex items-center gap-1"><i class="fas fa-cog text-xs"></i> Skills</a>
+      <a href="#contact" class="hover:text-blue-600 transition flex items-center gap-1"><i class="fas fa-envelope text-xs"></i> Contact</a>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <a href="#contact" class="hidden md:inline-block px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm rounded-full shadow-md hover:shadow-xl transition-all">Hire me</a>
+      <button id="menu-btn" class="md:hidden text-2xl text-blue-700 focus:outline-none relative z-50">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </div>
+
+  <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-md border-t border-slate-100 flex flex-col p-6 space-y-5 font-medium shadow-xl">
+    <a href="#about" class="mobile-link hover:text-blue-600 text-lg"><i class="fas fa-user w-6"></i> About</a>
+    <a href="#achievements" class="mobile-link hover:text-blue-600 text-lg"><i class="fas fa-medal w-6"></i> Achievements</a>
+    <a href="#experience" class="mobile-link hover:text-blue-600 text-lg"><i class="fas fa-briefcase w-6"></i> Experience</a>
+    <a href="#projects" class="mobile-link hover:text-blue-600 text-lg"><i class="fas fa-code w-6"></i> Projects</a>
+    <a href="#skills" class="mobile-link hover:text-blue-600 text-lg"><i class="fas fa-cog w-6"></i> Skills</a>
+    <a href="#contact" class="mobile-link hover:text-blue-600 text-lg"><i class="fas fa-envelope w-6"></i> Contact</a>
+    <hr class="border-slate-200" />
+    <a href="#contact" class="bg-blue-50 text-blue-700 px-4 py-3 rounded-xl text-center font-semibold"><i class="fas fa-paper-plane mr-2"></i>Let's talk</a>
+  </div>
+</nav>
+
+<!-- ===== HERO SECTION ===== -->
+<section class="relative pt-36 pb-24 px-6 overflow-hidden bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-white">
+  <div class="absolute inset-0 opacity-20 pointer-events-none">
+    <div class="absolute top-20 left-10 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-10 right-10 w-80 h-80 bg-indigo-400 rounded-full mix-blend-multiply filter blur-3xl animate-pulse delay-1000"></div>
+    <div class="absolute top-1/2 left-1/3 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl animate-pulse delay-700"></div>
+  </div>
+  <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M0 0h60v60H0z" fill="none" stroke="%233b82f6" stroke-width="0.5" stroke-opacity="0.2"/%3E%3C/svg%3E')]"></div>
+
+  <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
+    <div class="text-center md:text-left order-2 md:order-1" data-aos="fade-up" data-aos-duration="1000">
+      <span class="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-sm rounded-full text-xs font-mono tracking-widest text-blue-300 border border-white/20 mb-6"><i class="fas fa-chart-line mr-2"></i>6.5+ YEARS · CREDIT · ANALYTICS</span>
+      <h1 class="text-4xl md:text-6xl leading-tight mb-6">
+  Turning <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">Data</span> into<br class="hidden md:block">
+  <span class="relative">
+    <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">Senior Management-Level</span> Decisions
+    <span class="absolute -bottom-2 left-0 w-full h-2 bg-blue-500/30 blur-md"></span>
+  </span>
+</h1>
+
+      <p class="text-lg md:text-xl text-slate-300 mb-8 max-w-xl mx-auto md:mx-0 flex flex-wrap gap-2 justify-center md:justify-start">
+  <span class="bg-white/5 px-3 py-1 rounded-full text-sm"><i class="fas fa-shield-alt text-blue-400 mr-1"></i>Compliance</span>
+  <span class="bg-white/5 px-3 py-1 rounded-full text-sm"><i class="fas fa-building-columns text-blue-400 mr-1"></i>Credit Admin</span>
+  <span class="bg-white/5 px-3 py-1 rounded-full text-sm"><i class="fas fa-chart-pie text-blue-400 mr-1"></i>Power BI</span>
+  <span class="bg-white/5 px-3 py-1 rounded-full text-sm"><i class="fas fa-magnifying-glass text-blue-400 mr-1"></i>Internal Control</span>
+  <span class="bg-white/5 px-3 py-1 rounded-full text-sm"><i class="fas fa-chart-line text-blue-400 mr-1"></i>Data Analysis</span>
+</p>
+
+     <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+  <a href="#contact" class="group px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full font-semibold shadow-xl hover:shadow-2xl transition-all flex items-center justify-center gap-2">
+    <i class="fas fa-comment-dots"></i>
+    <span>Let’s Talk</span>
+    <i class="fas fa-arrow-right group-hover:translate-x-1 transition"></i>
+  </a>
+  <a href="#achievements" class="px-8 py-3 bg-white/10 backdrop-blur-sm border border-white/30 rounded-full font-semibold hover:bg-white/20 transition flex items-center justify-center gap-2">
+    <i class="fas fa-trophy"></i> Achievements
+  </a>
+  <a href="#projects" class="px-8 py-3 bg-white/5 backdrop-blur-sm border border-white/20 rounded-full font-semibold hover:bg-white/15 transition flex items-center justify-center gap-2">
+    <i class="fas fa-code"></i> Projects
+  </a>
+</div>
+    </div>
+
+    <div class="flex justify-center items-center order-1 md:order-2 relative" data-aos="fade-left" data-aos-duration="1000">
+      <div class="relative w-64 h-64 md:w-80 md:h-80 mx-auto">
+        <!-- Background glow -->
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full blur-2xl opacity-40 animate-pulse"></div>
+
+        <!-- Animated dashed ring -->
+        <div class="absolute inset-0 border-2 border-dashed border-blue-500/30 rounded-full animate-[spin_20s_linear_infinite]"></div>
+
+        <!-- Inner solid ring -->
+        <div class="absolute inset-4 border border-indigo-500/20 rounded-full"></div>
+
+        <!-- Profile image with grayscale hover -->
+        <div class="absolute inset-8 rounded-full overflow-hidden shadow-2xl ring-4 ring-white/30">
+          <img src="assets/images/profile.jpg" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-700" alt="Hasnat Saifullah" onerror="this.src='https://via.placeholder.com/400?text=Hasnat'"/>
+        </div>
+
+        <!-- Floating badges -->
+        <div class="absolute -bottom-4 -right-4 bg-slate-800 backdrop-blur-md border border-slate-600 rounded-xl px-4 py-2 shadow-2xl flex gap-3 items-center z-10">
+          <i class="fas fa-chart-pie text-blue-400 text-xl"></i>
+          <span class="text-sm font-bold">950 Cr+ Portfolio Management Experience</span>
+        </div>
+        <div class="absolute -top-4 -left-4 bg-indigo-600 rounded-full p-3 shadow-xl z-10">
+          <i class="fas fa-magnifying-glass-chart text-white text-xl"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ABOUT + COUNTERS ===== -->
+<section id="about" class="py-28 px-6 bg-white relative">
+  <div class="max-w-7xl mx-auto">
+    <!-- Heading with icon -->
+    <div class="flex items-center gap-3 mb-12" data-aos="fade-right">
+      <i class="fas fa-user text-4xl text-blue-600"></i>
+      <h2 class="text-4xl font-bold shiny-underline">Career Overview</h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-16 items-center">
+      <div data-aos="fade-right">
+        <p class="text-slate-600 text-lg leading-relaxed">
+          Analytical professional with <span class="font-bold text-blue-700">6.5+ years</span> in Credit Operations, Internal Control, and Data Visualization. I convert complex datasets into senior management decision making ready insights for supporting regulatory compliance and strategic growth.
+        </p>
+        <div class="mt-8 flex gap-6 text-slate-500">
+          <div><i class="fas fa-building-columns text-3xl text-blue-200"></i></div>
+          <div><i class="fas fa-chart-simple text-3xl text-indigo-200"></i></div>
+          <div><i class="fas fa-file-shield text-3xl text-purple-200"></i></div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-5" data-aos="zoom-in">
+        <div class="p-6 bg-slate-50 rounded-2xl shadow-sm border border-slate-200 text-center hover:scale-105 transition-transform">
+          <h3 class="text-4xl font-black text-blue-600 counter" data-target="6.5">0</h3>
+          <p class="font-medium text-slate-600">Years <br>Experience</p>
+          <i class="fas fa-briefcase text-blue-200 text-2xl mt-2"></i>
+        </div>
+        <div class="p-6 bg-slate-50 rounded-2xl shadow-sm border border-slate-200 text-center hover:scale-105 transition-transform">
+          <h3 class="text-4xl font-black text-indigo-600 counter" data-target="950">0</h3>
+          <p class="font-medium text-slate-600">Crore+ <br>Portfolio managing experience</p>
+          <i class="fas fa-bangladeshi-taka-sign text-indigo-200 text-2xl mt-2"></i>
+        </div>
+        <div class="p-6 bg-slate-50 rounded-2xl shadow-sm border border-slate-200 text-center hover:scale-105 transition-transform">
+          <h3 class="text-4xl font-black text-purple-600 counter" data-target="5">0</h3>
+          <p class="font-medium text-slate-600">Dashboards <br>Live</p>
+          <i class="fas fa-table text-purple-200 text-2xl mt-2"></i>
+        </div>
+        <div class="p-6 bg-slate-50 rounded-2xl shadow-sm border border-slate-200 text-center hover:scale-105 transition-transform">
+  <h3 class="text-4xl font-black text-red-600 inline-flex items-baseline">
+    <span class="counter" data-target="95">0</span>%
+  </h3>
+  <p class="font-medium text-slate-600">Accuracy <br>Compliance</p>
+  <i class="fas fa-bullseye text-red-200 text-2xl mt-2"></i>
+</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ACHIEVEMENTS ===== -->
+<section id="achievements" class="py-28 px-6 bg-slate-50 border-y border-slate-200">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex items-center gap-3 mb-12" data-aos="fade-right">
+      <i class="fas fa-crown text-4xl text-blue-600"></i>
+      <h2 class="text-4xl font-bold shiny-underline">Professional Achievements</h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+      <div class="group p-7 bg-white rounded-2xl shadow-md hover:shadow-xl transition-all flex flex-col sm:flex-row gap-6 items-center sm:items-start border border-slate-100" data-aos="flip-up">
+        <div class="w-20 h-20 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center group-hover:scale-110 transition">
+          <i class="fas fa-certificate text-4xl text-blue-700"></i>
+        </div>
+        <div>
+          <h3 class="font-bold text-xl">Banking Professional (JAIBB)</h3>
+          <p class="text-slate-500">Institute of Bankers, Bangladesh</p>
+          <p class="text-sm text-blue-600 mt-2 flex items-center gap-1"><i class="far fa-calendar"></i> October 2025</p>
+        </div>
+      </div>
+      <div class="group p-7 bg-white rounded-2xl shadow-md hover:shadow-xl transition-all flex flex-col sm:flex-row gap-6 items-center sm:items-start border border-slate-100" data-aos="flip-up" data-aos-delay="100">
+        <div class="w-20 h-20 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center group-hover:scale-110 transition">
+          <i class="fas fa-chart-line text-4xl text-indigo-700"></i>
+        </div>
+        <div>
+          <h3 class="font-bold text-xl">Project Appraisal & Credit Management</h3>
+          <p class="text-slate-500">BIBM</p>
+          <p class="text-sm text-blue-600 mt-2 flex items-center gap-1"><i class="far fa-calendar"></i> July 2025</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center" data-aos="fade-up">
+      <a href="achievements.html" class="inline-flex gap-2 items-center px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-semibold shadow-lg hover:shadow-2xl transition-all"><i class="fas fa-medal"></i> View All Certifications</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EXPERIENCE ===== -->
+<section id="experience" class="py-28 px-6 bg-white">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex items-center gap-3 mb-12" data-aos="fade-right">
+      <i class="fas fa-briefcase text-4xl text-blue-600"></i>
+      <h2 class="text-4xl font-bold shiny-underline">Professional Experience</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="relative p-7 bg-slate-50 rounded-2xl border-l-8 border-blue-500 shadow-md hover:shadow-xl transition group" data-aos="fade-up">
+        <div class="flex justify-between items-start">
+          <div>
+            <h3 class="text-xl font-bold">Senior Officer – Internal Control & Compliance</h3>
+            <p class="text-blue-700 font-semibold">Bay Leasing & Investment Ltd.</p>
+          </div>
+          <img src="assets/images/blil%20logo.png" class="w-12 h-12 object-contain opacity-70 group-hover:opacity-100" onerror="this.src='https://via.placeholder.com/48?text=BLIL'">
+        </div>
+        <ul class="list-disc ml-5 mt-4 text-slate-600 space-y-1 text-sm">
+          <li>Internal Audits & Compliance Frameworks</li>
+          <li>Bangladesh Bank reporting such as "ISS reports", "Monthly Disbursement" and Inspection and Compliance releted reply</li>
+          <li>Critically evaluate the Large loan inspections, CIB Status, CRG Scores</li>
+        </ul>
+        <i class="fas fa-building-columns absolute bottom-3 right-3 text-5xl text-blue-100 -z-10 pointer-events-none"></i>
+      </div>
+
+      <div class="relative p-7 bg-slate-50 rounded-2xl border-l-8 border-indigo-500 shadow-md hover:shadow-xl transition group" data-aos="fade-up" data-aos-delay="100">
+        <div class="flex justify-between items-start">
+          <div>
+            <h3 class="text-xl font-bold">Officer – Branch Operations</h3>
+            <p class="text-blue-700 font-semibold">Bay Leasing & Investment Ltd.</p>
+          </div>
+          <img src="assets/images/blil%20logo.png" class="w-12 h-12 object-contain opacity-70 group-hover:opacity-100" onerror="this.src='https://via.placeholder.com/48?text=BLIL'">
+        </div>
+        <ul class="list-disc ml-5 mt-4 text-slate-600 space-y-1 text-sm">
+          <li>Managed loan & deposit portfolio of Bangla Motor Branch</li>
+          <li>Financial statement analysis & credit appraisal</li>
+          <li>Branch operational compliance</li>
+        </ul>
+        <i class="fas fa-coins absolute bottom-3 right-3 text-5xl text-indigo-100 -z-10 pointer-events-none"></i>
+      </div>
+
+      <div class="relative p-7 bg-slate-50 rounded-2xl border-l-8 border-purple-500 shadow-md hover:shadow-xl transition group md:col-span-2 md:w-1/2 md:mx-auto" data-aos="fade-up" data-aos-delay="200">
+        <div class="flex justify-between items-start">
+          <div>
+            <h3 class="text-xl font-bold">Junior Executive – Digital Marketing</h3>
+            <p class="text-blue-700 font-semibold">Electra International Ltd.</p>
+          </div>
+          <img src="assets/images/electralogo.png" class="w-14 h-auto object-contain opacity-70 group-hover:opacity-100" onerror="this.src='https://via.placeholder.com/56?text=Electra'">
+        </div>
+        <ul class="list-disc ml-5 mt-4 text-slate-600 space-y-1 text-sm">
+          <li>Daraz marketplace: Initiated BDT 7.00+ lakh sales</li>
+          <li>SEO & content optimization for organic traffic and maximize Brand Awareness</li>
+        </ul>
+        <i class="fas fa-cart-shopping absolute bottom-3 right-3 text-5xl text-purple-100 -z-10 pointer-events-none"></i>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EDUCATION ===== -->
+<section id="education" class="py-20 px-6 bg-slate-50">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex items-center gap-3 mb-12" data-aos="fade-right">
+      <i class="fas fa-graduation-cap text-4xl text-blue-600"></i>
+      <h2 class="text-4xl font-bold shiny-underline">Education</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div class="flex bg-white p-5 rounded-xl shadow-sm gap-4 items-center hover:shadow-md" data-aos="fade-right">
+        <img src="assets/images/ewulogo.png" class="w-14 h-14 object-contain" onerror="this.src='https://via.placeholder.com/56?text=EWU'">
+        <div><h3 class="font-bold">MBA, Operation Management</h3><p class="text-sm text-slate-500">East West University · CGPA 3.33</p></div>
+      </div>
+      <div class="flex bg-white p-5 rounded-xl shadow-sm gap-4 items-center hover:shadow-md" data-aos="fade-right" data-aos-delay="50">
+        <img src="assets/images/ewulogo.png" class="w-14 h-14 object-contain" onerror="this.src='https://via.placeholder.com/56?text=EWU'">
+        <div><h3 class="font-bold">BBA, Marketing</h3><p class="text-sm text-slate-500">East West University · CGPA 2.96</p></div>
+      </div>
+      <div class="flex bg-white p-5 rounded-xl shadow-sm gap-4 items-center hover:shadow-md" data-aos="fade-right" data-aos-delay="100">
+        <img src="assets/images/ipsc-logo.png" class="w-14 h-14 object-contain" onerror="this.src='https://via.placeholder.com/56?text=IPSC'">
+        <div><h3 class="font-bold">HSC (Business Studies)</h3><p class="text-sm text-slate-500">IPSC, Cumilla · GPA 5.00</p></div>
+      </div>
+      <div class="flex bg-white p-5 rounded-xl shadow-sm gap-4 items-center hover:shadow-md" data-aos="fade-right" data-aos-delay="150">
+        <img src="assets/images/ipsc-logo.png" class="w-14 h-14 object-contain" onerror="this.src='https://via.placeholder.com/56?text=IPSC'">
+        <div><h3 class="font-bold">SSC (Business Studies)</h3><p class="text-sm text-slate-500">IPSC, Cumilla · GPA 4.88</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROJECTS ===== -->
+<section id="projects" class="py-28 px-6 bg-white">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex items-center gap-3 mb-12" data-aos="fade-right">
+      <i class="fas fa-code text-4xl text-blue-600"></i>
+      <h2 class="text-4xl font-bold shiny-underline">Featured Projects</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="group bg-gradient-to-br from-slate-50 to-white p-8 rounded-3xl shadow-md hover:shadow-2xl transition-all border border-slate-200 hover:-translate-y-2" data-aos="flip-left">
+        <i class="fas fa-chart-pie text-4xl text-blue-600 mb-5 group-hover:scale-110 transition"></i>
+        <h3 class="text-2xl font-bold mb-2">Financial Analytics</h3>
+        <p class="text-slate-600">Power BI dashboards for portfolio monitoring & risk trigger.</p>
+      </div>
+      <div class="group bg-gradient-to-br from-slate-50 to-white p-8 rounded-3xl shadow-md hover:shadow-2xl transition-all border border-slate-200 hover:-translate-y-2" data-aos="flip-left" data-aos-delay="100">
+  <i class="fas fa-motorcycle text-4xl text-emerald-600 mb-5 group-hover:scale-110 transition"></i>
+  <h3 class="text-2xl font-bold mb-2">Bike Mileage Tracking</h3>
+  <p class="text-slate-600">Live dashboard for real-time automotive mileage tracking and analytics – monitor fuel efficiency, trip logs, and parts performance trends.</p>
+</div>
+      <div class="group bg-gradient-to-br from-slate-50 to-white p-8 rounded-3xl shadow-md hover:shadow-2xl transition-all border border-slate-200 hover:-translate-y-2" data-aos="flip-left" data-aos-delay="200">
+        <i class="fas fa-shield-halved text-4xl text-red-600 mb-5 group-hover:scale-110 transition"></i>
+        <h3 class="text-2xl font-bold mb-2">Credit Risk</h3>
+        <p class="text-slate-600">CRG frameworks and compliance audit workflows.</p>
+      </div>
+    </div>
+    <div class="text-center mt-12" data-aos="fade-up">
+      <a href="projects.html" class="inline-flex gap-2 items-center px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-semibold shadow-lg hover:shadow-2xl transition-all"><i class="fas fa-diagram-project"></i> View All Projects</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CORE COMPETENCIES + YOUTUBE CHANNELS ===== -->
+<section id="skills" class="py-28 px-6 bg-slate-50">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex items-center gap-3 mb-12" data-aos="fade-right">
+      <i class="fas fa-cog text-4xl text-blue-600"></i>
+      <h2 class="text-4xl font-bold shiny-underline">Core Competencies</h2>
+    </div>
+
+    <!-- Main skills grid -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-5 mb-16">
+      <div class="bg-white p-6 rounded-2xl shadow-sm flex flex-col items-center gap-2 border border-slate-200 hover:shadow-xl hover:scale-105 transition" data-aos="zoom-in"><i class="fas fa-chart-simple text-3xl text-blue-600"></i><span class="font-semibold">Data Visualization</span></div>
+      <div class="bg-white p-6 rounded-2xl shadow-sm flex flex-col items-center gap-2 border border-slate-200 hover:shadow-xl hover:scale-105 transition" data-aos="zoom-in" data-aos-delay="50"><i class="fas fa-file-invoice text-3xl text-indigo-600"></i><span class="font-semibold">Credit Analysis</span></div>
+      <div class="bg-white p-6 rounded-2xl shadow-sm flex flex-col items-center gap-2 border border-slate-200 hover:shadow-xl hover:scale-105 transition" data-aos="zoom-in" data-aos-delay="100"><i class="fas fa-camera-retro text-3xl text-purple-600"></i><span class="font-semibold">Video/Photo Editing</span></div>
+      <div class="bg-white p-6 rounded-2xl shadow-sm flex flex-col items-center gap-2 border border-slate-200 hover:shadow-xl hover:scale-105 transition" data-aos="zoom-in" data-aos-delay="150"><i class="fas fa-shield text-3xl text-red-600"></i><span class="font-semibold">Internal Audit</span></div>
+    </div>
+
+    <!-- Digital Presence / YouTube Channels -->
+    <div class="mt-12" data-aos="fade-up">
+      <div class="flex items-center gap-3 mb-6">
+        <i class="fab fa-youtube text-4xl text-red-600"></i>
+        <h3 class="text-2xl font-semibold shiny-underline">Digital Presence & Content</h3>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Mousum Hasnat Channel -->
+        <div class="bg-white p-5 rounded-2xl shadow-md flex items-center justify-between flex-wrap gap-4">
+          <div class="flex items-center gap-3">
+            <img src="assets/images/mhmotovlogs.png" class="w-12 h-12 rounded-full object-cover" onerror="this.src='https://via.placeholder.com/48'">
+            <div>
+              <p class="font-bold">Mousum Hasnat Moto Vlogs</p>
+              <p class="text-xs text-slate-500">Vlogs & Tech Gadgets</p>
+            </div>
+          </div>
+          <a href="https://www.youtube.com/@MousumHasnat" target="_blank" class="bg-red-600 text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-red-700 transition shadow-md"><i class="fab fa-youtube mr-1"></i> Subscribe</a>
+        </div>
+        <!-- One Minute Deen MH Channel -->
+        <div class="bg-white p-5 rounded-2xl shadow-md flex items-center justify-between flex-wrap gap-4">
+          <div class="flex items-center gap-3">
+            <img src="assets/images/one%20minute%20deen%20logo.jpg" class="w-12 h-12 rounded-full object-cover" onerror="this.src='https://via.placeholder.com/48'">
+            <div>
+              <p class="font-bold">One Minute Deen MH</p>
+              <p class="text-xs text-slate-500">Islamic shorts</p>
+            </div>
+          </div>
+          <a href="https://www.youtube.com/@OneMinuteDeenMH" target="_blank" class="bg-red-600 text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-red-700 transition shadow-md"><i class="fab fa-youtube mr-1"></i> Subscribe</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional tool stack -->
+    <div class="flex flex-wrap justify-center gap-4 text-slate-500 text-sm mt-12">
+      <span class="px-4 py-2 bg-white rounded-full shadow-sm"><i class="fas fa-chart-pie text-yellow-600"></i> Power BI</span>
+      <span class="px-4 py-2 bg-white rounded-full shadow-sm"><i class="fas fa-chart-line text-blue-600"></i> Looker Studio</span>
+      <span class="px-4 py-2 bg-white rounded-full shadow-sm"><i class="fas fa-file-excel text-green-700"></i> Advanced Excel</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact" class="py-28 px-6 bg-gradient-to-br from-slate-900 to-indigo-950 text-white">
+  <div class="max-w-7xl mx-auto text-center">
+    <div class="flex items-center justify-center gap-3 mb-4" data-aos="fade-up">
+      <i class="fas fa-envelope text-4xl text-blue-400"></i>
+      <h2 class="text-4xl font-bold shiny-underline">Let’s Connect</h2>
+    </div>
+    <p class="text-slate-400 mb-12">Available for professional consultations and collaborations.</p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+      <a href="https://wa.me/8801727658363" target="_blank" class="group p-6 bg-slate-800/50 backdrop-blur-sm rounded-2xl hover:bg-slate-700 transition border border-slate-700 hover:border-emerald-500" data-aos="fade-up">
+        <i class="fab fa-whatsapp text-emerald-400 text-4xl mb-3 group-hover:scale-110 transition"></i>
+        <p class="font-bold">+880 1727-658363</p>
+        <p class="text-xs text-slate-400">WhatsApp</p>
+      </a>
+      <a href="mailto:hasnatsaifullah@gmail.com" class="group p-6 bg-slate-800/50 backdrop-blur-sm rounded-2xl hover:bg-slate-700 transition border border-slate-700 hover:border-red-500" data-aos="fade-up" data-aos-delay="50">
+        <i class="fas fa-envelope text-red-400 text-4xl mb-3 group-hover:scale-110 transition"></i>
+        <p class="font-bold truncate">hasnatsaifullah@gmail.com</p>
+        <p class="text-xs text-slate-400">Email</p>
+      </a>
+      <a href="https://www.linkedin.com/in/hasnatsaifullah/" target="_blank" class="group p-6 bg-slate-800/50 backdrop-blur-sm rounded-2xl hover:bg-slate-700 transition border border-slate-700 hover:border-blue-500" data-aos="fade-up" data-aos-delay="100">
+        <i class="fab fa-linkedin text-blue-400 text-4xl mb-3 group-hover:scale-110 transition"></i>
+        <p class="font-bold">Hasnat Saifullah</p>
+        <p class="text-xs text-slate-400">LinkedIn</p>
+      </a>
+      <a href="https://www.facebook.com/hasnat.saifullah6.1/" target="_blank" class="group p-6 bg-slate-800/50 backdrop-blur-sm rounded-2xl hover:bg-slate-700 transition border border-slate-700 hover:border-blue-400" data-aos="fade-up" data-aos-delay="150">
+        <i class="fab fa-facebook text-blue-400 text-4xl mb-3 group-hover:scale-110 transition"></i>
+        <p class="font-bold">Hasnat Saifullah</p>
+        <p class="text-xs text-slate-400">Facebook</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="py-8 text-center text-slate-500 text-sm border-t border-slate-800 bg-slate-900">
+  © 2026 Hasnat Saifullah · Precision & Data-Driven Strategy
+  <span class="block text-xs mt-1"><i class="fas fa-chart-line"></i> Financial Data Analyst</span>
+</footer>
+
+<!-- BACK TO TOP BUTTON -->
+<button id="backToTop" class="fixed bottom-6 right-6 bg-blue-700 text-white w-12 h-12 rounded-full shadow-2xl hidden items-center justify-center hover:bg-blue-600 transition-all z-[60]">
+  <i class="fas fa-arrow-up"></i>
+</button>
+
+<!-- SCRIPTS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  // Preloader fade
+  window.addEventListener('load', () => {
+    document.getElementById('preloader').style.opacity = 0;
+    setTimeout(() => {
+      document.getElementById('preloader').style.display = 'none';
+    }, 700);
+  });
+
+  // AOS init
+  AOS.init({ duration: 800, once: true, offset: 80 });
+
+  // Mobile menu
+  const menuBtn = document.getElementById('menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileLinks = document.querySelectorAll('.mobile-link');
+
+  menuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+  });
+  mobileLinks.forEach(l => l.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+  // ===== COUNTER ANIMATION (runs every time About appears) =====
+  const counters = document.querySelectorAll('.counter');
+  const runCounters = () => {
+    counters.forEach(counter => {
+      const target = +counter.dataset.target;
+      let count = 0;
+      const inc = target / 80;  // smooth increment per frame
+      const update = () => {
+        if (count < target) {
+          count += inc;
+          // Keep decimal only if target has a decimal
+          counter.innerText = target % 1 === 0 ? Math.floor(count) : count.toFixed(1);
+          requestAnimationFrame(update);
+        } else {
+          counter.innerText = target;  // final exact value
+        }
+      };
+      update();
+    });
+  };
+
+  // Trigger every time #about enters viewport (threshold 50%)
+  const observer = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) runCounters();
+  }, { threshold: 0.5 });
+
+  observer.observe(document.getElementById('about'));
+
+  // Back to top
+  const topBtn = document.getElementById('backToTop');
+  window.onscroll = () => {
+    if (document.documentElement.scrollTop > 400) {
+      topBtn.classList.remove('hidden'); topBtn.classList.add('flex');
+    } else { topBtn.classList.add('hidden'); topBtn.classList.remove('flex'); }
+  };
+  topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+</script>
+</body>
+</html>
