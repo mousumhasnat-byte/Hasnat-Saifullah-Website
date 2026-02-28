@@ -23,6 +23,7 @@
 
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans">
+<canvas id="data-mesh-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-[0] opacity-60"></canvas>
 
 <!-- ===== NAVIGATION ===== -->
 <nav class="bg-white/80 backdrop-blur-md border-b border-slate-200/60 sticky top-0 z-50 shadow-sm">
@@ -340,6 +341,140 @@ function moveBifoldSlider(direction) {
   slider.style.transform = `translateX(-${bifoldStep * 100}%)`;
 }
 
+</script>
+
+<script>
+  const canvasProj = document.getElementById('projects-canvas');
+  const ctxProj = canvasProj.getContext('2d');
+  let nodes = [];
+  
+  function resizeCanvasProj() {
+      canvasProj.width = window.innerWidth;
+      canvasProj.height = window.innerHeight;
+  }
+  
+  class TechNode {
+      constructor() {
+          this.x = Math.random() * window.innerWidth;
+          this.y = Math.random() * window.innerHeight;
+          this.vx = (Math.random() - 0.5) * 1;
+          this.vy = (Math.random() - 0.5) * 1;
+          this.size = Math.random() * 4 + 2;
+      }
+      update() {
+          this.x += this.vx;
+          this.y += this.vy;
+          if (this.x < 0 || this.x > window.innerWidth) this.vx *= -1;
+          if (this.y < 0 || this.y > window.innerHeight) this.vy *= -1;
+      }
+      draw() {
+          ctxProj.beginPath();
+          // Draw a techy square/diamond instead of a circle
+          ctxProj.rect(this.x - this.size/2, this.y - this.size/2, this.size, this.size);
+          ctxProj.fillStyle = 'rgba(16, 185, 129, 0.6)'; // Tailwind Emerald 500
+          ctxProj.fill();
+      }
+  }
+  
+  function initProj() {
+      resizeCanvasProj();
+      nodes = [];
+      for (let i = 0; i < 50; i++) nodes.push(new TechNode());
+  }
+  
+  function animateProj() {
+      ctxProj.clearRect(0, 0, canvasProj.width, canvasProj.height);
+      for (let i = 0; i < nodes.length; i++) {
+          nodes[i].update();
+          nodes[i].draw();
+          for (let j = i + 1; j < nodes.length; j++) {
+              const dx = nodes[i].x - nodes[j].x;
+              const dy = nodes[i].y - nodes[j].y;
+              const distance = Math.sqrt(dx * dx + dy * dy);
+              if (distance < 200) {
+                  ctxProj.beginPath();
+                  // Tech grid lines
+                  ctxProj.strokeStyle = `rgba(20, 184, 166, ${0.5 - distance / 400})`; // Tailwind Teal 500
+                  ctxProj.lineWidth = 1.5;
+                  ctxProj.setLineDash([5, 5]); // Dashed blueprint lines
+                  ctxProj.moveTo(nodes[i].x, nodes[i].y);
+                  ctxProj.lineTo(nodes[j].x, nodes[j].y);
+                  ctxProj.stroke();
+                  ctxProj.setLineDash([]); // Reset dash for other renders
+              }
+          }
+      }
+      requestAnimationFrame(animateProj);
+  }
+  
+  window.addEventListener('resize', initProj);
+  initProj();
+  animateProj();
+</script>
+
+<script>
+  const canvasIdx = document.getElementById('data-mesh-canvas');
+  const ctxIdx = canvasIdx.getContext('2d');
+  let particlesIdx = [];
+  
+  function resizeCanvasIdx() {
+      canvasIdx.width = window.innerWidth;
+      canvasIdx.height = window.innerHeight;
+  }
+  
+  class DataParticle {
+      constructor() {
+          this.x = Math.random() * window.innerWidth;
+          this.y = Math.random() * window.innerHeight;
+          this.vx = (Math.random() - 0.5) * 1.5;
+          this.vy = (Math.random() - 0.5) * 1.5;
+          this.radius = Math.random() * 2.5 + 1;
+      }
+      update() {
+          this.x += this.vx;
+          this.y += this.vy;
+          if (this.x < 0 || this.x > window.innerWidth) this.vx *= -1;
+          if (this.y < 0 || this.y > window.innerHeight) this.vy *= -1;
+      }
+      draw() {
+          ctxIdx.beginPath();
+          ctxIdx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctxIdx.fillStyle = 'rgba(59, 130, 246, 0.7)'; // Tailwind Blue 500
+          ctxIdx.fill();
+      }
+  }
+  
+  function initIdx() {
+      resizeCanvasIdx();
+      particlesIdx = [];
+      for (let i = 0; i < 70; i++) particlesIdx.push(new DataParticle());
+  }
+  
+  function animateIdx() {
+      ctxIdx.clearRect(0, 0, canvasIdx.width, canvasIdx.height);
+      for (let i = 0; i < particlesIdx.length; i++) {
+          particlesIdx[i].update();
+          particlesIdx[i].draw();
+          for (let j = i + 1; j < particlesIdx.length; j++) {
+              const dx = particlesIdx[i].x - particlesIdx[j].x;
+              const dy = particlesIdx[i].y - particlesIdx[j].y;
+              const distance = Math.sqrt(dx * dx + dy * dy);
+              if (distance < 180) {
+                  ctxIdx.beginPath();
+                  ctxIdx.strokeStyle = `rgba(99, 102, 241, ${1 - distance / 180})`; // Tailwind Indigo 500
+                  ctxIdx.lineWidth = 1;
+                  ctxIdx.moveTo(particlesIdx[i].x, particlesIdx[i].y);
+                  ctxIdx.lineTo(particlesIdx[j].x, particlesIdx[j].y);
+                  ctxIdx.stroke();
+              }
+          }
+      }
+      requestAnimationFrame(animateIdx);
+  }
+  
+  window.addEventListener('resize', initIdx);
+  initIdx();
+  animateIdx();
 </script>
 
 </body>

@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans">
+<canvas id="achievements-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-[-1] opacity-70"></canvas>
 
 <!-- ===== NAVIGATION ===== -->
 <nav class="bg-white/80 backdrop-blur-md border-b border-slate-200/60 sticky top-0 z-50 shadow-sm">
@@ -22,6 +23,7 @@
 </nav>
 
 <!-- ===== HERO HEADER ===== -->
+ 
 <section class="relative py-24 px-6 overflow-hidden bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-white">
   <div class="absolute inset-0 opacity-20">
     <div class="absolute top-10 left-10 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"></div>
@@ -480,6 +482,66 @@ function moveAiSlider(direction) {
   slider.style.transform = `translateX(-${aiStep * 100}%)`;
 }
 
+</script>
+
+<script>
+  const canvasAchv = document.getElementById('achievements-canvas');
+  const ctxAchv = canvasAchv.getContext('2d');
+  let sparks = [];
+  
+  function resizeCanvasAchv() {
+      canvasAchv.width = window.innerWidth;
+      canvasAchv.height = window.innerHeight;
+  }
+  
+  class Spark {
+      constructor() {
+          this.x = Math.random() * window.innerWidth;
+          this.y = Math.random() * window.innerHeight + window.innerHeight; // Start from bottom
+          this.vx = (Math.random() - 0.5) * 0.5;
+          this.vy = -(Math.random() * 1.5 + 0.5); // Move upwards
+          this.radius = Math.random() * 3 + 1;
+          this.opacity = Math.random();
+      }
+      update() {
+          this.x += this.vx;
+          this.y += this.vy;
+          // Fade out as they go up
+          this.opacity -= 0.002;
+          if (this.y < 0 || this.opacity <= 0) {
+              this.y = window.innerHeight + 10;
+              this.x = Math.random() * window.innerWidth;
+              this.opacity = 1;
+          }
+      }
+      draw() {
+          ctxAchv.beginPath();
+          ctxAchv.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctxAchv.fillStyle = `rgba(245, 158, 11, ${this.opacity})`; // Tailwind Amber 500
+          ctxAchv.shadowBlur = 10;
+          ctxAchv.shadowColor = 'rgba(251, 191, 36, 0.8)';
+          ctxAchv.fill();
+      }
+  }
+  
+  function initAchv() {
+      resizeCanvasAchv();
+      sparks = [];
+      for (let i = 0; i < 60; i++) sparks.push(new Spark());
+  }
+  
+  function animateAchv() {
+      ctxAchv.clearRect(0, 0, canvasAchv.width, canvasAchv.height);
+      for (let i = 0; i < sparks.length; i++) {
+          sparks[i].update();
+          sparks[i].draw();
+      }
+      requestAnimationFrame(animateAchv);
+  }
+  
+  window.addEventListener('resize', initAchv);
+  initAchv();
+  animateAchv();
 </script>
 
 </body>
