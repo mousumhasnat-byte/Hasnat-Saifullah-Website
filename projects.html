@@ -127,20 +127,24 @@
       <div class="min-w-full w-full flex-shrink-0">
         <img src="assets/images/dashboard  3.jpg" class="w-full h-auto object-cover" alt="NPL Trend View" />
       </div>
+      <div class="min-w-full w-full flex-shrink-0">
+        <img src="assets/images/Developing Comprehensive Data Analysis with Power BI.jpg" class="w-full h-auto object-cover" alt="BLIL Certificate" />
+      </div>
     </div>
-
+    
     <button onclick="moveProjectSlider(-1)" 
-      class="absolute left-3 top-1/2 -translate-y-1/2 z-40 bg-black/50 hover:bg-black/80 text-white w-10 h-10 rounded-full flex items-center justify-center md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 shadow-lg">
+      class="absolute left-4 top-1/2 -translate-y-1/2 z-40 bg-black/50 hover:bg-black/80 text-white w-10 h-10 rounded-full flex items-center justify-center md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 shadow-lg">
       <i class="fas fa-chevron-left"></i>
     </button>
     
     <button onclick="moveProjectSlider(1)" 
-      class="absolute right-3 top-1/2 -translate-y-1/2 z-40 bg-black/50 hover:bg-black/80 text-white w-10 h-10 rounded-full flex items-center justify-center md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 shadow-lg">
+      class="absolute right-4 top-1/2 -translate-y-1/2 z-40 bg-black/50 hover:bg-black/80 text-white w-10 h-10 rounded-full flex items-center justify-center md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 shadow-lg">
       <i class="fas fa-chevron-right"></i>
     </button>
 
     <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 flex gap-2">
       <div class="w-2 h-2 rounded-full bg-white shadow-md border border-slate-300"></div>
+      <div class="w-2 h-2 rounded-full bg-white/50 shadow-md border border-slate-300"></div>
       <div class="w-2 h-2 rounded-full bg-white/50 shadow-md border border-slate-300"></div>
       <div class="w-2 h-2 rounded-full bg-white/50 shadow-md border border-slate-300"></div>
     </div>
@@ -298,7 +302,7 @@
   });
 
 let projectStep = 0;
-const projectTotal = 3; 
+const projectTotal = 4; // Total slides in the first project slider
 
 function moveProjectSlider(direction) {
   const slider = document.getElementById('slider-project-1');
