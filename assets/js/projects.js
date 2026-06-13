@@ -31,12 +31,13 @@ const backToTopBtn = document.getElementById('backToTop');
 window.addEventListener('scroll', () => {
   if (window.scrollY > 300) {
     backToTopBtn.classList.remove('hidden');
+    backToTopBtn.classList.add('flex');
   } else {
     backToTopBtn.classList.add('hidden');
+    backToTopBtn.classList.remove('flex');
   }
 });
 backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
 // ── Data-Mesh Canvas (the only working canvas on this page) ───────────────────
 (function () {
   const canvas = document.getElementById('data-mesh-canvas');

@@ -1,0 +1,4 @@
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+* { font-family: 'Inter', system-ui, sans-serif; }
+img { max-width: 100%; height: auto; }

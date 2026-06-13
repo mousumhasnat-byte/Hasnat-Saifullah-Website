@@ -68,13 +68,14 @@ html { scroll-behavior: smooth; }
 .shiny-underline:hover::after { transform: scaleX(1); }
 
 #mobile-menu {
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s;
-  transform-origin: top;
-}
-#mobile-menu.hidden {
-  transform: scaleY(0);
+  overflow: hidden;
+  max-height: 0;
   opacity: 0;
-  pointer-events: none;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s;
+}
+#mobile-menu:not(.hidden) {
+  max-height: 400px;
+  opacity: 1;
 }
 
 .clickable-card {
