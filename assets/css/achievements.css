@@ -1,0 +1,22 @@
+* { font-family: 'Inter', system-ui, sans-serif; }
+html { scroll-behavior: smooth; }
+
+/* Fixes shiny-underline — was referenced but never defined on this page */
+.shiny-underline {
+  position: relative;
+  display: inline-block;
+}
+.shiny-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #2563eb, #7c3aed, #2563eb);
+  border-radius: 4px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.shiny-underline:hover::after { transform: scaleX(1); }

@@ -1,0 +1,91 @@
+* { font-family: 'Inter', system-ui, sans-serif; }
+html { scroll-behavior: smooth; }
+
+.animated-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.bg-shape {
+  position: absolute;
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: 50%;
+  filter: blur(40px);
+  animation: floatShape 15s infinite ease-in-out;
+}
+.bg-shape-1 { width: 300px; height: 300px; top: 10%; left: 5%; background: rgba(59,130,246,0.15); animation-delay: 0s; }
+.bg-shape-2 { width: 400px; height: 400px; bottom: 10%; right: 5%; background: rgba(139,92,246,0.1); animation-delay: -5s; }
+.bg-shape-3 { width: 200px; height: 200px; top: 40%; left: 40%; background: rgba(16,185,129,0.1); animation-delay: -2s; }
+@keyframes floatShape {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -20px) scale(1.1); }
+}
+
+.chart-icon {
+  position: absolute;
+  font-size: 2rem;
+  color: rgba(255,255,255,0.1);
+  animation: floatIcon 20s linear infinite;
+}
+@keyframes floatIcon {
+  0%   { transform: translateY(100vh) rotate(0deg);   opacity: 0; }
+  10%  { opacity: 0.3; }
+  90%  { opacity: 0.3; }
+  100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50%       { transform: translateY(-12px) rotate(1deg); }
+}
+.float-slow { animation: float 7s ease-in-out infinite; }
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+  50%       { box-shadow: 0 0 25px 8px rgba(37, 99, 235, 0.3); }
+}
+.glow-hover:hover { animation: pulse-glow 2s infinite; }
+
+.shiny-underline {
+  position: relative;
+  display: inline-block;
+}
+.shiny-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #2563eb, #7c3aed, #2563eb);
+  border-radius: 4px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.shiny-underline:hover::after { transform: scaleX(1); }
+
+#mobile-menu {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s;
+  transform-origin: top;
+}
+#mobile-menu.hidden {
+  transform: scaleY(0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.clickable-card {
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.clickable-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 40px -12px rgba(0,0,0,0.3);
+}
+
+section.relative {
+  position: relative;
+}
