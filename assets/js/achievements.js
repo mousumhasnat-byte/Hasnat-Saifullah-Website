@@ -55,6 +55,7 @@ backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior:
 (function () {
   const canvas = document.getElementById('achievements-canvas');
   if (!canvas) return;
+  if (window.innerWidth < 768) return;
   const ctx = canvas.getContext('2d');
   let sparks = [];
 

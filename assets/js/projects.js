@@ -41,6 +41,7 @@ backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior:
 (function () {
   const canvas = document.getElementById('data-mesh-canvas');
   if (!canvas) return;
+  if (window.innerWidth < 768) return;
   const ctx = canvas.getContext('2d');
   let particles = [];
 

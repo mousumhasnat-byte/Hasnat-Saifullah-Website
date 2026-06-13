@@ -59,7 +59,8 @@ topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smoo
   const ctx = canvas.getContext('2d');
   let width, height;
   let particles = [];
-  const PARTICLE_COUNT = window.innerWidth < 768 ? 30 : 80;
+  if (window.innerWidth < 768) return;
+const PARTICLE_COUNT = 80;
   const MAX_DISTANCE   = 200;
   const EDGE_OPACITY   = 0.15;
 
