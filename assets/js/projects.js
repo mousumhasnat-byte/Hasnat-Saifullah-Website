@@ -107,3 +107,5 @@ backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior:
   init();
   requestAnimationFrame(animate);
 })();
+
+AOS.init({ duration: 700, once: true });

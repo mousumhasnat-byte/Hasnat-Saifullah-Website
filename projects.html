@@ -26,8 +26,10 @@
   <!-- Page CSS -->
   <link rel="stylesheet" href="assets/css/projects.css">
 
-  <!-- Page JS — deferred -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
   <script src="assets/js/projects.js" defer></script>
+
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans">
 <canvas id="data-mesh-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-[0] opacity-60"></canvas>
@@ -45,10 +47,12 @@
 
 <!-- HEADER -->
 <header class="py-20 bg-gradient-to-br from-blue-900 to-slate-900 text-white text-center">
-  <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Projects</h1>
-  <p class="text-lg text-slate-300 max-w-3xl mx-auto">
-    Completed projects across financial analytics, risk management, creative branding, and data-driven decision making level.
-  </p>
+  <div data-aos="fade-up">
+    <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Projects</h1>
+    <p class="text-lg text-slate-300 max-w-3xl mx-auto">
+      Completed projects across financial analytics, risk management, creative branding, and data-driven decision making level.
+    </p>
+  </div>
 </header>
 
 <!-- CASE STUDIES -->
