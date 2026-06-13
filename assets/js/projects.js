@@ -36,7 +36,7 @@ window.addEventListener('scroll', () => {
     backToTopBtn.classList.add('hidden');
     backToTopBtn.classList.remove('flex');
   }
-});
+}, { passive: true });
 backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 // ── Data-Mesh Canvas (the only working canvas on this page) ───────────────────
 (function () {

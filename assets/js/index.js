@@ -48,7 +48,7 @@ window.addEventListener('scroll', () => {
     topBtn.classList.add('hidden');
     topBtn.classList.remove('flex');
   }
-});
+}, { passive: true });
 topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
 // ── Data-Mesh Canvas ─────────────────────────────────────────────────────────
@@ -112,10 +112,7 @@ const PARTICLE_COUNT = 80;
       ctx.beginPath();
       ctx.arc(p.x * width, p.y * height, p.size * 1.2, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(96,165,250,0.9)';
-      ctx.shadowColor = 'rgba(59,130,246,0.5)';
-      ctx.shadowBlur  = 8;
       ctx.fill();
-      ctx.shadowBlur = 0;
       ctx.beginPath();
       ctx.arc(p.x * width, p.y * height, p.size * 0.6, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(255,255,255,0.5)';

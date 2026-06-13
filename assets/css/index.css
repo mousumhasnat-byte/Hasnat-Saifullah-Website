@@ -80,7 +80,7 @@ html { scroll-behavior: smooth; }
 
 .clickable-card {
   cursor: pointer;
-  transition: all 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 .clickable-card:hover {
   transform: translateY(-8px);

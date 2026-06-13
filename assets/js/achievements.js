@@ -48,7 +48,7 @@ window.addEventListener('scroll', () => {
   } else {
     backToTopBtn.classList.replace('flex', 'hidden');
   }
-});
+}, { passive: true });
 backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
 // ── Spark Canvas ──────────────────────────────────────────────────────────────
@@ -85,11 +85,8 @@ backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior:
     draw() {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.fillStyle   = `rgba(245,158,11,${this.opacity})`;
-      ctx.shadowBlur  = 10;
-      ctx.shadowColor = 'rgba(251,191,36,0.8)';
+      ctx.fillStyle = `rgba(245,158,11,${this.opacity})`;
       ctx.fill();
-      ctx.shadowBlur  = 0;
     }
   }
 
@@ -99,7 +96,10 @@ backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior:
     for (let i = 0; i < 60; i++) sparks.push(new Spark());
   }
 
-  function animate() {
+  let lastTime = 0;
+  function animate(time) {
+    if (time - lastTime < 33) { requestAnimationFrame(animate); return; }
+    lastTime = time;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     sparks.forEach(s => { s.update(); s.draw(); });
     requestAnimationFrame(animate);
