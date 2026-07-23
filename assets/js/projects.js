@@ -26,6 +26,125 @@ function moveBifoldSlider(direction) {
   slider.style.transform = `translateX(-${bifoldStep * 100}%)`;
 }
 
+let webDashStep = 0;
+const webDashTotal = 10;
+function moveWebDashSlider(direction) {
+  const slider = document.getElementById('slider-web-dash');
+  if (!slider) return;
+  webDashStep = (webDashStep + direction + webDashTotal) % webDashTotal;
+  slider.style.transform = `translateX(-${webDashStep * 100}%)`;
+}
+
+// ── Image Modal (Fullscreen) ───────────────────────────────────────────────────
+const webDashImages = [
+  'assets/images/loan_dashboard_executive_summary.png',
+  'assets/images/loan_dashboard_overview.png',
+  'assets/images/loan_dashboard_graphics.png',
+  'assets/images/loan_dashboard_recovery.png',
+  'assets/images/deposit_dashboard_executive_summary.png',
+  'assets/images/deposit_dashboard_overview.png',
+  'assets/images/deposit_dashboard_graphics.png',
+  'assets/images/deposit_dashboard_liability_team.png',
+  'assets/images/deposit_dashboard_encashments.png',
+  'assets/images/deposit_dashboard_maturity.png',
+];
+
+let modalImageIndex = 0;
+let currentZoom = 1;
+
+function applyZoom() {
+  const img = document.getElementById('modalImg');
+  const wrapper = document.getElementById('modalImgWrapper');
+  if (!img || !wrapper) return;
+  const pct = Math.round(currentZoom * 100);
+  document.getElementById('zoomLevel').textContent = pct + '%';
+  if (currentZoom === 1) {
+    img.style.transform = '';
+    img.style.width = '';
+    img.style.maxWidth = '';
+    img.style.display = '';
+    wrapper.style.display = '';
+    wrapper.style.justifyContent = '';
+    wrapper.style.alignItems = '';
+  } else {
+    img.style.transform = `scale(${currentZoom})`;
+    img.style.width = '100vw';
+    img.style.maxWidth = 'none';
+    img.style.transformOrigin = '0 0';
+    wrapper.style.display = 'block';
+  }
+}
+
+function zoomIn() {
+  currentZoom = Math.min(currentZoom + 0.25, 3);
+  applyZoom();
+}
+
+function zoomOut() {
+  currentZoom = Math.max(currentZoom - 0.25, 0.25);
+  applyZoom();
+}
+
+function resetZoom() {
+  currentZoom = 1;
+  applyZoom();
+}
+
+function openImageModal(index) {
+  modalImageIndex = index;
+  currentZoom = 1;
+  const modal = document.getElementById('imageModal');
+  const zoomBar = document.getElementById('zoomBar');
+  const modalImg = document.getElementById('modalImg');
+  if (modal && modalImg) {
+    modalImg.onload = function () { applyZoom(); };
+    modalImg.src = webDashImages[index];
+    modal.classList.remove('hidden');
+    if (zoomBar) zoomBar.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeImageModal() {
+  const modal = document.getElementById('imageModal');
+  const zoomBar = document.getElementById('zoomBar');
+  if (modal) {
+    modal.classList.add('hidden');
+    if (zoomBar) zoomBar.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+    currentZoom = 1;
+  }
+}
+
+function modalPrev() {
+  modalImageIndex = (modalImageIndex - 1 + webDashImages.length) % webDashImages.length;
+  currentZoom = 1;
+  const modalImg = document.getElementById('modalImg');
+  if (modalImg) {
+    modalImg.onload = function () { applyZoom(); };
+    modalImg.src = webDashImages[modalImageIndex];
+  }
+}
+
+function modalNext() {
+  modalImageIndex = (modalImageIndex + 1) % webDashImages.length;
+  currentZoom = 1;
+  const modalImg = document.getElementById('modalImg');
+  if (modalImg) {
+    modalImg.onload = function () { applyZoom(); };
+    modalImg.src = webDashImages[modalImageIndex];
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeImageModal();
+  if (e.key === 'ArrowLeft') { const m = document.getElementById('imageModal'); if (m && !m.classList.contains('hidden')) modalPrev(); }
+  if (e.key === 'ArrowRight') { const m = document.getElementById('imageModal'); if (m && !m.classList.contains('hidden')) modalNext(); }
+});
+document.getElementById('imageModal')?.addEventListener('click', e => {
+  if (e.target.id === 'imageModal') closeImageModal();
+});
+
 // ── Back to Top ───────────────────────────────────────────────────────────────
 const backToTopBtn = document.getElementById('backToTop');
 window.addEventListener('scroll', () => {
