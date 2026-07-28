@@ -153,7 +153,22 @@ function closeImageModal() {
   }
 }
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeImageModal(); });
+// ── Video Modal ────────────────────────────────────────────────────────────────
+function openVideoModal() {
+  const modal = document.getElementById('videoModal');
+  const video = document.getElementById('promoVideo');
+  if (modal && video) { modal.classList.remove('hidden'); video.currentTime = 0; video.play(); document.body.style.overflow = 'hidden'; }
+}
+function closeVideoModal() {
+  const modal = document.getElementById('videoModal');
+  const video = document.getElementById('promoVideo');
+  if (modal) { modal.classList.add('hidden'); video.pause(); document.body.style.overflow = 'auto'; }
+}
+document.getElementById('videoModal')?.addEventListener('click', e => {
+  if (e.target.id === 'videoModal') closeVideoModal();
+});
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeImageModal(); closeVideoModal(); } });
 document.getElementById('imageModal')?.addEventListener('click', e => {
   if (e.target.id === 'imageModal') closeImageModal();
 });

@@ -101,7 +101,7 @@
 </nav>
 
 <!-- ===== HERO SECTION ===== -->
-<section class="relative pt-36 pb-24 px-6 overflow-hidden bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-white">
+<section class="relative pt-20 pb-12 px-6 overflow-hidden bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-white">
   <canvas id="data-mesh" class="absolute inset-0 w-full h-full pointer-events-none" style="z-index:1;"></canvas>
 
   <div class="absolute inset-0 opacity-20 pointer-events-none">
@@ -145,7 +145,7 @@
       </div>
     </div>
 
-    <div class="flex justify-center items-center order-1 md:order-2 relative" data-aos="fade-left" data-aos-duration="1000">
+    <div class="flex flex-col items-center gap-6 order-1 md:order-2 relative" data-aos="fade-left" data-aos-duration="1000">
       <div class="relative w-64 h-64 md:w-80 md:h-80 mx-auto">
         <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full blur-2xl opacity-40 animate-pulse"></div>
         <div class="absolute inset-0 border-2 border-dashed border-blue-500/30 rounded-full animate-[spin_20s_linear_infinite]"></div>
@@ -160,6 +160,22 @@
         <div class="absolute -top-4 -left-4 bg-indigo-600 rounded-full p-3 shadow-xl z-10">
           <i class="fas fa-magnifying-glass-chart text-white text-xl"></i>
         </div>
+      </div>
+
+      <div class="w-80 mx-auto">
+        <div class="relative rounded-2xl overflow-hidden border border-white/20 shadow-xl group cursor-pointer" onclick="openVideoModal()">
+          <video autoplay muted loop playsinline class="w-full h-auto">
+            <source src="assets/videos/hasnat_intro_for_website.mp4" type="video/mp4">
+          </video>
+          <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+            <div class="bg-white/90 p-3 rounded-full text-blue-600 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all">
+              <i class="fas fa-expand-alt text-xl"></i>
+            </div>
+          </div>
+        </div>
+        <p class="text-center text-blue-300/70 text-xs mt-2 font-mono tracking-wider flex items-center justify-center gap-1">
+          <span class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span> Intro — Click to expand
+        </p>
       </div>
     </div>
   </div>
@@ -548,6 +564,16 @@
     <i class="fas fa-times-circle"></i>
   </button>
   <img id="modalImg" src="" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl object-contain border-4 border-white/10">
+</div>
+
+<!-- Video Modal -->
+<div id="videoModal" class="fixed inset-0 z-[9999] hidden bg-black/95 flex items-center justify-center p-4">
+  <button onclick="closeVideoModal()" class="absolute top-4 right-4 z-[10000] text-white text-4xl hover:text-blue-400 transition">
+    <i class="fas fa-times-circle"></i>
+  </button>
+  <video id="promoVideo" controls autoplay class="max-w-full max-h-[90vh] rounded-lg shadow-2xl">
+    <source src="assets/videos/hasnat_intro_for_website.mp4" type="video/mp4">
+  </video>
 </div>
 
 </body>
