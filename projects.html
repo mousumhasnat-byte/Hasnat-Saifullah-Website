@@ -48,9 +48,9 @@
 <!-- HEADER -->
 <header class="py-20 bg-gradient-to-br from-blue-900 to-slate-900 text-white text-center">
   <div data-aos="fade-up">
-    <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Projects</h1>
+    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 shiny-underline inline-block">Projects That Turn Data into Decisions</h1>
     <p class="text-lg text-slate-300 max-w-3xl mx-auto">
-      Completed projects across financial analytics, risk management, creative branding, and data-driven decision making level.
+      Case studies in MIS dashboard engineering, credit risk &amp; portfolio analytics, and corporate branding — built for a leading NBFI and used daily by senior management.
     </p>
   </div>
 </header>
@@ -228,18 +228,7 @@
       <button onclick="moveWebDashSlider(1)" class="absolute right-4 top-1/2 -translate-y-1/2 z-40 bg-black/30 hover:bg-black/60 text-white w-10 h-10 rounded-full flex items-center justify-center md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 shadow-lg">
         <i class="fas fa-chevron-right"></i>
       </button>
-      <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 flex gap-2">
-        <div class="w-2 h-2 rounded-full bg-white shadow-md border border-slate-300"></div>
-        <div class="w-2 h-2 rounded-full bg-white/50 shadow-md border border-slate-300"></div>
-        <div class="w-2 h-2 rounded-full bg-white/50 shadow-md border border-slate-300"></div>
-        <div class="w-2 h-2 rounded-full bg-white/50 shadow-md border border-slate-300"></div>
-        <div class="w-2 h-2 rounded-full bg-white/50 shadow-md border border-slate-300"></div>
-        <div class="w-2 h-2 rounded-full bg-white/50 shadow-md border border-slate-300"></div>
-        <div class="w-2 h-2 rounded-full bg-white/50 shadow-md border border-slate-300"></div>
-        <div class="w-2 h-2 rounded-full bg-white/50 shadow-md border border-slate-300"></div>
-        <div class="w-2 h-2 rounded-full bg-white/50 shadow-md border border-slate-300"></div>
-        <div class="w-2 h-2 rounded-full bg-white shadow-md border border-slate-300"></div>
-      </div>
+      <div id="dots-web-dash" class="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2"></div>
     </div>
 
     <div>
@@ -286,12 +275,7 @@
       <button onclick="moveProjectSlider(1)" class="absolute right-4 top-1/2 -translate-y-1/2 z-40 bg-black/50 hover:bg-black/80 text-white w-10 h-10 rounded-full flex items-center justify-center md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 shadow-lg">
         <i class="fas fa-chevron-right"></i>
       </button>
-      <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 flex gap-2">
-        <div class="w-2 h-2 rounded-full bg-white shadow-md border border-slate-300"></div>
-        <div class="w-2 h-2 rounded-full bg-white/50 shadow-md border border-slate-300"></div>
-        <div class="w-2 h-2 rounded-full bg-white/50 shadow-md border border-slate-300"></div>
-        <div class="w-2 h-2 rounded-full bg-white/50 shadow-md border border-slate-300"></div>
-      </div>
+      <div id="dots-project-1" class="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2"></div>
     </div>
 
     <div>
@@ -356,6 +340,7 @@
       <button onclick="moveCreativeSlider(1)" class="absolute right-3 top-1/2 -translate-y-1/2 z-40 bg-black/40 hover:bg-black/80 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-lg">
         <i class="fas fa-chevron-right"></i>
       </button>
+      <div id="dots-project-creative" class="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2"></div>
     </div>
   </section>
 
@@ -410,7 +395,7 @@
 </button>
 
 <!-- Image Modal -->
-<div id="imageModal" class="fixed inset-0 z-[9999] hidden bg-black/90 flex items-start justify-center overflow-auto">
+<div id="imageModal" class="fixed inset-0 z-[9999] hidden bg-black/90 flex items-center justify-center overflow-hidden">
   <button onclick="closeImageModal()" class="fixed top-4 right-4 z-[10000] text-white text-4xl hover:text-blue-400 transition-all">
     <i class="fas fa-times-circle"></i>
   </button>
@@ -422,8 +407,8 @@
     <i class="fas fa-chevron-right"></i>
   </button>
 
-  <div id="modalImgWrapper" class="w-full min-h-screen flex items-start justify-center pt-8 pb-24">
-    <img id="modalImg" src="" class="w-full h-auto rounded-lg shadow-2xl border-4 border-white/10 transition-transform duration-200">
+  <div id="modalImgWrapper" class="absolute inset-0 flex overflow-auto p-4">
+    <img id="modalImg" src="" class="w-full h-auto m-auto rounded-lg shadow-2xl border-4 border-white/10 transition-[width] duration-200">
   </div>
 </div>
 
@@ -433,7 +418,7 @@
   <span id="zoomLevel" class="text-white text-sm font-mono min-w-[3rem] text-center">100%</span>
   <button onclick="zoomIn()" class="text-white text-xl w-8 h-8 flex items-center justify-center hover:bg-white/20 rounded-full transition" title="Zoom In">+</button>
   <span class="text-white/30 mx-1">|</span>
-  <button onclick="resetZoom()" class="text-white text-xs px-3 py-1 hover:bg-white/20 rounded-full transition" title="Reset to 100%">1:1</button>
+  <button onclick="resetZoom()" class="text-white text-xs px-3 py-1 hover:bg-white/20 rounded-full transition" title="Reset to fit window">Fit</button>
 </div>
 
 </body>

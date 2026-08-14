@@ -1,4 +1,28 @@
 // ── Sliders ───────────────────────────────────────────────────────────────────
+function setDots(dotsId, active) {
+  const dots = document.getElementById(dotsId);
+  if (!dots) return;
+  [...dots.children].forEach((d, i) => {
+    d.classList.toggle('slider-dot--active', i === active);
+    d.classList.toggle('slider-dot--inactive', i !== active);
+  });
+}
+
+function renderDots(dotsId, total, goToFn) {
+  const dots = document.getElementById(dotsId);
+  if (!dots) return;
+  dots.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'slider-dot slider-dot--inactive';
+    b.setAttribute('aria-label', `Go to slide ${i + 1}`);
+    b.addEventListener('click', () => goToFn(i));
+    dots.appendChild(b);
+  }
+  setDots(dotsId, 0);
+}
+
 let projectStep = 0;
 const projectTotal = 4;
 function moveProjectSlider(direction) {
@@ -6,7 +30,9 @@ function moveProjectSlider(direction) {
   if (!slider) return;
   projectStep = (projectStep + direction + projectTotal) % projectTotal;
   slider.style.transform = `translateX(-${projectStep * 100}%)`;
+  setDots('dots-project-1', projectStep);
 }
+function goToProjectSlide(i) { projectStep = i; moveProjectSlider(0); }
 
 let creativeStep = 0;
 const creativeTotal = 2;
@@ -15,7 +41,9 @@ function moveCreativeSlider(direction) {
   if (!slider) return;
   creativeStep = (creativeStep + direction + creativeTotal) % creativeTotal;
   slider.style.transform = `translateX(-${creativeStep * 100}%)`;
+  setDots('dots-project-creative', creativeStep);
 }
+function goToCreativeSlide(i) { creativeStep = i; moveCreativeSlider(0); }
 
 let bifoldStep = 0;
 const bifoldTotal = 2;
@@ -33,7 +61,9 @@ function moveWebDashSlider(direction) {
   if (!slider) return;
   webDashStep = (webDashStep + direction + webDashTotal) % webDashTotal;
   slider.style.transform = `translateX(-${webDashStep * 100}%)`;
+  setDots('dots-web-dash', webDashStep);
 }
+function goToWebDashSlide(i) { webDashStep = i; moveWebDashSlider(0); }
 
 // ── Image Modal (Fullscreen) ───────────────────────────────────────────────────
 const webDashImages = [
@@ -54,24 +84,13 @@ let currentZoom = 1;
 
 function applyZoom() {
   const img = document.getElementById('modalImg');
-  const wrapper = document.getElementById('modalImgWrapper');
-  if (!img || !wrapper) return;
-  const pct = Math.round(currentZoom * 100);
-  document.getElementById('zoomLevel').textContent = pct + '%';
+  const zoomLevel = document.getElementById('zoomLevel');
+  if (!img || !zoomLevel) return;
+  zoomLevel.textContent = Math.round(currentZoom * 100) + '%';
   if (currentZoom === 1) {
-    img.style.transform = '';
     img.style.width = '';
-    img.style.maxWidth = '';
-    img.style.display = '';
-    wrapper.style.display = '';
-    wrapper.style.justifyContent = '';
-    wrapper.style.alignItems = '';
   } else {
-    img.style.transform = `scale(${currentZoom})`;
-    img.style.width = '100vw';
-    img.style.maxWidth = 'none';
-    img.style.transformOrigin = '0 0';
-    wrapper.style.display = 'block';
+    img.style.width = Math.round(img.naturalWidth * currentZoom) + 'px';
   }
 }
 
@@ -226,5 +245,10 @@ backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior:
   init();
   requestAnimationFrame(animate);
 })();
+
+// ── Slider Dots ───────────────────────────────────────────────────────────────
+renderDots('dots-web-dash', webDashTotal, goToWebDashSlide);
+renderDots('dots-project-1', projectTotal, goToProjectSlide);
+renderDots('dots-project-creative', creativeTotal, goToCreativeSlide);
 
 AOS.init({ duration: 700, once: true });

@@ -20,3 +20,21 @@ html { scroll-behavior: smooth; }
   transition: transform 0.4s ease;
 }
 .shiny-underline:hover::after { transform: scaleX(1); }
+
+.slider-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.slider-dot--inactive {
+  background: rgba(148, 163, 184, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+.slider-dot--active {
+  background: #2563eb;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  transform: scale(1.3);
+}

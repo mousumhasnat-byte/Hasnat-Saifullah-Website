@@ -7,3 +7,40 @@ html { scroll-behavior: smooth; }
   100% { opacity: 1; }
 }
 .animate-blink { animation: blink 1.5s infinite; }
+
+.shiny-underline {
+  position: relative;
+  display: inline-block;
+}
+.shiny-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #2563eb, #7c3aed, #2563eb);
+  border-radius: 4px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.shiny-underline:hover::after { transform: scaleX(1); }
+
+.slider-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.slider-dot--inactive {
+  background: rgba(148, 163, 184, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+.slider-dot--active {
+  background: #2563eb;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  transform: scale(1.3);
+}

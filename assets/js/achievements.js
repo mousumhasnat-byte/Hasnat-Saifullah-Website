@@ -1,11 +1,37 @@
 // ── Sliders ───────────────────────────────────────────────────────────────────
+function setDots(dotsId, active) {
+  const dots = document.getElementById(dotsId);
+  if (!dots) return;
+  [...dots.children].forEach((d, i) => {
+    d.classList.toggle('slider-dot--active', i === active);
+    d.classList.toggle('slider-dot--inactive', i !== active);
+  });
+}
+
+function renderDots(dotsId, total, goToFn) {
+  const dots = document.getElementById(dotsId);
+  if (!dots) return;
+  dots.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'slider-dot slider-dot--inactive';
+    b.setAttribute('aria-label', `Go to slide ${i + 1}`);
+    b.addEventListener('click', () => goToFn(i));
+    dots.appendChild(b);
+  }
+  setDots(dotsId, 0);
+}
+
 let bibmStep = 0;
 const bibmTotal = 3;
 function moveBibmSlider(direction) {
   const slider = document.getElementById('slider-bibm');
   bibmStep = (bibmStep + direction + bibmTotal) % bibmTotal;
   slider.style.transform = `translateX(-${bibmStep * 100}%)`;
+  setDots('dots-bibm', bibmStep);
 }
+function goToBibmSlide(i) { bibmStep = i; moveBibmSlider(0); }
 
 let blfcaStep = 0;
 const blfcaTotal = 3;
@@ -13,7 +39,9 @@ function moveBlfcaSlider(direction) {
   const slider = document.getElementById('slider-blfca');
   blfcaStep = (blfcaStep + direction + blfcaTotal) % blfcaTotal;
   slider.style.transform = `translateX(-${blfcaStep * 100}%)`;
+  setDots('dots-blfca', blfcaStep);
 }
+function goToBlfcaSlide(i) { blfcaStep = i; moveBlfcaSlider(0); }
 
 let regStep = 0;
 const regTotal = 2;
@@ -21,7 +49,9 @@ function moveRegSlider(direction) {
   const slider = document.getElementById('slider-regulatory');
   regStep = (regStep + direction + regTotal) % regTotal;
   slider.style.transform = `translateX(-${regStep * 100}%)`;
+  setDots('dots-regulatory', regStep);
 }
+function goToRegSlide(i) { regStep = i; moveRegSlider(0); }
 
 let ostadStep = 0;
 const ostadTotal = 3;
@@ -29,7 +59,9 @@ function moveOstadUnboltSlider(direction) {
   const slider = document.getElementById('slider-ostad-unbolt');
   ostadStep = (ostadStep + direction + ostadTotal) % ostadTotal;
   slider.style.transform = `translateX(-${ostadStep * 100}%)`;
+  setDots('dots-ostad-unbolt', ostadStep);
 }
+function goToOstadSlide(i) { ostadStep = i; moveOstadUnboltSlider(0); }
 
 let aiStep = 0;
 const aiTotal = 1;
@@ -113,3 +145,9 @@ backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior:
 document.addEventListener('DOMContentLoaded', function () {
   if (typeof AOS !== 'undefined') AOS.init({ duration: 700, once: true });
 });
+
+// ── Slider Dots ───────────────────────────────────────────────────────────────
+renderDots('dots-ostad-unbolt', ostadTotal, goToOstadSlide);
+renderDots('dots-blfca', blfcaTotal, goToBlfcaSlide);
+renderDots('dots-regulatory', regTotal, goToRegSlide);
+renderDots('dots-bibm', bibmTotal, goToBibmSlide);
