@@ -72,6 +72,16 @@ function moveAiSlider(direction) {
   slider.style.transform = `translateX(-${aiStep * 100}%)`;
 }
 
+let grcStep = 0;
+const grcTotal = 3;
+function moveGrcSlider(direction) {
+  const slider = document.getElementById('slider-grc');
+  grcStep = (grcStep + direction + grcTotal) % grcTotal;
+  slider.style.transform = `translateX(-${grcStep * 100}%)`;
+  setDots('dots-grc', grcStep);
+}
+function goToGrcSlide(i) { grcStep = i; moveGrcSlider(0); }
+
 // ── Back to Top ───────────────────────────────────────────────────────────────
 const backToTopBtn = document.getElementById('backToTop');
 window.addEventListener('scroll', () => {
@@ -151,3 +161,4 @@ renderDots('dots-ostad-unbolt', ostadTotal, goToOstadSlide);
 renderDots('dots-blfca', blfcaTotal, goToBlfcaSlide);
 renderDots('dots-regulatory', regTotal, goToRegSlide);
 renderDots('dots-bibm', bibmTotal, goToBibmSlide);
+renderDots('dots-grc', grcTotal, goToGrcSlide);
