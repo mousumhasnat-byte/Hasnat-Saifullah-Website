@@ -1,6 +1,8 @@
 * { font-family: 'Inter', system-ui, sans-serif; }
 html { scroll-behavior: smooth; }
 
+main p, main li { text-align: justify; }
+
 /* Fixes shiny-underline — was referenced but never defined on this page */
 .shiny-underline {
   position: relative;
