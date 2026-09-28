@@ -1,5 +1,7 @@
 * { font-family: 'Inter', system-ui, sans-serif; }
 html { scroll-behavior: smooth; }
+p, li { text-align: justify; }
+header p, header li { text-align: center; }
 
 @keyframes blink {
   0%   { opacity: 1; }
