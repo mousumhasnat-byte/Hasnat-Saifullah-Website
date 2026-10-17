@@ -45,15 +45,6 @@ function moveCreativeSlider(direction) {
 }
 function goToCreativeSlide(i) { creativeStep = i; moveCreativeSlider(0); }
 
-let bifoldStep = 0;
-const bifoldTotal = 2;
-function moveBifoldSlider(direction) {
-  const slider = document.getElementById('slider-project-bifold');
-  if (!slider) return;
-  bifoldStep = (bifoldStep + direction + bifoldTotal) % bifoldTotal;
-  slider.style.transform = `translateX(-${bifoldStep * 100}%)`;
-}
-
 let webDashStep = 0;
 const webDashTotal = 10;
 function moveWebDashSlider(direction) {

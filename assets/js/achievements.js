@@ -63,15 +63,6 @@ function moveOstadUnboltSlider(direction) {
 }
 function goToOstadSlide(i) { ostadStep = i; moveOstadUnboltSlider(0); }
 
-let aiStep = 0;
-const aiTotal = 1;
-function moveAiSlider(direction) {
-  if (aiTotal <= 1) return;
-  const slider = document.getElementById('slider-ai-academy');
-  aiStep = (aiStep + direction + aiTotal) % aiTotal;
-  slider.style.transform = `translateX(-${aiStep * 100}%)`;
-}
-
 let grcStep = 0;
 const grcTotal = 3;
 function moveGrcSlider(direction) {
