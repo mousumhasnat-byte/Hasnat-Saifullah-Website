@@ -70,6 +70,19 @@ const webDashImages = [
   'assets/images/deposit_dashboard_maturity.png',
 ];
 
+const webDashAlts = [
+  'Loan Dashboard — Executive Summary screenshot',
+  'Loan Dashboard — Portfolio Overview screenshot',
+  'Loan Dashboard — Graphics & Charts screenshot',
+  'Loan Dashboard — Monthly Recovery screenshot',
+  'Deposit Dashboard — Executive Summary screenshot',
+  'Deposit Dashboard — Portfolio Overview screenshot',
+  'Deposit Dashboard — Graphics & Trends screenshot',
+  'Deposit Dashboard — Liability Team screenshot',
+  'Deposit Dashboard — Encashments screenshot',
+  'Deposit Dashboard — Maturing Accounts screenshot',
+];
+
 let modalImageIndex = 0;
 let currentZoom = 1;
 
@@ -109,6 +122,7 @@ function openImageModal(index) {
   if (modal && modalImg) {
     modalImg.onload = function () { applyZoom(); };
     modalImg.src = webDashImages[index];
+    modalImg.alt = webDashAlts[index] || 'Dashboard screenshot preview';
     modal.classList.remove('hidden');
     if (zoomBar) zoomBar.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
@@ -133,6 +147,7 @@ function modalPrev() {
   if (modalImg) {
     modalImg.onload = function () { applyZoom(); };
     modalImg.src = webDashImages[modalImageIndex];
+    modalImg.alt = webDashAlts[modalImageIndex] || 'Dashboard screenshot preview';
   }
 }
 
@@ -143,6 +158,7 @@ function modalNext() {
   if (modalImg) {
     modalImg.onload = function () { applyZoom(); };
     modalImg.src = webDashImages[modalImageIndex];
+    modalImg.alt = webDashAlts[modalImageIndex] || 'Dashboard screenshot preview';
   }
 }
 
@@ -172,6 +188,7 @@ backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior:
   const canvas = document.getElementById('data-mesh-canvas');
   if (!canvas) return;
   if (window.innerWidth < 768) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const ctx = canvas.getContext('2d');
   let particles = [];
 
@@ -208,6 +225,7 @@ backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior:
   }
 
   let lastTime = 0;
+  let running = true;
   function animate(time) {
     if (time - lastTime > 30) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -229,8 +247,14 @@ backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior:
       });
       lastTime = time;
     }
-    requestAnimationFrame(animate);
+    if (running) requestAnimationFrame(animate);
   }
+
+  // Pause the loop while the tab is hidden to save CPU/battery.
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { running = false; }
+    else if (!running) { running = true; lastTime = 0; requestAnimationFrame(animate); }
+  });
 
   window.addEventListener('resize', init);
   init();
@@ -243,3 +267,11 @@ renderDots('dots-project-1', projectTotal, goToProjectSlide);
 renderDots('dots-project-creative', creativeTotal, goToCreativeSlide);
 
 AOS.init({ duration: 700, once: true });
+
+// Keyboard support for clickable elements that use role="button" (Enter / Space)
+document.addEventListener('keydown', e => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target instanceof Element && e.target.matches('[role="button"]')) {
+    e.preventDefault();
+    e.target.click();
+  }
+});

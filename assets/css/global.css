@@ -6,6 +6,24 @@ p, li { text-align: justify; }
 #contact p, #contact li { text-align: center; }
 body > section:first-of-type p, body > section:first-of-type li { text-align: center; }
 
+/* ── Accessibility: visible keyboard focus ─────────────────────────────────── */
+/* Kept in CSS (not utility classes) so every interactive element is covered. */
+:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ── Accessibility: honour reduced-motion preference ───────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Shared "shiny" hover underline — used by page headers */
 .shiny-underline {
   position: relative;

@@ -89,6 +89,7 @@ backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior:
   const canvas = document.getElementById('achievements-canvas');
   if (!canvas) return;
   if (window.innerWidth < 768) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const ctx = canvas.getContext('2d');
   let sparks = [];
 
@@ -130,13 +131,21 @@ backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior:
   }
 
   let lastTime = 0;
+  let running = true;
   function animate(time) {
-    if (time - lastTime < 33) { requestAnimationFrame(animate); return; }
-    lastTime = time;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    sparks.forEach(s => { s.update(); s.draw(); });
-    requestAnimationFrame(animate);
+    if (running && time - lastTime >= 33) {
+      lastTime = time;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      sparks.forEach(s => { s.update(); s.draw(); });
+    }
+    if (running) requestAnimationFrame(animate);
   }
+
+  // Pause the loop while the tab is hidden to save CPU/battery.
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { running = false; }
+    else if (!running) { running = true; lastTime = 0; requestAnimationFrame(animate); }
+  });
 
   window.addEventListener('resize', init);
   init();

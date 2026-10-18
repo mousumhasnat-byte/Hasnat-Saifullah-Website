@@ -4,19 +4,84 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Projects | Hasnat Saifullah</title>
-  <meta name="description" content="Executive case studies on financial analytics, credit risk, and digital growth by Hasnat Saifullah">
+  <meta name="description" content="Projects by Hasnat Saifullah: Bike Lifecycle Tracker, MIS Dashboard Suite (Loan &amp; Deposit), and corporate branding case studies.">
+  <link rel="canonical" href="https://hasnat-saifullah.example/projects.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta property="og:title" content="Projects | Hasnat Saifullah" />
   <meta property="og:description" content="Case studies in financial analytics, credit risk, and data-driven decision making." />
+  <meta property="og:url" content="https://hasnat-saifullah.example/projects.html" />
+  <meta property="og:image" content="https://hasnat-saifullah.example/assets/images/profile.jpg" />
   <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Projects | Hasnat Saifullah" />
+  <meta name="twitter:description" content="Case studies in financial analytics, credit risk, and data-driven decision making." />
+  <meta name="twitter:image" content="https://hasnat-saifullah.example/assets/images/profile.jpg">
+
+  <!-- Structured data: WebPage + CreativeWork projects -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "name": "Projects | Hasnat Saifullah",
+        "url": "https://hasnat-saifullah.example/projects.html",
+        "description": "Case studies in financial analytics, credit risk, and data-driven decision making.",
+        "isPartOf": { "@type": "WebSite", "name": "Hasnat Saifullah", "url": "https://hasnat-saifullah.example/" },
+        "about": { "@type": "Person", "name": "Hasnat Saifullah", "url": "https://hasnat-saifullah.example/" }
+      },
+      {
+        "@type": "ItemList",
+        "name": "Featured Projects",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "item": {
+              "@type": "CreativeWork",
+              "name": "Bike Lifecycle & Maintenance Tracker",
+              "url": "https://hasnat-saifullah.example/projects.html#bike-mileage",
+              "creator": { "@type": "Person", "name": "Hasnat Saifullah" },
+              "about": "Automotive data analytics dashboard built with Looker Studio, Google Sheets and BigQuery"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "item": {
+              "@type": "CreativeWork",
+              "name": "MIS Dashboard Suite for Loan & Deposit Portfolio",
+              "url": "https://hasnat-saifullah.example/projects.html#web-dashboards",
+              "creator": { "@type": "Person", "name": "Hasnat Saifullah" },
+              "about": "Company-wide MIS platform built with PHP, JavaScript, Chart.js and SheetJS/XLSX for Bay Leasing & Investment Ltd., consolidating all branches' Loan and Deposit portfolio data into one interactive web dashboard",
+              "dateCreated": "2025-11",
+              "dateModified": "2026-04"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "item": {
+              "@type": "CreativeWork",
+              "name": "Corporate Branding & Creative Design",
+              "url": "https://hasnat-saifullah.example/projects.html#creative-design",
+              "creator": { "@type": "Person", "name": "Hasnat Saifullah" },
+              "about": "Corporate identity and marketing collateral designed in Adobe Photoshop and Illustrator"
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
   <!-- DNS prefetch -->
-  <link rel="dns-prefetch" href="//cdn.tailwindcss.com">
   <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="assets/images/Hasnat Saifullah Photo Favcon.jpg">
 
-  <!-- Tailwind (blocking — required) -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind (blocking — production build) -->
+  <link rel="stylesheet" href="assets/css/tailwind.css">
 
   <!-- Font Awesome — non-blocking -->
   <link rel="stylesheet"
@@ -33,7 +98,7 @@
 
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans">
-<canvas id="data-mesh-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-[0] opacity-60"></canvas>
+<canvas id="data-mesh-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-[0] opacity-60" aria-hidden="true"></canvas>
 
 <!-- ===== NAVIGATION ===== -->
 <nav class="bg-white/80 backdrop-blur-md border-b border-slate-200/60 sticky top-0 z-50 shadow-sm">
@@ -70,9 +135,17 @@
       </div>
       <h2 class="text-3xl font-bold mb-4">Bike Lifecycle & Maintenance Tracker</h2>
       <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 mb-6">
-        <p class="font-semibold text-slate-800 flex items-center gap-2"><i class="fas fa-info-circle text-blue-500"></i>Project Overview</p>
+        <p class="font-semibold text-slate-800 flex items-center gap-2"><i class="fas fa-bullseye text-red-500"></i>Problem</p>
         <p class="text-slate-600 text-sm mt-2 leading-relaxed">
-          A comprehensive automated vehicle health tracking solution built in <strong>Google Data Studio</strong> to monitor mileage, parts maintenance cycles, and ownership costs through interactive data visualization.
+          Vehicle running costs were tracked manually in notebooks, making mileage, fuel spend, and service due-dates impossible to analyse. There was no way to see when oil, tyres, or brake pads were due, or what the bike actually cost to own per kilometre.
+        </p>
+        <p class="font-semibold text-slate-800 flex items-center gap-2 mt-4"><i class="fas fa-cogs text-blue-500"></i>Solution</p>
+        <p class="text-slate-600 text-sm mt-2 leading-relaxed">
+          Built an automated vehicle-health tracker in <strong>Looker Studio</strong> connected to Google Sheets and BigQuery. The dashboard calculates odometer and daily averages, counts down parts-replacement intervals, and logs fuel-station history and full ownership cost — all updated from structured trip and expense data.
+        </p>
+        <p class="font-semibold text-slate-800 flex items-center gap-2 mt-4"><i class="fas fa-chart-line text-emerald-500"></i>Impact</p>
+        <p class="text-slate-600 text-sm mt-2 leading-relaxed">
+          Turns scattered logs into a single real-time view of ownership cost and maintenance risk — enabling proactive servicing, clearer cost-per-kilometre analysis, and data-driven decisions that keep the vehicle in optimal condition.
         </p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-slate-700 mb-6">
@@ -94,9 +167,15 @@
         </div>
       </div>
       <div class="flex flex-wrap gap-2">
-        <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">Data Studio</span>
-        <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">BigQuery/Sheets</span>
+        <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">Looker Studio</span>
+        <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">Google Sheets</span>
+        <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">BigQuery</span>
         <span class="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-semibold rounded-full">Vehicle Analytics</span>
+      </div>
+      <div class="mt-6 flex flex-wrap items-center gap-4">
+        <a href="https://lookerstudio.google.com/reporting/7003ffa0-b437-4b84-aeba-9c1e335ed96c" target="_blank" rel="noopener noreferrer" class="text-blue-600 font-bold text-sm hover:underline flex items-center gap-2">
+          View Live Dashboard <i class="fas fa-external-link-alt"></i>
+        </a>
       </div>
     </div>
 
@@ -119,11 +198,11 @@
   </section>
 
   <!-- 2: MIS Dashboard Suite -->
-  <section id="web-dashboards" class="grid lg:grid-cols-2 gap-12 items-center bg-white/50 backdrop-blur-sm p-8 rounded-3xl border border-slate-200 shadow-lg hover:shadow-xl transition project-card-hover" data-aos="fade-up">
-    <div class="relative rounded-xl shadow-xl border overflow-hidden group md:h-[55vh] h-[300px] bg-slate-100/50">
+  <section id="web-dashboards" class="grid lg:grid-cols-2 gap-12 lg:items-stretch bg-white/50 backdrop-blur-sm p-8 rounded-3xl border border-slate-200 shadow-lg hover:shadow-xl transition project-card-hover" data-aos="fade-up">
+    <div class="relative rounded-xl shadow-xl border overflow-hidden group h-[300px] lg:h-auto lg:min-h-[620px] bg-slate-100/50">
       <div id="slider-web-dash" class="flex transition-transform duration-500 ease-in-out w-full h-full" style="transform:translateX(0%);">
         <div class="min-w-full w-full flex-shrink-0 h-full">
-          <div class="relative group cursor-pointer h-full" onclick="openImageModal(0)">
+          <div class="relative group cursor-pointer h-full" role="button" tabindex="0" onclick="openImageModal(0)">
             <img src="assets/images/loan_dashboard_executive_summary.png" class="w-full h-full object-contain bg-slate-100/50" alt="Loan Dashboard - Executive Summary" loading="lazy" />
             <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <div class="bg-white/90 p-3 rounded-full text-blue-600 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all">
@@ -133,7 +212,7 @@
           </div>
         </div>
         <div class="min-w-full w-full flex-shrink-0 h-full">
-          <div class="relative group cursor-pointer h-full" onclick="openImageModal(1)">
+          <div class="relative group cursor-pointer h-full" role="button" tabindex="0" onclick="openImageModal(1)">
             <img src="assets/images/loan_dashboard_overview.png" class="w-full h-full object-contain bg-slate-100/50" alt="Loan Dashboard - Portfolio Overview" loading="lazy" />
             <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <div class="bg-white/90 p-3 rounded-full text-blue-600 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all">
@@ -143,7 +222,7 @@
           </div>
         </div>
         <div class="min-w-full w-full flex-shrink-0 h-full">
-          <div class="relative group cursor-pointer h-full" onclick="openImageModal(2)">
+          <div class="relative group cursor-pointer h-full" role="button" tabindex="0" onclick="openImageModal(2)">
             <img src="assets/images/loan_dashboard_graphics.png" class="w-full h-full object-contain bg-slate-100/50" alt="Loan Dashboard - Graphics & Charts" loading="lazy" />
             <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <div class="bg-white/90 p-3 rounded-full text-blue-600 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all">
@@ -153,7 +232,7 @@
           </div>
         </div>
         <div class="min-w-full w-full flex-shrink-0 h-full">
-          <div class="relative group cursor-pointer h-full" onclick="openImageModal(3)">
+          <div class="relative group cursor-pointer h-full" role="button" tabindex="0" onclick="openImageModal(3)">
             <img src="assets/images/loan_dashboard_recovery.png" class="w-full h-full object-contain bg-slate-100/50" alt="Loan Dashboard - Monthly Recovery" loading="lazy" />
             <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <div class="bg-white/90 p-3 rounded-full text-blue-600 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all">
@@ -163,7 +242,7 @@
           </div>
         </div>
         <div class="min-w-full w-full flex-shrink-0 h-full">
-          <div class="relative group cursor-pointer h-full" onclick="openImageModal(4)">
+          <div class="relative group cursor-pointer h-full" role="button" tabindex="0" onclick="openImageModal(4)">
             <img src="assets/images/deposit_dashboard_executive_summary.png" class="w-full h-full object-contain bg-slate-100/50" alt="Deposit Dashboard - Executive Summary" loading="lazy" />
             <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <div class="bg-white/90 p-3 rounded-full text-blue-600 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all">
@@ -173,7 +252,7 @@
           </div>
         </div>
         <div class="min-w-full w-full flex-shrink-0 h-full">
-          <div class="relative group cursor-pointer h-full" onclick="openImageModal(5)">
+          <div class="relative group cursor-pointer h-full" role="button" tabindex="0" onclick="openImageModal(5)">
             <img src="assets/images/deposit_dashboard_overview.png" class="w-full h-full object-contain bg-slate-100/50" alt="Deposit Dashboard - Portfolio Overview" loading="lazy" />
             <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <div class="bg-white/90 p-3 rounded-full text-blue-600 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all">
@@ -183,7 +262,7 @@
           </div>
         </div>
         <div class="min-w-full w-full flex-shrink-0 h-full">
-          <div class="relative group cursor-pointer h-full" onclick="openImageModal(6)">
+          <div class="relative group cursor-pointer h-full" role="button" tabindex="0" onclick="openImageModal(6)">
             <img src="assets/images/deposit_dashboard_graphics.png" class="w-full h-full object-contain bg-slate-100/50" alt="Deposit Dashboard - Graphics & Trends" loading="lazy" />
             <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <div class="bg-white/90 p-3 rounded-full text-blue-600 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all">
@@ -193,7 +272,7 @@
           </div>
         </div>
         <div class="min-w-full w-full flex-shrink-0 h-full">
-          <div class="relative group cursor-pointer h-full" onclick="openImageModal(7)">
+          <div class="relative group cursor-pointer h-full" role="button" tabindex="0" onclick="openImageModal(7)">
             <img src="assets/images/deposit_dashboard_liability_team.png" class="w-full h-full object-contain bg-slate-100/50" alt="Deposit Dashboard - Liability Team" loading="lazy" />
             <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <div class="bg-white/90 p-3 rounded-full text-blue-600 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all">
@@ -203,7 +282,7 @@
           </div>
         </div>
         <div class="min-w-full w-full flex-shrink-0 h-full">
-          <div class="relative group cursor-pointer h-full" onclick="openImageModal(8)">
+          <div class="relative group cursor-pointer h-full" role="button" tabindex="0" onclick="openImageModal(8)">
             <img src="assets/images/deposit_dashboard_encashments.png" class="w-full h-full object-contain bg-slate-100/50" alt="Deposit Dashboard - Encashments" loading="lazy" />
             <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <div class="bg-white/90 p-3 rounded-full text-blue-600 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all">
@@ -213,7 +292,7 @@
           </div>
         </div>
         <div class="min-w-full w-full flex-shrink-0 h-full">
-          <div class="relative group cursor-pointer h-full" onclick="openImageModal(9)">
+          <div class="relative group cursor-pointer h-full" role="button" tabindex="0" onclick="openImageModal(9)">
             <img src="assets/images/deposit_dashboard_maturity.png" class="w-full h-full object-contain bg-slate-100/50" alt="Deposit Dashboard - Maturing Accounts" loading="lazy" />
             <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <div class="bg-white/90 p-3 rounded-full text-blue-600 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all">
@@ -223,10 +302,10 @@
           </div>
         </div>
       </div>
-      <button onclick="moveWebDashSlider(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 z-40 bg-black/30 hover:bg-black/60 text-white w-10 h-10 rounded-full flex items-center justify-center md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 shadow-lg">
+      <button onclick="moveWebDashSlider(-1)" aria-label="Previous dashboard image" class="absolute left-4 top-1/2 -translate-y-1/2 z-40 bg-black/30 hover:bg-black/60 text-white w-10 h-10 rounded-full flex items-center justify-center md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 shadow-lg">
         <i class="fas fa-chevron-left"></i>
       </button>
-      <button onclick="moveWebDashSlider(1)" class="absolute right-4 top-1/2 -translate-y-1/2 z-40 bg-black/30 hover:bg-black/60 text-white w-10 h-10 rounded-full flex items-center justify-center md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 shadow-lg">
+      <button onclick="moveWebDashSlider(1)" aria-label="Next dashboard image" class="absolute right-4 top-1/2 -translate-y-1/2 z-40 bg-black/30 hover:bg-black/60 text-white w-10 h-10 rounded-full flex items-center justify-center md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 shadow-lg">
         <i class="fas fa-chevron-right"></i>
       </button>
       <div id="dots-web-dash" class="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2"></div>
@@ -236,19 +315,26 @@
       <span class="text-blue-600 font-bold uppercase text-sm">Financial Analytics</span>
       <h2 class="text-3xl font-bold mt-2 mb-4">MIS Dashboard Suite for Loan & Deposit Portfolio</h2>
       <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 mb-6">
-        <p class="font-semibold">Executive Summary</p>
-        <p class="text-slate-600 text-sm mt-2">Architected a full-stack web-based MIS dashboard platform for <strong>Bay Leasing & Investment Ltd.</strong>, consolidating Loan and Deposit portfolio intelligence into a unified interface. The system ingests multi-sheet Excel data files in-browser via <strong>SheetJS/XLSX</strong> — eliminating server-side database dependencies and manual data consolidation. Visual analytics powered by <strong>Chart.js</strong> render real-time KPIs, trend charts, sparklines, and portfolio breakdowns across <strong>Loan Portfolio</strong> (branch, product, RM, CL-wise views, monthly recovery tracking, dropped accounts, CL migration) and <strong>Deposit Portfolio</strong> (executive center, deposit portfolio, liability team performance, encashment analysis, maturing accounts) modules. Secured with a <strong>PHP session-based authentication layer</strong>, the dashboards serve senior management daily for multidimensional filtering, branch-level drill-down, and data-driven portfolio decision-making.</p>
+        <p class="font-semibold text-slate-800 flex items-center gap-2"><i class="fas fa-bullseye text-red-500"></i>Problem</p>
+        <p class="text-slate-600 text-sm mt-2">Loan and Deposit portfolio data at <strong>Bay Leasing & Investment Ltd.</strong> (BLIL) was spread across every branch and pulled manually into static reports. Preparing them was slow and error-prone, and there was no single, interactive view anyone could drill into for timely decisions.</p>
+        <p class="font-semibold text-slate-800 flex items-center gap-2 mt-4"><i class="fas fa-cogs text-blue-500"></i>Solution</p>
+        <p class="text-slate-600 text-sm mt-2">Solely built a company-wide MIS platform — initiated at the request of the <strong>Managing Director</strong> — that consolidates Loan and Deposit portfolio data from all branches into one interactive web dashboard, replacing static reports and manual data pulls. Multi-sheet Excel files are parsed in the browser via <strong>SheetJS/XLSX</strong> (so no database is needed), <strong>Chart.js</strong> renders KPIs, trend charts, sparklines and portfolio breakdowns, and <strong>PHP session-based authentication</strong> secures access. It started in <strong>November 2025</strong> as a Power BI prototype and was re-architected in <strong>April 2026</strong> as a standalone web dashboard for more flexibility, easy deployment on any machine, tighter access control and faster iteration — and remains in active development.</p>
+        <p class="font-semibold text-slate-800 flex items-center gap-2 mt-4"><i class="fas fa-chart-line text-emerald-500"></i>Impact</p>
+        <p class="text-slate-600 text-sm mt-2">Senior management uses it for monthly business reviews and meeting presentations, while <strong>15–20 back-office colleagues</strong> rely on it for Bangladesh Bank (BB) reporting — cutting <strong>2–3 hours</strong> of manual data pulling, sorting and compiling down to a few clicks. Pre-calculated KPIs, time-series data and multi-dimensional filtering (branch, product, RM, customer segment) give instant drill-down, establishing one source of truth across the full company portfolio.</p>
       </div>
       <ul class="space-y-3 text-slate-700">
-        <li class="flex items-center gap-2"><i class="fas fa-file-excel text-green-600"></i> Replaced static PDF reports with a live interactive MIS — trusted daily by senior management for data-driven decisions</li>
-        <li class="flex items-center gap-2"><i class="fas fa-sliders-h text-blue-500"></i> Multi-dimensional filtering by branch, product, RM, and customer segment for instant portfolio drill-down</li>
-        <li class="flex items-center gap-2"><i class="fas fa-tachometer-alt text-emerald-500"></i> Dual-platform coverage — Loan &amp; Deposit portfolios under one unified web interface</li>
+        <li class="flex items-center gap-2"><i class="fas fa-building-columns text-blue-500"></i> Company-wide coverage — every branch's Loan &amp; Deposit portfolio under one interactive interface</li>
+        <li class="flex items-center gap-2"><i class="fas fa-clock text-emerald-500"></i> Saves 15–20 back-office users 2–3 hours per Bangladesh Bank report, now down to a few clicks</li>
+        <li class="flex items-center gap-2"><i class="fas fa-sliders-h text-blue-500"></i> Pre-calculated KPIs, time-series data and multi-dimensional filtering for instant drill-down</li>
+        <li class="flex items-center gap-2"><i class="fas fa-history text-amber-500"></i> Evolved from a Power BI prototype (Nov 2025) to a standalone web app (Apr 2026) — in active development</li>
+        <li class="flex items-center gap-2"><i class="fas fa-database text-purple-500"></i> Single source of truth for monthly business reviews, management presentations and regulatory reporting</li>
       </ul>
       <div class="mt-6 flex flex-wrap gap-2">
         <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded">PHP</span>
-        <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-semibold rounded">Chart.js</span>
-        <span class="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-semibold rounded">SheetJS</span>
         <span class="px-3 py-1 bg-sky-100 text-sky-700 text-xs font-semibold rounded">JavaScript</span>
+        <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-semibold rounded">Chart.js</span>
+        <span class="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-semibold rounded">SheetJS/XLSX</span>
+        <span class="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs font-semibold rounded">Power BI (prototype)</span>
       </div>
     </div>
   </section>
@@ -270,10 +356,10 @@
           <img src="assets/images/dashboard  3.jpg" class="w-full h-auto object-cover" alt="NPL Trend View" loading="lazy" />
         </div>
       </div>
-      <button onclick="moveProjectSlider(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 z-40 bg-black/50 hover:bg-black/80 text-white w-10 h-10 rounded-full flex items-center justify-center md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 shadow-lg">
+      <button onclick="moveProjectSlider(-1)" aria-label="Previous project image" class="absolute left-4 top-1/2 -translate-y-1/2 z-40 bg-black/50 hover:bg-black/80 text-white w-10 h-10 rounded-full flex items-center justify-center md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 shadow-lg">
         <i class="fas fa-chevron-left"></i>
       </button>
-      <button onclick="moveProjectSlider(1)" class="absolute right-4 top-1/2 -translate-y-1/2 z-40 bg-black/50 hover:bg-black/80 text-white w-10 h-10 rounded-full flex items-center justify-center md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 shadow-lg">
+      <button onclick="moveProjectSlider(1)" aria-label="Next project image" class="absolute right-4 top-1/2 -translate-y-1/2 z-40 bg-black/50 hover:bg-black/80 text-white w-10 h-10 rounded-full flex items-center justify-center md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 shadow-lg">
         <i class="fas fa-chevron-right"></i>
       </button>
       <div id="dots-project-1" class="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2"></div>
@@ -305,8 +391,12 @@
       <span class="text-indigo-600 font-bold uppercase text-sm">Visual Communication</span>
       <h2 class="text-3xl font-bold mt-2 mb-4">Corporate Branding & Creative Design</h2>
       <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 mb-6">
-        <p class="font-semibold">Project Overview</p>
-        <p class="text-slate-600 text-sm mt-2">Developed high-impact visual assets for <strong>Bay Leasing & Investment Ltd.</strong>, focusing on corporate identity through professional banner designs and marketing materials.</p>
+        <p class="font-semibold text-slate-800 flex items-center gap-2"><i class="fas fa-bullseye text-red-500"></i>Problem</p>
+        <p class="text-slate-600 text-sm mt-2">Bay Leasing &amp; Investment Ltd. needed high-impact, print-ready visual assets that maintained a consistent, professional corporate identity across branches and marketing materials — without a unified design system.</p>
+        <p class="font-semibold text-slate-800 flex items-center gap-2 mt-4"><i class="fas fa-cogs text-blue-500"></i>Solution</p>
+        <p class="text-slate-600 text-sm mt-2">Designed a suite of corporate identity assets in <strong>Adobe Photoshop</strong> and <strong>Adobe Illustrator</strong> — high-resolution lift lets, large-format banners, and marketing collateral — all built on clean, professional layouts and a modernized brand aesthetic.</p>
+        <p class="font-semibold text-slate-800 flex items-center gap-2 mt-4"><i class="fas fa-chart-line text-emerald-500"></i>Impact</p>
+        <p class="text-slate-600 text-sm mt-2">Modernized the brand aesthetic and enhanced branch-level visibility and client engagement across the organization's physical and digital touchpoints.</p>
       </div>
       <ul class="space-y-3 text-slate-700">
         <li class="flex items-center gap-2"><i class="fas fa-palette text-indigo-500"></i> Modernized brand aesthetic with clean, professional layouts</li>
@@ -317,6 +407,7 @@
         <div class="flex flex-wrap gap-2">
           <span class="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs font-semibold rounded">Photoshop</span>
           <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded">Adobe Illustrator</span>
+          <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded">Print Design</span>
           <span class="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-semibold rounded">Branding</span>
         </div>
         <a href="https://www.behance.net/mousumhasnat" rel="noopener noreferrer" class="text-blue-600 font-bold text-sm hover:underline flex items-center gap-2">
@@ -335,10 +426,10 @@
         </div>
         
       </div>
-      <button onclick="moveCreativeSlider(-1)" class="absolute left-3 top-1/2 -translate-y-1/2 z-40 bg-black/40 hover:bg-black/80 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-lg">
+      <button onclick="moveCreativeSlider(-1)" aria-label="Previous creative design image" class="absolute left-3 top-1/2 -translate-y-1/2 z-40 bg-black/40 hover:bg-black/80 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-lg">
         <i class="fas fa-chevron-left"></i>
       </button>
-      <button onclick="moveCreativeSlider(1)" class="absolute right-3 top-1/2 -translate-y-1/2 z-40 bg-black/40 hover:bg-black/80 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-lg">
+      <button onclick="moveCreativeSlider(1)" aria-label="Next creative design image" class="absolute right-3 top-1/2 -translate-y-1/2 z-40 bg-black/40 hover:bg-black/80 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-lg">
         <i class="fas fa-chevron-right"></i>
       </button>
       <div id="dots-project-creative" class="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2"></div>
@@ -391,35 +482,35 @@
   <p class="text-sm">© Hasnat Saifullah · Data-Driven Strategist & Creative Excellence</p>
 </footer>
 
-<button id="backToTop" class="fixed bottom-8 right-8 bg-blue-600 text-white w-12 h-12 rounded-full shadow-2xl hidden items-center justify-center hover:bg-blue-500 hover:scale-110 transition-all z-[60] focus:outline-none">
+<button id="backToTop" aria-label="Back to top" class="fixed bottom-8 right-8 bg-blue-600 text-white w-12 h-12 rounded-full shadow-2xl hidden items-center justify-center hover:bg-blue-500 hover:scale-110 transition-all z-[60]">
   <i class="fas fa-arrow-up"></i>
 </button>
 
 <!-- Image Modal -->
 <div id="imageModal" class="fixed inset-0 z-[9999] hidden bg-black/90 flex items-center justify-center overflow-hidden">
-  <button onclick="closeImageModal()" class="fixed top-4 right-4 z-[10000] text-white text-4xl hover:text-blue-400 transition-all">
+  <button onclick="closeImageModal()" aria-label="Close image viewer" class="fixed top-4 right-4 z-[10000] text-white text-4xl hover:text-blue-400 transition-all">
     <i class="fas fa-times-circle"></i>
   </button>
 
-  <button onclick="modalPrev()" class="fixed left-6 top-1/2 -translate-y-1/2 z-[10000] text-white text-3xl hover:text-blue-400 transition-all w-12 h-12 flex items-center justify-center bg-black/30 hover:bg-black/60 rounded-full">
+  <button onclick="modalPrev()" aria-label="Previous image" class="fixed left-6 top-1/2 -translate-y-1/2 z-[10000] text-white text-3xl hover:text-blue-400 transition-all w-12 h-12 flex items-center justify-center bg-black/30 hover:bg-black/60 rounded-full">
     <i class="fas fa-chevron-left"></i>
   </button>
-  <button onclick="modalNext()" class="fixed right-6 top-1/2 -translate-y-1/2 z-[10000] text-white text-3xl hover:text-blue-400 transition-all w-12 h-12 flex items-center justify-center bg-black/30 hover:bg-black/60 rounded-full">
+  <button onclick="modalNext()" aria-label="Next image" class="fixed right-6 top-1/2 -translate-y-1/2 z-[10000] text-white text-3xl hover:text-blue-400 transition-all w-12 h-12 flex items-center justify-center bg-black/30 hover:bg-black/60 rounded-full">
     <i class="fas fa-chevron-right"></i>
   </button>
 
   <div id="modalImgWrapper" class="absolute inset-0 flex overflow-auto p-4">
-    <img id="modalImg" src="" class="w-full h-auto m-auto rounded-lg shadow-2xl border-4 border-white/10 transition-[width] duration-200">
+    <img id="modalImg" src="" alt="Dashboard screenshot preview" class="w-full h-auto m-auto rounded-lg shadow-2xl border-4 border-white/10 transition-[width] duration-200">
   </div>
 </div>
 
 <!-- Zoom Bar (outside modal to avoid fixed-position issues) -->
 <div id="zoomBar" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[10010] hidden bg-black/60 backdrop-blur-sm rounded-full px-4 py-2 flex items-center gap-3 shadow-xl">
-  <button onclick="zoomOut()" class="text-white text-xl w-8 h-8 flex items-center justify-center hover:bg-white/20 rounded-full transition" title="Zoom Out">−</button>
+  <button onclick="zoomOut()" aria-label="Zoom out" class="text-white text-xl w-8 h-8 flex items-center justify-center hover:bg-white/20 rounded-full transition" title="Zoom Out">−</button>
   <span id="zoomLevel" class="text-white text-sm font-mono min-w-[3rem] text-center">100%</span>
-  <button onclick="zoomIn()" class="text-white text-xl w-8 h-8 flex items-center justify-center hover:bg-white/20 rounded-full transition" title="Zoom In">+</button>
+  <button onclick="zoomIn()" aria-label="Zoom in" class="text-white text-xl w-8 h-8 flex items-center justify-center hover:bg-white/20 rounded-full transition" title="Zoom In">+</button>
   <span class="text-white/30 mx-1">|</span>
-  <button onclick="resetZoom()" class="text-white text-xs px-3 py-1 hover:bg-white/20 rounded-full transition" title="Reset to fit window">Fit</button>
+  <button onclick="resetZoom()" aria-label="Reset zoom to fit window" class="text-white text-xs px-3 py-1 hover:bg-white/20 rounded-full transition" title="Reset to fit window">Fit</button>
 </div>
 
 </body>

@@ -6,7 +6,6 @@
   <title>Hasnat Saifullah · Compliance & Credit Analytics</title>
 
   <!-- DNS prefetch for all CDN domains -->
-  <link rel="dns-prefetch" href="//cdn.tailwindcss.com">
   <link rel="dns-prefetch" href="//fonts.googleapis.com">
   <link rel="dns-prefetch" href="//fonts.gstatic.com">
   <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
@@ -19,15 +18,58 @@
   <link rel="icon" type="image/png" href="assets/images/Hasnat%20Saifullah%20Photo%20Favcon.jpg" />
 
   <!-- META -->
+  <!-- ⚠ SEO BASE URL: replace https://hasnat-saifullah.example with your real domain (find & replace) -->
   <meta name="description" content="Hasnat Saifullah – Credit Administration, Internal Control, Financial Analytics, Power BI, SEO & Data-Driven Decision Making. 7+ years in NBFIs & digital growth." />
+  <link rel="canonical" href="https://hasnat-saifullah.example/" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta property="og:title" content="Hasnat Saifullah · Compliance & Credit Analytics" />
   <meta property="og:description" content="7+ years in Credit Operations, Internal Control, and Data Visualization. Turning data into senior management decisions." />
-  <meta property="og:image" content="assets/images/profile.jpg" />
+  <meta property="og:url" content="https://hasnat-saifullah.example/" />
+  <meta property="og:image" content="https://hasnat-saifullah.example/assets/images/profile.jpg" />
   <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Hasnat Saifullah" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Hasnat Saifullah · Compliance & Credit Analytics" />
+  <meta name="twitter:description" content="7+ years in Credit Operations, Internal Control, and Data Visualization. Turning data into senior management decisions." />
+  <meta name="twitter:image" content="https://hasnat-saifullah.example/assets/images/profile.jpg" />
   <meta name="theme-color" content="#0f172a">
 
-  <!-- TAILWIND (blocking — required for CDN mode) -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Structured data: Person + WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "name": "Hasnat Saifullah",
+        "url": "https://hasnat-saifullah.example/",
+        "image": "https://hasnat-saifullah.example/assets/images/profile.jpg",
+        "jobTitle": "Senior Officer – Internal Control & Compliance / Financial Data Analyst",
+        "worksFor": { "@type": "Organization", "name": "Bay Leasing & Investment Ltd." },
+        "sameAs": [
+          "https://www.linkedin.com/in/hasnatsaifullah/",
+          "https://www.facebook.com/hasnat.saifullah6.1/"
+        ],
+        "knowsAbout": [
+          "Credit Administration",
+          "Internal Control & Compliance",
+          "Regulatory Reporting",
+          "Power BI",
+          "Financial Analytics",
+          "MIS Dashboard Development"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "name": "Hasnat Saifullah",
+        "url": "https://hasnat-saifullah.example/"
+      }
+    ]
+  }
+  </script>
+
+  <!-- TAILWIND (blocking — production build) -->
+  <link rel="stylesheet" href="assets/css/tailwind.css">
 
   <!-- Fonts — non-blocking -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,7 +97,7 @@
 <body class="bg-slate-50 text-slate-900 antialiased">
 
 <!-- ===== ANIMATED BACKGROUND ===== -->
-<div class="animated-bg">
+<div class="animated-bg" aria-hidden="true">
   <div class="bg-shape bg-shape-1"></div>
   <div class="bg-shape bg-shape-2"></div>
   <div class="bg-shape bg-shape-3"></div>
@@ -83,7 +125,7 @@
 
     <div class="flex items-center gap-4">
       <a href="#contact" class="hidden md:inline-block px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm rounded-full shadow-md hover:shadow-xl transition-all">Hire me</a>
-      <button id="menu-btn" class="md:hidden text-2xl text-blue-700 focus:outline-none relative z-50">
+      <button id="menu-btn" class="md:hidden text-2xl text-blue-700 relative z-50 rounded-md" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-menu">
         <i class="fas fa-bars"></i>
       </button>
     </div>
@@ -102,7 +144,7 @@
 
 <!-- ===== HERO SECTION ===== -->
 <section class="relative pt-20 pb-12 px-6 overflow-hidden bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-white">
-  <canvas id="data-mesh" class="absolute inset-0 w-full h-full pointer-events-none" style="z-index:1;"></canvas>
+  <canvas id="data-mesh" class="absolute inset-0 w-full h-full pointer-events-none" style="z-index:1;" aria-hidden="true"></canvas>
 
   <div class="absolute inset-0 opacity-20 pointer-events-none">
     <div class="absolute top-20 left-10 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"></div>
@@ -151,7 +193,7 @@
         <div class="absolute inset-0 border-2 border-dashed border-blue-500/30 rounded-full animate-[spin_20s_linear_infinite]"></div>
         <div class="absolute inset-4 border border-indigo-500/20 rounded-full"></div>
         <div class="absolute inset-8 rounded-full overflow-hidden shadow-2xl ring-4 ring-white/30">
-          <img src="assets/images/profile.jpg" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-700" alt="Hasnat Saifullah" loading="eager" decoding="async" onerror="this.src='https://via.placeholder.com/400?text=Hasnat'"/>
+          <img src="assets/images/profile.jpg" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-700" alt="Portrait of Hasnat Saifullah" loading="eager" decoding="async" onerror="this.src='https://via.placeholder.com/400?text=Hasnat'"/>
         </div>
         <div class="absolute -bottom-4 -right-4 bg-slate-800 backdrop-blur-md border border-slate-600 rounded-xl px-4 py-2 shadow-2xl flex gap-3 items-center z-10">
           <i class="fas fa-chart-pie text-blue-400 text-xl"></i>
@@ -163,7 +205,7 @@
       </div>
 
       <div class="w-80 mx-auto">
-        <div class="relative rounded-2xl overflow-hidden border border-white/20 shadow-xl group cursor-pointer" onclick="openVideoModal()">
+        <div class="relative rounded-2xl overflow-hidden border border-white/20 shadow-xl group cursor-pointer" role="button" tabindex="0" aria-label="Play introduction video" onclick="openVideoModal()">
           <video autoplay muted loop playsinline class="w-full h-auto">
             <source src="assets/videos/hasnat_intro_for_website.mp4" type="video/mp4">
           </video>
@@ -197,32 +239,32 @@
         <div class="mt-10 relative group">
           <div class="absolute -inset-1 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
           <div class="relative bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
-            <img src="assets/images/career overview napkinai.png" alt="Career Expertise Summary"
+            <img src="assets/images/career overview napkinai.png" alt="Infographic summarizing Hasnat Saifullah's career expertise and core competencies"
                  class="w-full h-auto object-cover transform group-hover:scale-[1.02] transition-transform duration-500"
                  loading="lazy" decoding="async">
           </div>
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-5" data-aos="zoom-in">
+      <div id="stats" class="grid grid-cols-2 gap-5" data-aos="zoom-in">
         <div class="p-6 bg-slate-50 rounded-2xl shadow-sm border border-slate-200 text-center hover:scale-105 transition-transform">
-          <h3 class="text-4xl font-black text-blue-600 counter" data-target="7">0</h3>
+          <h3 class="text-4xl font-black text-blue-600 counter" data-target="7">7</h3>
           <p class="font-medium text-slate-600">Years <br>Experience</p>
           <i class="fas fa-briefcase text-blue-200 text-2xl mt-2"></i>
         </div>
         <div class="p-6 bg-slate-50 rounded-2xl shadow-sm border border-slate-200 text-center hover:scale-105 transition-transform">
-          <h3 class="text-4xl font-black text-indigo-600 counter" data-target="950">0</h3>
+          <h3 class="text-4xl font-black text-indigo-600 counter" data-target="950">950</h3>
           <p class="font-medium text-slate-600">Crore+ <br>Portfolio managing experience</p>
           <i class="fas fa-bangladeshi-taka-sign text-indigo-200 text-2xl mt-2"></i>
         </div>
         <div class="p-6 bg-slate-50 rounded-2xl shadow-sm border border-slate-200 text-center hover:scale-105 transition-transform">
-          <h3 class="text-4xl font-black text-purple-600 counter" data-target="5">0</h3>
+          <h3 class="text-4xl font-black text-purple-600 counter" data-target="5">5</h3>
           <p class="font-medium text-slate-600">Dashboards <br>Live</p>
           <i class="fas fa-table text-purple-200 text-2xl mt-2"></i>
         </div>
         <div class="p-6 bg-slate-50 rounded-2xl shadow-sm border border-slate-200 text-center hover:scale-105 transition-transform">
           <h3 class="text-4xl font-black text-red-600 inline-flex items-baseline">
-            <span class="counter" data-target="95">0</span>%
+            <span class="counter" data-target="100">100</span>%
           </h3>
           <p class="font-medium text-slate-600">Accuracy <br>Compliance</p>
           <i class="fas fa-bullseye text-red-200 text-2xl mt-2"></i>
@@ -317,7 +359,7 @@
               <h3 class="text-xl font-bold">Senior Officer – ICCD</h3>
               <p class="text-blue-700 font-semibold text-sm">Bay Leasing & Investment Ltd.</p>
             </div>
-            <img src="assets/images/blil%20logo.png" class="w-10 h-10 object-contain opacity-70" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/40'">
+            <img src="assets/images/blil%20logo.png" alt="Bay Leasing &amp; Investment Ltd. logo" class="w-10 h-10 object-contain opacity-70" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/40'">
           </div>
           <ul class="list-disc ml-5 mt-4 text-slate-600 space-y-2 text-xs text-justify">
             <li>Conduct half-yearly and yearly internal audits across departments and branches, identifying control weaknesses and driving compliance improvements</li>
@@ -326,8 +368,8 @@
           </ul>
           <p class="mt-3 text-sm text-blue-600 font-medium italic text-justify">Key Impact: Empowered senior management with data-driven MIS dashboards for real-time portfolio monitoring and regulatory reporting</p>
         </div>
-        <div class="mt-6 relative group overflow-hidden rounded-xl border border-slate-200 cursor-pointer" onclick="openImageModal(this.querySelector('img').src)">
-          <img src="assets/images/Senior Officer – Internal Control and Compliance Department.png" alt="Senior Officer Proof" class="w-full h-auto transform group-hover:scale-110 transition-transform duration-500" loading="lazy" decoding="async">
+        <div class="mt-6 relative group overflow-hidden rounded-xl border border-slate-200 cursor-pointer" role="button" tabindex="0" aria-label="View enlarged proof of appointment as Senior Officer, Internal Control &amp; Compliance Department" onclick="openImageModal(this.querySelector('img').src, this.querySelector('img').alt)">
+          <img src="assets/images/Senior Officer – Internal Control and Compliance Department.png" alt="Appointment letter and role proof for Senior Officer, Internal Control &amp; Compliance Department" class="w-full h-auto transform group-hover:scale-110 transition-transform duration-500" loading="lazy" decoding="async">
           <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div class="bg-white/90 p-3 rounded-full text-blue-600 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all">
               <i class="fas fa-expand-alt text-xl"></i>
@@ -343,7 +385,7 @@
               <h3 class="text-xl font-bold">Officer – Branch Operations</h3>
               <p class="text-blue-700 font-semibold text-sm">Bay Leasing & Investment Ltd.</p>
             </div>
-            <img src="assets/images/blil%20logo.png" class="w-10 h-10 object-contain opacity-70" onerror="this.src='https://via.placeholder.com/40'">
+            <img src="assets/images/blil%20logo.png" alt="Bay Leasing &amp; Investment Ltd. logo" class="w-10 h-10 object-contain opacity-70" onerror="this.src='https://via.placeholder.com/40'">
           </div>
           <ul class="list-disc ml-5 mt-4 text-slate-600 space-y-2 text-xs text-justify">
             <li>Managed a comprehensive loan and deposit portfolio valued at ~BDT 60 Crores with full exposure to diverse credit products and operational workflows</li>
@@ -352,8 +394,8 @@
           </ul>
           <p class="mt-3 text-sm text-blue-600 font-medium italic text-justify">Key Impact: Strengthened portfolio quality and credit decisioning through comprehensive financial analysis and documentation</p>
         </div>
-        <div class="mt-6 relative group overflow-hidden rounded-xl border border-slate-200 cursor-pointer" onclick="openImageModal(this.querySelector('img').src)">
-          <img src="assets/images/Officer – Branch Operations.png" alt="Officer Proof" class="w-full h-auto transform group-hover:scale-110 transition-transform duration-500" loading="lazy" decoding="async">
+        <div class="mt-6 relative group overflow-hidden rounded-xl border border-slate-200 cursor-pointer" role="button" tabindex="0" aria-label="View enlarged proof of appointment as Officer, Branch Operations" onclick="openImageModal(this.querySelector('img').src, this.querySelector('img').alt)">
+          <img src="assets/images/Officer – Branch Operations.png" alt="Appointment letter and role proof for Officer, Branch Operations" class="w-full h-auto transform group-hover:scale-110 transition-transform duration-500" loading="lazy" decoding="async">
           <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div class="bg-white/90 p-3 rounded-full text-indigo-600 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all">
               <i class="fas fa-expand-alt text-xl"></i>
@@ -369,7 +411,7 @@
               <h3 class="text-xl font-bold">Junior Executive – Digital</h3>
               <p class="text-blue-700 font-semibold text-sm">Electra International Ltd.</p>
             </div>
-            <img src="assets/images/electralogo.png" class="w-10 h-auto object-contain opacity-70" onerror="this.src='https://via.placeholder.com/40'">
+            <img src="assets/images/electralogo.png" alt="Electra International Ltd. logo" class="w-10 h-auto object-contain opacity-70" onerror="this.src='https://via.placeholder.com/40'">
           </div>
           <ul class="list-disc ml-5 mt-4 text-slate-600 space-y-2 text-xs text-justify">
             <li>Generated BDT 7.00+ Lac in product sales through Daraz marketplace optimization and inventory management</li>
@@ -378,8 +420,8 @@
           </ul>
           <p class="mt-3 text-sm text-blue-600 font-medium italic text-justify">Key Impact: Drove measurable revenue growth and online brand presence through marketplace optimization and digital content</p>
         </div>
-        <div class="mt-6 relative group overflow-hidden rounded-xl border border-slate-200 cursor-pointer" onclick="openImageModal(this.querySelector('img').src)">
-          <img src="assets/images/Junior Executive – Retail Sales & Digital Marketing  .png" alt="Junior Executive Proof" class="w-full h-auto transform group-hover:scale-110 transition-transform duration-500" loading="lazy" decoding="async">
+        <div class="mt-6 relative group overflow-hidden rounded-xl border border-slate-200 cursor-pointer" role="button" tabindex="0" aria-label="View enlarged proof of appointment as Junior Executive, Digital" onclick="openImageModal(this.querySelector('img').src, this.querySelector('img').alt)">
+          <img src="assets/images/Junior Executive – Retail Sales & Digital Marketing  .png" alt="Appointment letter and role proof for Junior Executive, Retail Sales &amp; Digital Marketing" class="w-full h-auto transform group-hover:scale-110 transition-transform duration-500" loading="lazy" decoding="async">
           <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div class="bg-white/90 p-3 rounded-full text-purple-600 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all">
               <i class="fas fa-expand-alt text-xl"></i>
@@ -401,19 +443,19 @@
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
       <div class="flex bg-white p-5 rounded-xl shadow-sm gap-4 items-center hover:shadow-md" data-aos="fade-right">
-        <img src="assets/images/ewulogo.png" class="w-14 h-14 object-contain" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/56?text=EWU'">
+        <img src="assets/images/ewulogo.png" alt="East West University logo" class="w-14 h-14 object-contain" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/56?text=EWU'">
         <div><h3 class="font-bold">MBA, Operation Management</h3><p class="text-sm text-slate-500">East West University · CGPA 3.33</p></div>
       </div>
       <div class="flex bg-white p-5 rounded-xl shadow-sm gap-4 items-center hover:shadow-md" data-aos="fade-right" data-aos-delay="50">
-        <img src="assets/images/ewulogo.png" class="w-14 h-14 object-contain" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/56?text=EWU'">
+        <img src="assets/images/ewulogo.png" alt="East West University logo" class="w-14 h-14 object-contain" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/56?text=EWU'">
         <div><h3 class="font-bold">BBA, Marketing</h3><p class="text-sm text-slate-500">East West University · CGPA 2.96</p></div>
       </div>
       <div class="flex bg-white p-5 rounded-xl shadow-sm gap-4 items-center hover:shadow-md" data-aos="fade-right" data-aos-delay="100">
-        <img src="assets/images/ipsc-logo.png" class="w-14 h-14 object-contain" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/56?text=IPSC'">
+        <img src="assets/images/ipsc-logo.png" alt="IPSC, Cumilla logo" class="w-14 h-14 object-contain" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/56?text=IPSC'">
         <div><h3 class="font-bold">HSC (Business Studies)</h3><p class="text-sm text-slate-500">IPSC, Cumilla · GPA 5.00</p></div>
       </div>
       <div class="flex bg-white p-5 rounded-xl shadow-sm gap-4 items-center hover:shadow-md" data-aos="fade-right" data-aos-delay="150">
-        <img src="assets/images/ipsc-logo.png" class="w-14 h-14 object-contain" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/56?text=IPSC'">
+        <img src="assets/images/ipsc-logo.png" alt="IPSC, Cumilla logo" class="w-14 h-14 object-contain" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/56?text=IPSC'">
         <div><h3 class="font-bold">SSC (Business Studies)</h3><p class="text-sm text-slate-500">IPSC, Cumilla · GPA 4.88</p></div>
       </div>
     </div>
@@ -431,19 +473,42 @@
       <a href="projects.html#bike-mileage" class="group bg-gradient-to-br from-slate-50 to-white p-8 rounded-3xl shadow-md hover:shadow-2xl transition-all border border-slate-200 hover:-translate-y-2" data-aos="flip-left" data-aos-delay="100">
         <i class="fas fa-motorcycle text-4xl text-emerald-600 mb-5 group-hover:scale-110 transition"></i>
         <h3 class="text-2xl font-bold mb-2">Bike Mileage Tracking</h3>
-        <p class="text-slate-600">Live dashboard for real-time automotive mileage tracking and analytics – monitor fuel efficiency, trip logs, and parts performance trends.</p>
+        <p class="text-slate-600 text-sm mb-3"><strong>Problem:</strong> Tracking vehicle mileage, maintenance cycles, and ownership costs was scattered and manual, making it difficult to anticipate servicing needs and control expenses.</p>
+        <p class="text-slate-600 text-sm mb-3"><strong>Solution:</strong> Designed and built a live, automated tracking dashboard in Google Looker Studio that centralizes odometer logs, fuel history, parts lifecycles, and running costs from structured data.</p>
+        <p class="text-slate-600 text-sm mb-4"><strong>Impact:</strong> Enables proactive maintenance planning, clearer cost visibility, and data-driven decisions for keeping the vehicle in optimal condition.</p>
+        <div class="flex flex-wrap gap-2 mb-4">
+          <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">Looker Studio</span>
+          <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-full">Google Sheets</span>
+          <span class="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-semibold rounded-full">Vehicle Analytics</span>
+        </div>
         <span class="inline-block mt-4 text-emerald-600 text-sm font-semibold group-hover:underline">View details →</span>
       </a>
       <a href="projects.html#web-dashboards" class="group bg-gradient-to-br from-slate-50 to-white p-8 rounded-3xl shadow-md hover:shadow-2xl transition-all border border-slate-200 hover:-translate-y-2" data-aos="flip-left">
         <i class="fas fa-chart-pie text-4xl text-blue-600 mb-5 group-hover:scale-110 transition"></i>
         <h3 class="text-2xl font-bold mb-2">MIS Dashboard Suite</h3>
-        <p class="text-slate-600">Web-based MIS platform for Bay Leasing &amp; Investment Ltd. — live loan and deposit portfolio monitoring with multi-dimensional filtering, used daily by senior management for data-driven decisions.</p>
+        <p class="text-slate-600 text-sm mb-3"><strong>Problem:</strong> Loan and Deposit portfolio data was scattered across every branch and pulled manually into static reports — slow to produce, hard to drill into, and never a single trusted view for the company.</p>
+        <p class="text-slate-600 text-sm mb-3"><strong>Solution:</strong> Built a company-wide MIS platform, initiated at the request of the Managing Director of <strong>Bay Leasing &amp; Investment Ltd.</strong> It consolidates all branches' Loan and Deposit data into one interactive web dashboard — multi-sheet Excel is parsed in-browser with SheetJS/XLSX (no database), Chart.js renders KPIs, trend charts and sparklines, and PHP session-based authentication secures access. Originally a Power BI prototype (Nov 2025), re-architected as a standalone web app (Apr 2026) so it runs on any machine with tighter access control and faster iteration.</p>
+        <p class="text-slate-600 text-sm mb-4"><strong>Impact:</strong> Now used by senior management for monthly business reviews and presentations, and by 15–20 back-office colleagues for Bangladesh Bank reporting — cutting 2–3 hours of manual data pulling, sorting and compiling down to a few clicks. One source of truth across the full company portfolio.</p>
+        <div class="flex flex-wrap gap-2 mb-4">
+          <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-full">PHP</span>
+          <span class="px-3 py-1 bg-sky-100 text-sky-700 text-xs font-semibold rounded-full">JavaScript</span>
+          <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">Chart.js</span>
+          <span class="px-3 py-1 bg-violet-100 text-violet-700 text-xs font-semibold rounded-full">SheetJS / XLSX</span>
+          <span class="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-semibold rounded-full">Power BI (prototype)</span>
+        </div>
         <span class="inline-block mt-4 text-blue-600 text-sm font-semibold group-hover:underline">View details →</span>
       </a>
       <a href="projects.html#creative-design" class="group bg-gradient-to-br from-slate-50 to-white p-8 rounded-3xl shadow-md hover:shadow-2xl transition-all border border-slate-200 hover:-translate-y-2" data-aos="flip-left" data-aos-delay="200">
         <i class="fas fa-paint-brush text-4xl text-indigo-600 mb-5 group-hover:scale-110 transition"></i>
         <h3 class="text-2xl font-bold mb-2">Corporate Branding</h3>
-        <p class="text-slate-600">High-impact visual assets for Bay Leasing & Investment Ltd. – banners, lift lets, and brand identity materials.</p>
+        <p class="text-slate-600 text-sm mb-3"><strong>Problem:</strong> Bay Leasing &amp; Investment Ltd. needed high-impact, print-ready visual assets that maintained a consistent, professional corporate identity across branches and marketing materials.</p>
+        <p class="text-slate-600 text-sm mb-3"><strong>Solution:</strong> Designed a suite of corporate identity assets in Adobe Photoshop and Illustrator — high-resolution lift lets, large-format banners, and marketing collateral with clean, professional layouts.</p>
+        <p class="text-slate-600 text-sm mb-4"><strong>Impact:</strong> Modernized the brand aesthetic and enhanced branch-level visibility and client engagement.</p>
+        <div class="flex flex-wrap gap-2 mb-4">
+          <span class="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-full">Photoshop</span>
+          <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">Illustrator</span>
+          <span class="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-semibold rounded-full">Branding</span>
+        </div>
         <span class="inline-block mt-4 text-indigo-600 text-sm font-semibold group-hover:underline">View details →</span>
       </a>
     </div>
@@ -484,7 +549,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="bg-white p-5 rounded-2xl shadow-md flex items-center justify-between flex-wrap gap-4 hover:shadow-xl transition">
           <div class="flex items-center gap-3">
-            <img src="assets/images/mhmotovlogs.png" class="w-12 h-12 rounded-full object-cover" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/48'">
+            <img src="assets/images/mhmotovlogs.png" alt="Mousum Hasnat Moto Vlogs channel logo" class="w-12 h-12 rounded-full object-cover" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/48'">
             <div>
               <p class="font-bold">Mousum Hasnat Moto Vlogs</p>
               <p class="text-xs text-slate-500">Vlogs & Tech Gadgets</p>
@@ -494,7 +559,7 @@
         </div>
         <div class="bg-white p-5 rounded-2xl shadow-md flex items-center justify-between flex-wrap gap-4 hover:shadow-xl transition">
           <div class="flex items-center gap-3">
-            <img src="assets/images/one%20minute%20deen%20logo.jpg" class="w-12 h-12 rounded-full object-cover" loading="lazy" onerror="this.src='https://via.placeholder.com/48'">
+            <img src="assets/images/one%20minute%20deen%20logo.jpg" alt="One Minute Deen MH channel logo" class="w-12 h-12 rounded-full object-cover" loading="lazy" onerror="this.src='https://via.placeholder.com/48'">
             <div>
               <p class="font-bold">One Minute Deen MH</p>
               <p class="text-xs text-slate-500">Islamic shorts</p>
@@ -554,21 +619,21 @@
 </footer>
 
 <!-- Back to Top -->
-<button id="backToTop" class="fixed bottom-6 right-6 bg-blue-700 text-white w-12 h-12 rounded-full shadow-2xl hidden items-center justify-center hover:bg-blue-600 transition-all z-[60]">
+<button id="backToTop" aria-label="Back to top" class="fixed bottom-6 right-6 bg-blue-700 text-white w-12 h-12 rounded-full shadow-2xl hidden items-center justify-center hover:bg-blue-600 transition-all z-[60]">
   <i class="fas fa-arrow-up"></i>
 </button>
 
 <!-- Image Modal -->
 <div id="imageModal" class="fixed inset-0 z-[9999] hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
-  <button onclick="closeImageModal()" class="absolute top-6 right-6 text-white text-4xl hover:text-blue-400 transition-all">
+  <button onclick="closeImageModal()" aria-label="Close image viewer" class="absolute top-6 right-6 text-white text-4xl hover:text-blue-400 transition-all">
     <i class="fas fa-times-circle"></i>
   </button>
-  <img id="modalImg" src="" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl object-contain border-4 border-white/10">
+  <img id="modalImg" src="" alt="Enlarged document preview" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl object-contain border-4 border-white/10">
 </div>
 
 <!-- Video Modal -->
 <div id="videoModal" class="fixed inset-0 z-[9999] hidden bg-black/95 flex items-center justify-center p-4">
-  <button onclick="closeVideoModal()" class="absolute top-4 right-4 z-[10000] text-white text-4xl hover:text-blue-400 transition">
+  <button onclick="closeVideoModal()" aria-label="Close video" class="absolute top-4 right-4 z-[10000] text-white text-4xl hover:text-blue-400 transition">
     <i class="fas fa-times-circle"></i>
   </button>
   <video id="promoVideo" controls autoplay class="max-w-full max-h-[90vh] rounded-lg shadow-2xl">

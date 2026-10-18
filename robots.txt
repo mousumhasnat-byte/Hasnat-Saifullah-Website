@@ -1,0 +1,9 @@
+# robots.txt — Hasnat Saifullah portfolio
+# ⚠ Replace https://hasnat-saifullah.example with your real domain.
+
+User-agent: *
+Allow: /
+
+# No Disallow rules — assets/images must stay crawlable for image SEO (og:image).
+
+Sitemap: https://hasnat-saifullah.example/sitemap.xml
