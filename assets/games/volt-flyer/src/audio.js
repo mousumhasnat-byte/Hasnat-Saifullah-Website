@@ -120,34 +120,13 @@ const Sfx = (() => {
         },
         get muted() { return muted; },
 
-        /* gas blast + handlebar bell on flap */
+        /* bicycle bell on flap: "cring-cring" — two bright metallic rings,
+           the second slightly lower like the clapper bouncing back */
         flap() {
             if (!ensure()) return;
             const t = ctx.currentTime;
-            const n = noiseSrc();
-            const bp = ctx.createBiquadFilter();
-            bp.type = 'bandpass';
-            bp.Q.value = 1.2;
-            bp.frequency.setValueAtTime(700, t);
-            bp.frequency.exponentialRampToValueAtTime(2600, t + 0.12);
-            const g = ctx.createGain();
-            g.gain.setValueAtTime(0.28, t);
-            g.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
-            n.connect(bp); bp.connect(g); g.connect(master);
-            n.start(t); n.stop(t + 0.2);
-
-            const o = ctx.createOscillator();
-            o.type = 'sine';
-            o.frequency.setValueAtTime(320, t);
-            o.frequency.exponentialRampToValueAtTime(110, t + 0.14);
-            const g2 = ctx.createGain();
-            g2.gain.setValueAtTime(0.12, t);
-            g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
-            o.connect(g2); g2.connect(master);
-            o.start(t); o.stop(t + 0.16);
-
-            bellPing(t + 0.01, 1180, 0.10);   // ting
-            bellPing(t + 0.12, 1480, 0.07);   // ting
+            bellPing(t, 2093, 0.30);          // cring!
+            bellPing(t + 0.11, 1760, 0.22);   // cring!
         },
 
         /* double bell ring on scoring a pole */
@@ -193,11 +172,35 @@ const Sfx = (() => {
             o.start(t); o.stop(t + 1.15);
         },
 
-        /* electrical sizzle + metal thud on death */
-        /* load shed: the grid powers down (saw drone falling + relay click) */
+        /* load shed: inverter "beep-beep", breaker clunks, the grid powers down */
         brownout() {
             if (!ensure()) return;
             const t = ctx.currentTime;
+
+            // inverter/UPS alarm — the classic "power gone" cue
+            for (let i = 0; i < 2; i++) {
+                const b = ctx.createOscillator();
+                b.type = 'square';
+                b.frequency.value = 1046;
+                const bg = ctx.createGain();
+                bg.gain.setValueAtTime(0.0001, t + i * 0.18);
+                bg.gain.exponentialRampToValueAtTime(0.13, t + i * 0.18 + 0.01);
+                bg.gain.exponentialRampToValueAtTime(0.0001, t + i * 0.18 + 0.11);
+                b.connect(bg); bg.connect(master);
+                b.start(t + i * 0.18); b.stop(t + i * 0.18 + 0.13);
+            }
+
+            // breaker trip thump
+            const th = ctx.createOscillator();
+            th.type = 'sine';
+            th.frequency.setValueAtTime(120, t);
+            th.frequency.exponentialRampToValueAtTime(42, t + 0.14);
+            const tg = ctx.createGain();
+            tg.gain.setValueAtTime(0.5, t);
+            tg.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+            th.connect(tg); tg.connect(master);
+            th.start(t); th.stop(t + 0.2);
+
             const o = ctx.createOscillator();
             o.type = 'sawtooth';
             o.frequency.setValueAtTime(120, t);
@@ -248,42 +251,63 @@ const Sfx = (() => {
             o.start(t + 0.2); o.stop(t + 0.62);
         },
 
+        /* lethal electric shock: arc crackle + mains buzz + zaaaap + clunk */
         die() {
             if (!ensure()) return;
             const t = ctx.currentTime;
 
-            // sizzle / short-circuit
+            // arc crackle: fluttering high-band noise
             const n = noiseSrc();
-            const hp = ctx.createBiquadFilter();
-            hp.type = 'highpass';
-            hp.frequency.value = 2200;
-            const g = ctx.createGain();
-            g.gain.setValueAtTime(0.4, t);
-            g.gain.exponentialRampToValueAtTime(0.0001, t + 0.5);
-            n.connect(hp); hp.connect(g); g.connect(master);
-            n.start(t); n.stop(t + 0.55);
+            const bp = ctx.createBiquadFilter();
+            bp.type = 'bandpass';
+            bp.frequency.value = 3200;
+            bp.Q.value = 0.8;
+            const ng = ctx.createGain();
+            ng.gain.setValueAtTime(0.0001, t);
+            for (let i = 0; i < 8; i++) {
+                ng.gain.exponentialRampToValueAtTime(0.22 * (i % 2 ? 0.35 : 1), t + 0.02 + i * 0.035);
+            }
+            ng.gain.exponentialRampToValueAtTime(0.0001, t + 0.45);
+            n.connect(bp); bp.connect(ng); ng.connect(master);
+            n.start(t); n.stop(t + 0.5);
 
-            // buzzy square zap
+            // harsh mains buzz: two detuned squares falling away
+            for (const f of [124, 131]) {
+                const o = ctx.createOscillator();
+                o.type = 'square';
+                o.frequency.setValueAtTime(f, t);
+                o.frequency.linearRampToValueAtTime(f * 0.6, t + 0.35);
+                const og = ctx.createGain();
+                og.gain.setValueAtTime(0.13, t);
+                og.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
+                const lp = ctx.createBiquadFilter();
+                lp.type = 'lowpass';
+                lp.frequency.value = 1800;
+                o.connect(lp); lp.connect(og); og.connect(master);
+                o.start(t); o.stop(t + 0.42);
+            }
+
+            // zaaaap: bright descending shock
             const z = ctx.createOscillator();
-            z.type = 'square';
-            z.frequency.setValueAtTime(140, t);
-            z.frequency.linearRampToValueAtTime(60, t + 0.25);
+            z.type = 'sawtooth';
+            z.frequency.setValueAtTime(1200, t);
+            z.frequency.exponentialRampToValueAtTime(70, t + 0.3);
             const zg = ctx.createGain();
-            zg.gain.setValueAtTime(0.12, t);
-            zg.gain.exponentialRampToValueAtTime(0.0001, t + 0.28);
+            zg.gain.setValueAtTime(0.18, t);
+            zg.gain.exponentialRampToValueAtTime(0.0001, t + 0.34);
             z.connect(zg); zg.connect(master);
-            z.start(t); z.stop(t + 0.3);
+            z.start(t); z.stop(t + 0.36);
 
-            // metal crash thud
-            const o = ctx.createOscillator();
-            o.type = 'sine';
-            o.frequency.setValueAtTime(110, t + 0.02);
-            o.frequency.exponentialRampToValueAtTime(38, t + 0.3);
-            const g2 = ctx.createGain();
-            g2.gain.setValueAtTime(0.5, t + 0.02);
-            g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.42);
-            o.connect(g2); g2.connect(master);
-            o.start(t + 0.02); o.stop(t + 0.45);
+            // clunk: hitting the road
+            const cl = ctx.createOscillator();
+            cl.type = 'sine';
+            cl.frequency.setValueAtTime(100, t + 0.28);
+            cl.frequency.exponentialRampToValueAtTime(36, t + 0.55);
+            const cg = ctx.createGain();
+            cg.gain.setValueAtTime(0.45, t + 0.28);
+            cg.gain.exponentialRampToValueAtTime(0.0001, t + 0.6);
+            cl.connect(cg); cg.connect(master);
+            cl.start(t + 0.28); cl.stop(t + 0.62);
         }
     };
 })();
