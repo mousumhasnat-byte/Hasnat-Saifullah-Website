@@ -56,6 +56,43 @@ function moveWebDashSlider(direction) {
 }
 function goToWebDashSlide(i) { webDashStep = i; moveWebDashSlider(0); }
 
+// ── Game Embed: Fullscreen ────────────────────────────────────────────────────
+// Toggles the embedded Volt Flyer game between its in-page frame and true
+// fullscreen. Apple's iOS Safari blocks Element.requestFullscreen() on
+// iframes, so there the button simply does nothing — the game still scales to
+// fit, and the "open in new tab" link remains the fallback.
+function toggleGameFullscreen() {
+  const frame = document.getElementById('game-frame');
+  if (!frame) return;
+
+  const active = document.fullscreenElement || document.webkitFullscreenElement;
+  const exit = document.exitFullscreen || document.webkitExitFullscreen;
+  const enter = frame.requestFullscreen || frame.webkitRequestFullscreen;
+
+  try {
+    if (active) {
+      if (exit) exit.call(document);
+    } else if (enter) {
+      const p = enter.call(frame);
+      if (p && typeof p.catch === 'function') p.catch(() => {});
+    }
+  } catch (e) { /* fullscreen unavailable (e.g. iOS Safari) — ignore */ }
+}
+
+// Keep the button's icon/label in sync when the user leaves via Esc.
+['fullscreenchange', 'webkitfullscreenchange'].forEach(evt => {
+  document.addEventListener(evt, () => {
+    const btn = document.getElementById('game-fs-btn');
+    const frame = document.getElementById('game-frame');
+    if (!btn || !frame) return;
+    const on = !!(document.fullscreenElement || document.webkitFullscreenElement);
+    btn.setAttribute('aria-pressed', String(on));
+    btn.setAttribute('aria-label', on ? 'Exit full screen' : 'Play in full screen');
+    const icon = btn.querySelector('i');
+    if (icon) icon.className = on ? 'fas fa-compress-alt' : 'fas fa-expand-alt';
+  });
+});
+
 // ── Image Modal (Fullscreen) ───────────────────────────────────────────────────
 const webDashImages = [
   'assets/images/loan_dashboard_executive_summary.png',

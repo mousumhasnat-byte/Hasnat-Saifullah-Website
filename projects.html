@@ -68,6 +68,20 @@
               "creator": { "@type": "Person", "name": "Hasnat Saifullah" },
               "about": "Corporate identity and marketing collateral designed in Adobe Photoshop and Illustrator"
             }
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "item": {
+              "@type": "VideoGame",
+              "name": "Flying Tesla of BD — Mission Impossible",
+              "url": "https://hasnat-saifullah.example/projects.html#volt-flyer",
+              "creator": { "@type": "Person", "name": "Hasnat Saifullah" },
+              "about": "Flappy-Bird-style HTML5 Canvas game built in dependency-free vanilla JavaScript, with all art drawn in code as vector graphics and all sound effects synthesized live via WebAudio",
+              "gamePlatform": "Web browser",
+              "playMode": "SinglePlayer",
+              "genre": "Arcade"
+            }
           }
         ]
       }
@@ -339,7 +353,50 @@
     </div>
   </section>
 
-  <!-- 3: Portfolio Monitoring -->
+  <!-- 3: Volt Flyer (web game) -->
+  <section id="volt-flyer" class="grid lg:grid-cols-2 gap-12 items-center bg-white/50 backdrop-blur-sm p-8 rounded-3xl border border-slate-200 shadow-lg hover:shadow-xl transition project-card-hover" data-aos="fade-up">
+    <div>
+      <span class="text-amber-600 font-bold uppercase text-sm">Interactive Web Game</span>
+      <h2 class="text-3xl font-bold mt-2 mb-4">Flying Tesla of BD — Mission Impossible</h2>
+      <p class="text-slate-600 mb-4">Elon Musk spent a decade and a few billion dollars trying to put a Tesla in the sky. I spent a few weekends putting a rickshaw in one instead — bolted-on thrusters, a Dhaka skyline absolutely covered in live wires, and approximately 0% useful outcome. It is a browser game, it is free, and it is very serious about not being serious.</p>
+      <p class="text-slate-600 mb-4">No engine, no framework, no image files, no audio files. Everything you see is drawn in code and everything you hear is synthesized on the spot, mostly because downloading an asset felt like too much effort.</p>
+      <ul class="space-y-3 text-slate-700">
+        <li class="flex items-center gap-2"><i class="fas fa-palette text-amber-500"></i> Every pixel drawn in code — rickshaw, wires, leaning poles, parallax skyline, all of it</li>
+        <li class="flex items-center gap-2"><i class="fas fa-volume-high text-blue-500"></i> All sound synthesized live with WebAudio, including the crash you will hear a lot</li>
+        <li class="flex items-center gap-2"><i class="fas fa-shuffle text-amber-500"></i> Wires generated on the fly, always leaving a gap wide enough for you to miss and blame yourself</li>
+        <li class="flex items-center gap-2"><i class="fas fa-bolt text-purple-500"></i> Load-shedding mode: screen dims, rickshaw autopilots for 5 poles, you tap uselessly</li>
+        <li class="flex items-center gap-2"><i class="fas fa-gamepad text-emerald-500"></i> Pause, mute, and a high score your browser remembers long after you close the tab in shame</li>
+      </ul>
+      <div class="mt-6 flex flex-wrap items-center gap-4">
+        <div class="flex flex-wrap gap-2">
+          <span class="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-semibold rounded">JavaScript</span>
+          <span class="px-3 py-1 bg-sky-100 text-sky-700 text-xs font-semibold rounded">HTML5 Canvas</span>
+          <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded">WebAudio API</span>
+          <span class="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-semibold rounded">Vanilla JS</span>
+          <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded">No Dependencies</span>
+        </div>
+        <a href="assets/games/volt-flyer/index.html" target="_blank" rel="noopener noreferrer" class="text-blue-600 font-bold text-sm hover:underline flex items-center gap-2">
+          Open in new tab <i class="fas fa-external-link-alt"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="relative rounded-xl shadow-xl border overflow-hidden bg-[#0b0d12] mx-auto w-full max-w-[380px] h-[480px] lg:h-[660px] group">
+      <iframe
+        id="game-frame"
+        src="assets/games/volt-flyer/index.html"
+        title="Flying Tesla of BD — Mission Impossible, playable browser game"
+        class="w-full h-full border-0"
+        loading="lazy"
+        allow="autoplay; fullscreen"
+        allowfullscreen></iframe>
+      <button id="game-fs-btn" type="button" onclick="toggleGameFullscreen()" aria-label="Play in full screen" aria-pressed="false" class="absolute right-3 top-3 z-40 bg-black/40 hover:bg-black/80 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-lg">
+        <i class="fas fa-expand-alt"></i>
+      </button>
+    </div>
+  </section>
+
+  <!-- 4: Portfolio Monitoring -->
   <section id="portfolio-monitoring" class="grid lg:grid-cols-2 gap-12 items-center bg-white/50 backdrop-blur-sm p-8 rounded-3xl border border-slate-200 shadow-lg hover:shadow-xl transition project-card-hover" data-aos="fade-up">
     <div class="relative rounded-xl shadow-xl border overflow-hidden group">
       <div id="slider-project-1" class="flex transition-transform duration-500 ease-in-out w-full" style="transform:translateX(0%);">
@@ -385,7 +442,7 @@
     </div>
   </section>
 
-  <!-- 4: Creative Design -->
+  <!-- 5: Creative Design -->
   <section id="creative-design" class="grid lg:grid-cols-2 gap-12 items-center bg-white/50 backdrop-blur-sm p-8 rounded-3xl border border-slate-200 shadow-lg hover:shadow-xl transition project-card-hover" data-aos="fade-up">
     <div class="order-2 lg:order-1">
       <span class="text-indigo-600 font-bold uppercase text-sm">Visual Communication</span>
@@ -436,7 +493,7 @@
     </div>
   </section>
 
-  <!-- 5: Bifold Brochure -->
+  <!-- 6: Bifold Brochure -->
   <section id="corporate-branding" class="grid lg:grid-cols-2 gap-12 items-center bg-white/50 backdrop-blur-sm p-8 rounded-3xl border border-slate-200 shadow-lg hover:shadow-xl transition project-card-hover" data-aos="fade-up">
     <div class="relative rounded-xl shadow-xl border overflow-hidden bg-slate-200 h-[500px] md:h-[600px]">
       <iframe
