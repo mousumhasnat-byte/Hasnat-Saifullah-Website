@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Projects | Hasnat Saifullah</title>
-  <meta name="description" content="Projects by Hasnat Saifullah: Bike Lifecycle Tracker, MIS Dashboard Suite (Loan &amp; Deposit), and corporate branding case studies.">
+  <meta name="description" content="Projects by Hasnat Saifullah: Bike Lifecycle Tracker, MIS Dashboard Suite (Loan &amp; Deposit), AI usage analytics on the Kaggle dataset, and corporate branding case studies.">
   <link rel="canonical" href="https://hasnat-saifullah.example/projects.html" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta property="og:title" content="Projects | Hasnat Saifullah" />
@@ -63,6 +63,17 @@
             "position": 3,
             "item": {
               "@type": "CreativeWork",
+              "name": "AI Usage & Impact on Students & Professionals — Case Study",
+              "url": "https://hasnat-saifullah.example/projects.html#ai-usage-impact",
+              "creator": { "@type": "Person", "name": "Hasnat Saifullah" },
+              "about": "Interactive exploratory data analysis dashboard on 288 survey responses about AI adoption, tools, purposes and impact among students and professionals, built with vanilla JavaScript and Chart.js"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "item": {
+              "@type": "CreativeWork",
               "name": "Corporate Branding & Creative Design",
               "url": "https://hasnat-saifullah.example/projects.html#creative-design",
               "creator": { "@type": "Person", "name": "Hasnat Saifullah" },
@@ -71,7 +82,7 @@
           },
           {
             "@type": "ListItem",
-            "position": 4,
+            "position": 5,
             "item": {
               "@type": "VideoGame",
               "name": "Flying Tesla of BD — Mission Impossible",
@@ -353,7 +364,97 @@
     </div>
   </section>
 
-  <!-- 3: Volt Flyer (web game) -->
+  <!-- 3: AI Usage & Impact (Kaggle case study) -->
+  <section id="ai-usage-impact" class="grid lg:grid-cols-2 gap-12 lg:items-stretch bg-white/50 p-8 rounded-3xl border border-slate-200 shadow-lg hover:shadow-xl transition project-card-hover">
+    <div data-aos="fade-up">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-md">
+          Kaggle Case Study
+        </span>
+        <span class="text-blue-600 font-bold uppercase text-sm tracking-wide">Data Analytics</span>
+      </div>
+      <h2 class="text-3xl font-bold mb-4">AI Usage &amp; Impact on Students and Professionals</h2>
+      <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 mb-6">
+        <p class="text-slate-600 text-sm leading-relaxed">
+          A single-file, fully interactive EDA dashboard built on the public Kaggle dataset <strong>"AI Usage and Impact on Students &amp; Professionals"</strong> — 288 respondents across 12 countries, split almost evenly between students (52%) and working professionals (48%). It explores who uses AI, which tools and purposes dominate, and whether usage actually moves productivity, satisfaction and time saved. Every chart is click-to-filter, and every figure below comes straight from the dataset.
+        </p>
+      </div>
+
+      <p class="font-semibold text-slate-800 flex items-center gap-2 mb-3"><i class="fas fa-lightbulb text-amber-500"></i>Key Findings</p>
+      <ul class="space-y-3 text-slate-700 text-sm mb-6">
+        <li class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+          <i class="fas fa-robot text-blue-500 text-lg mt-1"></i>
+          <div><span class="font-bold block">ChatGPT is the default — 41% of respondents</span><span class="text-xs text-slate-600">119 of 288 name it as their primary AI tool; ChatGPT, Gemini, Copilot and Claude together cover ~77% of the sample.</span></div>
+        </li>
+        <li class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+          <i class="fas fa-code text-emerald-500 text-lg mt-1"></i>
+          <div><span class="font-bold block">Coding is the #1 use case — but Writing saves the most time</span><span class="text-xs text-slate-600">Coding leads at 22.6%, then Writing (17%), Studying (13.5%) and Research (13.2%); Writing users report ~7 hrs/week saved vs ~5.6 for Coding.</span></div>
+        </li>
+        <li class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+          <i class="fas fa-user-graduate text-indigo-500 text-lg mt-1"></i>
+          <div><span class="font-bold block">Students are not heavier users than professionals</span><span class="text-xs text-slate-600">3.01 vs 2.87 hrs/day — effectively identical, even though professionals work longer days (8.3 vs 6.2 hrs).</span></div>
+        </li>
+        <li class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+          <i class="fas fa-gauge-high text-amber-500 text-lg mt-1"></i>
+          <div><span class="font-bold block">Impact is real but modest — accuracy is the weak link</span><span class="text-xs text-slate-600">Average productivity 5.24/10, satisfaction 6.13/10 and 5.81 hrs saved per week — but accuracy scores only 3.42/10.</span></div>
+        </li>
+        <li class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+          <i class="fas fa-arrow-trend-up text-emerald-500 text-lg mt-1"></i>
+          <div><span class="font-bold block">More usage → more time saved and perceived productivity, not accuracy</span><span class="text-xs text-slate-600">Hours/day correlates 0.78 with weekly time saved and 0.66 with productivity, but only 0.05 with accuracy.</span></div>
+        </li>
+        <li class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+          <i class="fas fa-thumbs-up text-sky-600 text-lg mt-1"></i>
+          <div><span class="font-bold block">59% would recommend AI; 1 in 4 would not</span><span class="text-xs text-slate-600">170 Yes, 71 No, 42 Maybe; students slightly more positive (60.3%) than professionals (57.7%).</span></div>
+        </li>
+        <li class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+          <i class="fas fa-earth-americas text-purple-500 text-lg mt-1"></i>
+          <div><span class="font-bold block">Young, global, degree-heavy sample</span><span class="text-xs text-slate-600">Median age 27, 44% aged 16–25, 66% hold a Bachelor's or Master's; India, US, Canada, Pakistan and the UK lead respondent counts.</span></div>
+        </li>
+        <li class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+          <i class="fas fa-screwdriver-wrench text-red-500 text-lg mt-1"></i>
+          <div><span class="font-bold block">Tool choice barely moves productivity</span><span class="text-xs text-slate-600">Copilot 5.51, Claude 5.29 and ChatGPT 5.23 cluster together while Perplexity trails at 4.64 — differences sit within noise, so usage intensity matters more than the brand.</span></div>
+        </li>
+      </ul>
+
+      <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6 text-xs text-slate-600">
+        <strong class="text-slate-800">Method note:</strong> averages use non-null values only (14 records lack a productivity score, 7 satisfaction, 10 time-saved, 11 income); percentages are over all 288 respondents.
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4">
+        <div class="flex flex-wrap gap-2">
+          <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded">Kaggle Dataset</span>
+          <span class="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-semibold rounded">Data Cleaning</span>
+          <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded">EDA</span>
+          <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-semibold rounded">Chart.js</span>
+          <span class="px-3 py-1 bg-sky-100 text-sky-700 text-xs font-semibold rounded">Vanilla JS</span>
+          <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded">Interactive Filtering</span>
+        </div>
+        <a href="https://www.kaggle.com/datasets/eishatuzzuhra/ai-usage-and-impact-on-students-and-professionals" target="_blank" rel="noopener noreferrer" class="text-blue-600 font-bold text-sm hover:underline flex items-center gap-2">
+          Kaggle dataset <i class="fas fa-external-link-alt"></i>
+        </a>
+      </div>
+    </div>
+
+    <div id="aiDashCard" class="relative rounded-xl shadow-xl border border-slate-200 overflow-hidden bg-slate-100">
+      <iframe
+        id="aiDashFrame"
+        src="assets/docs/AI_Usage_Impact_Dashboard.html"
+        title="AI Usage & Impact Dashboard — interactive preview"
+        class="ai-dash-frame"
+        loading="lazy"></iframe>
+      <span class="ai-dash-badge">Live View</span>
+      <div class="ai-dash-toolbar">
+        <button id="aiDashExpandBtn" type="button" onclick="toggleAiDashFullscreen()" aria-label="Expand dashboard to full window" aria-pressed="false" title="Expand dashboard to full window" class="ai-dash-btn">
+          <i class="fas fa-expand-alt"></i>
+        </button>
+        <a href="assets/docs/AI_Usage_Impact_Dashboard.html" target="_blank" rel="noopener noreferrer" aria-label="Open dashboard in a new tab" title="Open in new tab" class="ai-dash-btn">
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4: Volt Flyer (web game) -->
   <section id="volt-flyer" class="grid lg:grid-cols-2 gap-12 items-center bg-white/50 backdrop-blur-sm p-8 rounded-3xl border border-slate-200 shadow-lg hover:shadow-xl transition project-card-hover" data-aos="fade-up">
     <div>
       <span class="text-amber-600 font-bold uppercase text-sm">Interactive Web Game</span>
@@ -396,7 +497,7 @@
     </div>
   </section>
 
-  <!-- 4: Portfolio Monitoring -->
+  <!-- 5: Portfolio Monitoring -->
   <section id="portfolio-monitoring" class="grid lg:grid-cols-2 gap-12 items-center bg-white/50 backdrop-blur-sm p-8 rounded-3xl border border-slate-200 shadow-lg hover:shadow-xl transition project-card-hover" data-aos="fade-up">
     <div class="relative rounded-xl shadow-xl border overflow-hidden group">
       <div id="slider-project-1" class="flex transition-transform duration-500 ease-in-out w-full" style="transform:translateX(0%);">
@@ -442,7 +543,7 @@
     </div>
   </section>
 
-  <!-- 5: Creative Design -->
+  <!-- 6: Creative Design -->
   <section id="creative-design" class="grid lg:grid-cols-2 gap-12 items-center bg-white/50 backdrop-blur-sm p-8 rounded-3xl border border-slate-200 shadow-lg hover:shadow-xl transition project-card-hover" data-aos="fade-up">
     <div class="order-2 lg:order-1">
       <span class="text-indigo-600 font-bold uppercase text-sm">Visual Communication</span>
@@ -493,7 +594,7 @@
     </div>
   </section>
 
-  <!-- 6: Bifold Brochure -->
+  <!-- 7: Bifold Brochure -->
   <section id="corporate-branding" class="grid lg:grid-cols-2 gap-12 items-center bg-white/50 backdrop-blur-sm p-8 rounded-3xl border border-slate-200 shadow-lg hover:shadow-xl transition project-card-hover" data-aos="fade-up">
     <div class="relative rounded-xl shadow-xl border overflow-hidden bg-slate-200 h-[500px] md:h-[600px]">
       <iframe

@@ -93,6 +93,41 @@ function toggleGameFullscreen() {
   });
 });
 
+// ── AI Usage Dashboard: full-window expand ────────────────────────────────────
+// The preview iframe is never re-created, so any filters the visitor sets inside
+// the dashboard survive the expand/collapse. Esc, the toggle button and a click
+// on the dark backdrop all close the overlay.
+function aiDashSetExpanded(on) {
+  const card = document.getElementById('aiDashCard');
+  const btn = document.getElementById('aiDashExpandBtn');
+  if (!card || !btn) return;
+  card.classList.toggle('ai-dash-fullscreen', on);
+  document.body.classList.toggle('ai-dash-locked', on);
+  btn.setAttribute('aria-pressed', String(on));
+  btn.setAttribute('aria-label', on ? 'Exit full window' : 'Expand dashboard to full window');
+  btn.title = on ? 'Exit full window (Esc)' : 'Expand dashboard to full window';
+  const icon = btn.querySelector('i');
+  if (icon) icon.className = on ? 'fas fa-compress-alt' : 'fas fa-expand-alt';
+  if (on) btn.focus();
+}
+
+function toggleAiDashFullscreen() {
+  const card = document.getElementById('aiDashCard');
+  if (!card) return;
+  aiDashSetExpanded(!card.classList.contains('ai-dash-fullscreen'));
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  const card = document.getElementById('aiDashCard');
+  if (card && card.classList.contains('ai-dash-fullscreen')) aiDashSetExpanded(false);
+});
+
+// Clicks inside the iframe don't bubble here — only the dark padding closes it.
+document.getElementById('aiDashCard')?.addEventListener('click', e => {
+  if (e.target.id === 'aiDashCard') aiDashSetExpanded(false);
+});
+
 // ── Image Modal (Fullscreen) ───────────────────────────────────────────────────
 const webDashImages = [
   'assets/images/loan_dashboard_executive_summary.png',

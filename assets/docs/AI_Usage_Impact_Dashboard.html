@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f172a">
+<title>AI Usage & Impact Dashboard | Hasnat Saifullah</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface2: #f1f5f9;
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --primary: #2563eb;
+  --indigo: #4f46e5;
+  --primary-soft: rgba(37, 99, 235, 0.08);
+  --green: #059669;
+  --amber: #d97706;
+  --rose: #e11d48;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(15,23,42,.06), 0 4px 16px rgba(15,23,42,.04);
+  --shadow-lg: 0 4px 24px rgba(15,23,42,.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1280px; margin: 0 auto; padding: 24px 20px 48px; }
+
+.hero {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 45%, #312e81 100%);
+  border-radius: 16px;
+  padding: 28px 32px;
+  margin-bottom: 20px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle at 20% 30%, rgba(96,165,250,.15), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(129,140,248,.12), transparent 35%);
+  pointer-events: none;
+}
+.hero-inner { position: relative; z-index: 1; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; align-items: flex-start; }
+.hero h1 {
+  font-size: 1.65rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1.25;
+}
+.hero h1 span {
+  background: linear-gradient(90deg, #60a5fa, #a5b4fc);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero p { color: #94a3b8; font-size: 0.92rem; margin-top: 8px; max-width: 540px; }
+.credit {
+  margin-top: 14px;
+  display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  padding: 8px 14px; border-radius: 999px;
+  font-size: 0.8rem; color: #cbd5e1;
+}
+.credit a { color: #93c5fd; text-decoration: underline; font-weight: 500; }
+.credit strong { color: #fff; font-weight: 600; }
+.hero-meta { text-align: right; font-size: 0.78rem; color: #94a3b8; }
+.hero-meta strong { display: block; color: #e2e8f0; font-size: 1.1rem; font-weight: 700; margin-bottom: 2px; }
+
+.filter-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+.filter-title {
+  font-size: 0.7rem; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--muted); font-weight: 600; margin-bottom: 12px;
+}
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px 14px;
+}
+.filter-group label {
+  display: block; font-size: 0.72rem; color: var(--muted);
+  margin-bottom: 5px; font-weight: 500;
+}
+.filter-group select, .filter-group input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M3 4.5L6 8l3-3.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+  cursor: pointer;
+}
+.filter-group input {
+  background-image: none;
+  padding-right: 12px;
+  cursor: text;
+}
+.filter-group select:focus, .filter-group input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+.btn-row {
+  display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; align-items: center;
+}
+.btn {
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  color: #fff; border: none; border-radius: 999px;
+  padding: 9px 18px; font-size: 0.85rem; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+  box-shadow: 0 2px 8px rgba(37,99,235,.3);
+  transition: opacity .15s, transform .1s, box-shadow .15s;
+}
+.btn:hover { opacity: .95; box-shadow: 0 4px 14px rgba(37,99,235,.4); }
+.btn:active { transform: scale(.98); }
+.btn.ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  box-shadow: none;
+}
+.btn.ghost:hover { border-color: var(--primary); color: var(--primary); }
+.filter-status {
+  margin-left: auto; font-size: 0.8rem; color: var(--muted);
+}
+.filter-status strong { color: var(--primary); font-weight: 600; }
+
+.chart-hint {
+  font-size: 0.75rem; color: var(--muted); margin-bottom: 12px;
+  padding: 8px 12px; background: var(--primary-soft); border-radius: 8px;
+  border: 1px solid rgba(37,99,235,.12);
+}
+.chart-hint strong { color: var(--primary); }
+
+.active-filters {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; min-height: 0;
+}
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #eff6ff; border: 1px solid #bfdbfe;
+  color: #1d4ed8; font-size: 0.75rem; font-weight: 600;
+  padding: 5px 10px; border-radius: 999px;
+}
+.chip button {
+  background: none; border: none; color: #1d4ed8; cursor: pointer;
+  font-size: 1rem; line-height: 1; padding: 0 2px;
+}
+.chip button:hover { color: #1e3a8a; }
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.kpi {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  transition: transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s ease, border-color .2s;
+  cursor: default;
+}
+.kpi::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, #2563eb, #4f46e5);
+  transition: height .2s;
+}
+.kpi:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 12px 28px rgba(37,99,235,.18);
+  border-color: #93c5fd;
+}
+.kpi:hover::before { height: 4px; }
+.kpi-label {
+  font-size: 0.68rem; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .05em; font-weight: 600;
+}
+.kpi-value {
+  font-size: 1.4rem; font-weight: 700; margin-top: 4px;
+  color: var(--text); letter-spacing: -0.02em;
+  transition: color .2s;
+}
+.kpi:hover .kpi-value { color: var(--primary); }
+.kpi-sub { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+
+.section { margin-bottom: 26px; }
+.section-header {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 12px; margin-bottom: 12px; flex-wrap: wrap;
+}
+.section-title {
+  font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em;
+}
+.section-title span {
+  color: var(--primary); font-weight: 500; font-size: 0.8rem; margin-left: 8px;
+}
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+@media (max-width: 900px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+  transition: box-shadow .2s;
+}
+.card:hover { box-shadow: var(--shadow-lg); }
+.card h3 {
+  font-size: 0.82rem; font-weight: 600; color: var(--muted);
+  margin-bottom: 4px;
+}
+.card .click-tip {
+  font-size: 0.68rem; color: #94a3b8; margin-bottom: 10px;
+}
+.chart-box { position: relative; height: 250px; cursor: pointer; }
+.chart-box.tall { height: 300px; }
+.chart-box.short { height: 200px; }
+
+.insight {
+  margin-top: 12px;
+  padding: 11px 13px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(37,99,235,.06), rgba(79,70,229,.04));
+  border: 1px solid rgba(37,99,235,.15);
+  font-size: 0.82rem;
+  color: #334155;
+  line-height: 1.55;
+}
+.insight::before {
+  content: '✦ Insight';
+  display: block;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--primary);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.table-wrap { overflow-x: auto; max-height: 340px; }
+.table-wrap.heat { max-height: none; overflow: visible; }
+.table-wrap.heat table { table-layout: auto; width: max-content; min-width: 100%; }
+.table-wrap.heat th, .table-wrap.heat td { white-space: nowrap; padding: 8px 14px; }
+table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+th {
+  position: sticky; top: 0;
+  background: var(--surface2);
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+tr:hover td { background: var(--primary-soft); }
+td.num { font-variant-numeric: tabular-nums; text-align: right; }
+
+.tag {
+  display: inline-block; padding: 2px 8px; border-radius: 6px;
+  font-size: 0.7rem; font-weight: 600;
+}
+.tag.yes { background: #d1fae5; color: #047857; }
+.tag.no { background: #ffe4e6; color: #be123c; }
+.tag.maybe { background: #fef3c7; color: #b45309; }
+
+.loading {
+  position: fixed; inset: 0;
+  background: rgba(248,250,252,.75);
+  display: none; align-items: center; justify-content: center;
+  z-index: 50; backdrop-filter: blur(3px);
+}
+.loading.show { display: flex; }
+.spinner {
+  width: 32px; height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin-top: 36px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.footer a { color: var(--primary); text-decoration: none; font-weight: 500; }
+.footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="loading" id="loading"><div class="spinner"></div></div>
+<div class="wrap">
+  <header class="hero">
+    <div class="hero-inner">
+      <div>
+        <h1>AI Usage &amp; <span>Impact</span> Dashboard</h1>
+        <p>How students and professionals adopt AI tools — usage intensity, productivity, satisfaction, and recommendation patterns across countries and purposes.</p>
+        <div class="credit">
+          AI Usage and Impact on Students &amp; Professionals ·
+          <a href="https://www.kaggle.com/datasets/eishatuzzuhra/ai-usage-and-impact-on-students-and-professionals" target="_blank" rel="noopener">Kaggle dataset</a>
+          · analysis by <strong><a href="https://hasnatsaifullah.netlify.app/" target="_blank" rel="noopener" style="color:#fff;text-decoration:underline">Hasnat Saifullah</a></strong>
+        </div>
+      </div>
+      <div class="hero-meta">
+        <strong id="totalN">—</strong>
+        respondents · click charts to filter
+      </div>
+    </div>
+  </header>
+
+  <div class="filter-panel">
+    <div class="filter-title">Filters · dropdown or click any chart bar/slice</div>
+    <div class="filter-grid">
+      <div class="filter-group"><label>User Type</label><select id="fUserType"></select></div>
+      <div class="filter-group"><label>Gender</label><select id="fGender"></select></div>
+      <div class="filter-group"><label>Country</label><select id="fCountry"></select></div>
+      <div class="filter-group"><label>Education</label><select id="fEdu"></select></div>
+      <div class="filter-group"><label>AI Tool</label><select id="fTool"></select></div>
+      <div class="filter-group"><label>AI Purpose</label><select id="fPurpose"></select></div>
+      <div class="filter-group"><label>Would Recommend</label><select id="fRec"></select></div>
+      <div class="filter-group"><label>Min Age</label><input type="number" id="fAgeMin" placeholder="Any" min="0" max="100"></div>
+      <div class="filter-group"><label>Max Age</label><input type="number" id="fAgeMax" placeholder="Any" min="0" max="100"></div>
+      <div class="filter-group"><label>Min Usage Hrs/Day</label><input type="number" id="fHoursMin" placeholder="Any" min="0" max="24" step="0.1"></div>
+      <div class="filter-group"><label>Min Productivity</label><input type="number" id="fProdMin" placeholder="Any" min="0" max="10" step="0.1"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="applyFilters()">Apply Filters</button>
+      <button class="btn ghost" onclick="resetFilters()">Reset All</button>
+      <div class="filter-status">Showing <strong id="shownN">—</strong> of <strong id="allN">—</strong> records</div>
+    </div>
+  </div>
+
+  <div class="active-filters" id="activeFilters"></div>
+  <div class="chart-hint"><strong>Power BI–style interaction:</strong> click a bar or pie slice to filter the whole dashboard. Click the same item again (or Reset) to clear that filter.</div>
+
+  <div class="kpi-grid" id="kpiGrid">
+    <div class="kpi"><div class="kpi-label">Respondents</div><div class="kpi-value" id="kN">—</div><div class="kpi-sub">After filters</div></div>
+    <div class="kpi"><div class="kpi-label">Students</div><div class="kpi-value" id="kStu">—</div><div class="kpi-sub" id="kStuPct">—</div></div>
+    <div class="kpi"><div class="kpi-label">Professionals</div><div class="kpi-value" id="kPro">—</div><div class="kpi-sub" id="kProPct">—</div></div>
+    <div class="kpi"><div class="kpi-label">Avg AI Hrs / Day</div><div class="kpi-value" id="kHrs">—</div><div class="kpi-sub">Usage intensity</div></div>
+    <div class="kpi"><div class="kpi-label">Avg Productivity</div><div class="kpi-value" id="kProd">—</div><div class="kpi-sub">Score 0–10 · non-null</div></div>
+    <div class="kpi"><div class="kpi-label">Avg Satisfaction</div><div class="kpi-value" id="kSat">—</div><div class="kpi-sub">Score 0–10</div></div>
+    <div class="kpi"><div class="kpi-label">Avg Time Saved</div><div class="kpi-value" id="kSaved">—</div><div class="kpi-sub">Hrs / week</div></div>
+    <div class="kpi"><div class="kpi-label">Recommend %</div><div class="kpi-value" id="kRec">—</div><div class="kpi-sub">Said “Yes”</div></div>
+  </div>
+
+  <section class="section">
+    <div class="section-header"><h2 class="section-title">Who Uses AI? <span>Demographics</span></h2></div>
+    <div class="grid-3">
+      <div class="card">
+        <h3>Students vs Professionals</h3>
+        <div class="click-tip">Click slice to filter by user type</div>
+        <div class="chart-box short"><canvas id="cUserType"></canvas></div>
+        <div class="insight" id="iUserType">—</div>
+      </div>
+      <div class="card">
+        <h3>Gender Distribution</h3>
+        <div class="click-tip">Click slice to filter by gender</div>
+        <div class="chart-box short"><canvas id="cGender"></canvas></div>
+        <div class="insight" id="iGender">—</div>
+      </div>
+      <div class="card">
+        <h3>Education Level</h3>
+        <div class="click-tip">Click bar to filter by education</div>
+        <div class="chart-box short"><canvas id="cEdu"></canvas></div>
+        <div class="insight" id="iEdu">—</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header"><h2 class="section-title">Where &amp; With What <span>Geography · Tools · Purposes</span></h2></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Respondents by Country</h3>
+        <div class="click-tip">Click bar to filter by country</div>
+        <div class="chart-box tall"><canvas id="cCountry"></canvas></div>
+        <div class="insight" id="iCountry">—</div>
+      </div>
+      <div class="card">
+        <h3>Preferred AI Tools</h3>
+        <div class="click-tip">Click bar to filter by tool</div>
+        <div class="chart-box tall"><canvas id="cTool"></canvas></div>
+        <div class="insight" id="iTool">—</div>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top:14px">
+      <div class="card">
+        <h3>Primary AI Purpose</h3>
+        <div class="click-tip">Click bar to filter by purpose</div>
+        <div class="chart-box"><canvas id="cPurpose"></canvas></div>
+        <div class="insight" id="iPurpose">—</div>
+      </div>
+      <div class="card">
+        <h3>Purpose Mix by User Type</h3>
+        <div class="click-tip">Click bar to filter by purpose</div>
+        <div class="chart-box"><canvas id="cPurposeByType"></canvas></div>
+        <div class="insight" id="iPurposeByType">—</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header"><h2 class="section-title">Impact of AI <span>Productivity · Satisfaction · Time Saved</span></h2></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Avg Scores by User Type</h3>
+        <div class="click-tip">Click a series legend or bar to filter Student / Professional</div>
+        <div class="chart-box"><canvas id="cImpactByType"></canvas></div>
+        <div class="insight" id="iImpactByType">—</div>
+      </div>
+      <div class="card">
+        <h3>Avg Productivity by AI Tool</h3>
+        <div class="click-tip">Mean of Productivity_Score · n shown in tooltip · click to filter</div>
+        <div class="chart-box"><canvas id="cProdByTool"></canvas></div>
+        <div class="insight" id="iProdByTool">—</div>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top:14px">
+      <div class="card">
+        <h3>Usage Hours vs Time Saved</h3>
+        <div class="chart-box"><canvas id="cScatter"></canvas></div>
+        <div class="insight" id="iScatter">—</div>
+      </div>
+      <div class="card">
+        <h3>Recommendation by User Type</h3>
+        <div class="click-tip">Click bar to filter by recommendation</div>
+        <div class="chart-box"><canvas id="cRec"></canvas></div>
+        <div class="insight" id="iRec">—</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header"><h2 class="section-title">Age, Income &amp; Intensity <span>Distributions</span></h2></div>
+    <div class="grid-3">
+      <div class="card">
+        <h3>Age Distribution</h3>
+        <div class="click-tip">Click bar to filter by age range</div>
+        <div class="chart-box short"><canvas id="cAge"></canvas></div>
+        <div class="insight" id="iAge">—</div>
+      </div>
+      <div class="card">
+        <h3>AI Hours / Day Distribution</h3>
+        <div class="click-tip">Click bar to filter by usage intensity</div>
+        <div class="chart-box short"><canvas id="cHours"></canvas></div>
+        <div class="insight" id="iHours">—</div>
+      </div>
+      <div class="card">
+        <h3>Monthly Income (approx.)</h3>
+        <div class="click-tip">Distribution view (click does not filter)</div>
+        <div class="chart-box short"><canvas id="cIncome"></canvas></div>
+        <div class="insight" id="iIncome">—</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header"><h2 class="section-title">Professions &amp; Tool Matrix <span>Drill-down</span></h2></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Top Professions (by count)</h3>
+        <div class="click-tip">Click bar to filter by profession</div>
+        <div class="chart-box tall"><canvas id="cProf"></canvas></div>
+        <div class="insight" id="iProf">—</div>
+      </div>
+      <div class="card">
+        <h3>Purpose × Tool Heat (counts)</h3>
+        <div class="table-wrap heat" id="heatTable"></div>
+        <div class="insight" id="iHeat">—</div>
+      </div>
+    </div>
+  </section>
+
+
+  <div class="footer">
+    Analysis by <a href="https://hasnatsaifullah.netlify.app/" target="_blank" rel="noopener">Hasnat Saifullah</a>
+    ·
+    <a href="https://www.kaggle.com/datasets/eishatuzzuhra/ai-usage-and-impact-on-students-and-professionals" target="_blank" rel="noopener">Kaggle dataset</a>
+    · Charts update live · Click chart elements to cross-filter
+  </div>
+</div>
+
+<script>
+const RAW = {"records":[{"User_ID":"U0269","Age":30.0,"Gender":"Male","Country":"United Kingdom","User_Type":"Professional","Education_Level":"Master's","Profession":"Business Analyst","Monthly_Income":5421.0,"AI_Tool":"ChatGPT","AI_Purpose":"Office Work","AI_Usage_Hours_Per_Day":2.0,"Monthly_AI_Cost":null,"Productivity_Score":5.3,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":3.9,"Work_or_Study_Hours_Per_Day":7.3,"Would_Recommend":"Yes"},{"User_ID":"U0217","Age":30.0,"Gender":"Male","Country":"United States","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Customer Support Specialist","Monthly_Income":8903.0,"AI_Tool":"ChatGPT","AI_Purpose":"Customer Support","AI_Usage_Hours_Per_Day":5.7,"Monthly_AI_Cost":0.0,"Productivity_Score":9.9,"Accuracy_Rating":3.0,"Satisfaction_Score":9.0,"Time_Saved_Hours_Per_Week":11.4,"Work_or_Study_Hours_Per_Day":8.4,"Would_Recommend":"Yes"},{"User_ID":"U0152","Age":17.0,"Gender":"Male","Country":"Canada","User_Type":"Student","Education_Level":"Unknown","Profession":"Computer Science Student","Monthly_Income":402.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.0,"Monthly_AI_Cost":20.0,"Productivity_Score":3.2,"Accuracy_Rating":2.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":5.2,"Work_or_Study_Hours_Per_Day":6.7,"Would_Recommend":"No"},{"User_ID":"U0264","Age":35.0,"Gender":"Female","Country":"Brazil","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Desenvolvedora de Software / Software Developer","Monthly_Income":1367.0,"AI_Tool":"Meta AI","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.7,"Monthly_AI_Cost":20.0,"Productivity_Score":5.6,"Accuracy_Rating":4.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":6.4,"Work_or_Study_Hours_Per_Day":9.6,"Would_Recommend":"Maybe"},{"User_ID":"U0263","Age":19.0,"Gender":"Female","Country":"Canada","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Biology Student","Monthly_Income":438.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Unknown","AI_Usage_Hours_Per_Day":4.1,"Monthly_AI_Cost":0.0,"Productivity_Score":4.7,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":9.2,"Work_or_Study_Hours_Per_Day":6.2,"Would_Recommend":"Yes"},{"User_ID":"U0225","Age":19.0,"Gender":"Unknown","Country":"United States","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Business Analytics Student","Monthly_Income":774.0,"AI_Tool":"Meta AI","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":1.5,"Monthly_AI_Cost":0.0,"Productivity_Score":5.0,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":2.9,"Work_or_Study_Hours_Per_Day":7.4,"Would_Recommend":"No"},{"User_ID":"U0246","Age":32.0,"Gender":"Male","Country":"France","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"D\u00e9veloppeur Full Stack","Monthly_Income":4466.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.2,"Monthly_AI_Cost":20.0,"Productivity_Score":3.0,"Accuracy_Rating":2.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":6.6,"Work_or_Study_Hours_Per_Day":6.4,"Would_Recommend":"Yes"},{"User_ID":"U0177","Age":32.0,"Gender":"Male","Country":"Philippines","User_Type":"Professional","Education_Level":"High School","Profession":"Social Media Content Creator","Monthly_Income":486.0,"AI_Tool":"ChatGPT","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":2.0,"Monthly_AI_Cost":0.0,"Productivity_Score":6.5,"Accuracy_Rating":2.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":3.2,"Work_or_Study_Hours_Per_Day":6.4,"Would_Recommend":"Yes"},{"User_ID":"U0207","Age":16.0,"Gender":"Male","Country":"Philippines","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Digital Media Production Student","Monthly_Income":132.0,"AI_Tool":"Claude","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":1.6,"Monthly_AI_Cost":30.0,"Productivity_Score":4.7,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":3.8,"Work_or_Study_Hours_Per_Day":3.8,"Would_Recommend":"Yes"},{"User_ID":"U0167","Age":40.0,"Gender":"Male","Country":"India","User_Type":"Professional","Education_Level":"High School","Profession":"Unknown","Monthly_Income":1595.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":1.7,"Monthly_AI_Cost":10.0,"Productivity_Score":null,"Accuracy_Rating":2.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":7.5,"Work_or_Study_Hours_Per_Day":9.4,"Would_Recommend":"Maybe"},{"User_ID":"U0135","Age":36.0,"Gender":"Female","Country":"Pakistan","User_Type":"Professional","Education_Level":"Master's","Profession":"Research Analyst","Monthly_Income":856.0,"AI_Tool":"ChatGPT","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":2.7,"Monthly_AI_Cost":0.0,"Productivity_Score":null,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":5.7,"Work_or_Study_Hours_Per_Day":8.7,"Would_Recommend":"Yes"},{"User_ID":"U0211","Age":22.0,"Gender":"Male","Country":"Canada","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Mechanical Engineering Student","Monthly_Income":547.0,"AI_Tool":"Claude","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":5.0,"Monthly_AI_Cost":0.0,"Productivity_Score":6.6,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":9.8,"Work_or_Study_Hours_Per_Day":5.6,"Would_Recommend":"No"},{"User_ID":"U0114","Age":30.0,"Gender":"Female","Country":"Australia","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Software Developer","Monthly_Income":3307.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":0.8,"Monthly_AI_Cost":10.0,"Productivity_Score":2.3,"Accuracy_Rating":4.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":0.5,"Work_or_Study_Hours_Per_Day":8.0,"Would_Recommend":"No"},{"User_ID":"U0191","Age":21.0,"Gender":"Female","Country":"Canada","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Software Engineering Student","Monthly_Income":387.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":5.8,"Monthly_AI_Cost":30.0,"Productivity_Score":6.9,"Accuracy_Rating":4.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":10.2,"Work_or_Study_Hours_Per_Day":4.8,"Would_Recommend":"Yes"},{"User_ID":"U0035","Age":28.0,"Gender":"Male","Country":"United Kingdom","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Data Analyst","Monthly_Income":3117.0,"AI_Tool":"Claude","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":3.9,"Monthly_AI_Cost":10.0,"Productivity_Score":8.6,"Accuracy_Rating":3.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":11.8,"Work_or_Study_Hours_Per_Day":7.6,"Would_Recommend":"Yes"},{"User_ID":"U0138","Age":16.0,"Gender":"Female","Country":"Canada","User_Type":"Student","Education_Level":"Master's","Profession":"Unknown","Monthly_Income":324.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":7.1,"Monthly_AI_Cost":20.0,"Productivity_Score":null,"Accuracy_Rating":2.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":11.6,"Work_or_Study_Hours_Per_Day":3.0,"Would_Recommend":"No"},{"User_ID":"U0059","Age":22.0,"Gender":"Male","Country":"Canada","User_Type":"Professional","Education_Level":"High School","Profession":"Customer Service Representative","Monthly_Income":3546.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Customer Support","AI_Usage_Hours_Per_Day":1.7,"Monthly_AI_Cost":0.0,"Productivity_Score":7.0,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":3.4,"Work_or_Study_Hours_Per_Day":6.7,"Would_Recommend":"Yes"},{"User_ID":"U0215","Age":23.0,"Gender":"Male","Country":"India","User_Type":"Student","Education_Level":"Master's","Profession":"English Literature Student","Monthly_Income":109.0,"AI_Tool":"Google Gemini","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":1.5,"Monthly_AI_Cost":20.0,"Productivity_Score":3.9,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":3.7,"Work_or_Study_Hours_Per_Day":3.9,"Would_Recommend":"Yes"},{"User_ID":"U0228","Age":22.0,"Gender":"Male","Country":"Kenya","User_Type":"Student","Education_Level":"High School","Profession":"Biology Student","Monthly_Income":109.0,"AI_Tool":"ChatGPT","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":9.6,"Monthly_AI_Cost":20.0,"Productivity_Score":7.3,"Accuracy_Rating":4.0,"Satisfaction_Score":9.0,"Time_Saved_Hours_Per_Week":19.4,"Work_or_Study_Hours_Per_Day":5.2,"Would_Recommend":"Yes"},{"User_ID":"U0046","Age":61.0,"Gender":"Female","Country":"Nigeria","User_Type":"Professional","Education_Level":"Diploma","Profession":"Research Technician","Monthly_Income":585.0,"AI_Tool":"Google Gemini","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":23.0,"Monthly_AI_Cost":10.0,"Productivity_Score":4.1,"Accuracy_Rating":3.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":5.4,"Work_or_Study_Hours_Per_Day":9.5,"Would_Recommend":"No"},{"User_ID":"U0176","Age":24.0,"Gender":"Male","Country":"India","User_Type":"Professional","Education_Level":"Diploma","Profession":"AI-Powered Customer Support Executive","Monthly_Income":1977.0,"AI_Tool":"ChatGPT","AI_Purpose":"Customer Support","AI_Usage_Hours_Per_Day":0.9,"Monthly_AI_Cost":10.0,"Productivity_Score":4.1,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":0.0,"Work_or_Study_Hours_Per_Day":7.3,"Would_Recommend":"Maybe"},{"User_ID":"U0227","Age":23.0,"Gender":"Male","Country":"Pakistan","User_Type":"Student","Education_Level":"Master's","Profession":"English Literature Student","Monthly_Income":0.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":1.7,"Monthly_AI_Cost":20.0,"Productivity_Score":2.8,"Accuracy_Rating":2.0,"Satisfaction_Score":3.0,"Time_Saved_Hours_Per_Week":2.7,"Work_or_Study_Hours_Per_Day":5.4,"Would_Recommend":"No"},{"User_ID":"U0198","Age":29.0,"Gender":"Female","Country":"Germany","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Kundenservice-Spezialistin / Customer Service Specialist","Monthly_Income":null,"AI_Tool":"ChatGPT","AI_Purpose":"Customer Support","AI_Usage_Hours_Per_Day":1.0,"Monthly_AI_Cost":null,"Productivity_Score":4.0,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":2.7,"Work_or_Study_Hours_Per_Day":8.0,"Would_Recommend":"Maybe"},{"User_ID":"U0141","Age":29.0,"Gender":"Unknown","Country":"United Kingdom","User_Type":"Student","Education_Level":"High School","Profession":"Computer Science Student","Monthly_Income":0.0,"AI_Tool":"Grammarly","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":2.6,"Monthly_AI_Cost":10.0,"Productivity_Score":3.7,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":4.8,"Work_or_Study_Hours_Per_Day":6.2,"Would_Recommend":"Yes"},{"User_ID":"U0205","Age":24.0,"Gender":"Male","Country":"United Kingdom","User_Type":"Student","Education_Level":"Unknown","Profession":"Mechanical Engineering Student","Monthly_Income":444.0,"AI_Tool":"Google Gemini","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":1.2,"Monthly_AI_Cost":0.0,"Productivity_Score":3.8,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":3.0,"Work_or_Study_Hours_Per_Day":7.2,"Would_Recommend":"No"},{"User_ID":"U0209","Age":28.0,"Gender":"Female","Country":"Philippines","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Digital Content Creator","Monthly_Income":392.0,"AI_Tool":"ChatGPT","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":1.6,"Monthly_AI_Cost":10.0,"Productivity_Score":4.0,"Accuracy_Rating":2.0,"Satisfaction_Score":3.0,"Time_Saved_Hours_Per_Week":4.5,"Work_or_Study_Hours_Per_Day":7.8,"Would_Recommend":"Yes"},{"User_ID":"U0149","Age":23.0,"Gender":"Male","Country":"Brazil","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Computer Science Student","Monthly_Income":215.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":0.6,"Monthly_AI_Cost":10.0,"Productivity_Score":3.0,"Accuracy_Rating":4.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":0.0,"Work_or_Study_Hours_Per_Day":6.5,"Would_Recommend":"No"},{"User_ID":"U0179","Age":28.0,"Gender":"Male","Country":"Brazil","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Pesquisador de Mercado","Monthly_Income":1567.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":0.7,"Monthly_AI_Cost":0.0,"Productivity_Score":4.0,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":4.4,"Work_or_Study_Hours_Per_Day":8.1,"Would_Recommend":"No"},{"User_ID":"U0016","Age":23.0,"Gender":"Female","Country":"Canada","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Biology Student","Monthly_Income":null,"AI_Tool":"ChatGPT","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":7.4,"Monthly_AI_Cost":0.0,"Productivity_Score":8.7,"Accuracy_Rating":3.0,"Satisfaction_Score":9.0,"Time_Saved_Hours_Per_Week":12.3,"Work_or_Study_Hours_Per_Day":6.8,"Would_Recommend":"Yes"},{"User_ID":"U0132","Age":null,"Gender":"Male","Country":"Australia","User_Type":"Student","Education_Level":"Unknown","Profession":"Business Administration Student","Monthly_Income":0.0,"AI_Tool":"ChatGPT","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":5.4,"Monthly_AI_Cost":0.0,"Productivity_Score":7.2,"Accuracy_Rating":4.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":10.7,"Work_or_Study_Hours_Per_Day":4.8,"Would_Recommend":"No"},{"User_ID":"U0008","Age":23.0,"Gender":"Male","Country":"Australia","User_Type":"Student","Education_Level":"Bachelor's","Profession":"English Literature Student","Monthly_Income":531.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":5.2,"Monthly_AI_Cost":0.0,"Productivity_Score":6.7,"Accuracy_Rating":null,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":12.1,"Work_or_Study_Hours_Per_Day":7.0,"Would_Recommend":"Yes"},{"User_ID":"U0162","Age":44.0,"Gender":"Female","Country":"Kenya","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Research Analyst","Monthly_Income":258.0,"AI_Tool":"DeepSeek","AI_Purpose":"Unknown","AI_Usage_Hours_Per_Day":3.7,"Monthly_AI_Cost":0.0,"Productivity_Score":4.6,"Accuracy_Rating":5.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":5.7,"Work_or_Study_Hours_Per_Day":6.9,"Would_Recommend":"Yes"},{"User_ID":"U0081","Age":23.0,"Gender":"Male","Country":"Nigeria","User_Type":"Professional","Education_Level":"Diploma","Profession":"Research Assistant","Monthly_Income":334.0,"AI_Tool":"ChatGPT","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":2.3,"Monthly_AI_Cost":20.0,"Productivity_Score":3.9,"Accuracy_Rating":2.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":2.5,"Work_or_Study_Hours_Per_Day":7.7,"Would_Recommend":"No"},{"User_ID":"U0014","Age":23.0,"Gender":"Male","Country":"India","User_Type":"Student","Education_Level":"High School","Profession":"Engineering Student","Monthly_Income":169.0,"AI_Tool":"Not Mentioned","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":5.4,"Monthly_AI_Cost":0.0,"Productivity_Score":8.1,"Accuracy_Rating":4.0,"Satisfaction_Score":9.0,"Time_Saved_Hours_Per_Week":6.8,"Work_or_Study_Hours_Per_Day":6.9,"Would_Recommend":"Yes"},{"User_ID":"U0278","Age":22.0,"Gender":"Male","Country":"Canada","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Mechanical Engineering Student","Monthly_Income":507.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":1.9,"Monthly_AI_Cost":0.0,"Productivity_Score":4.6,"Accuracy_Rating":3.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":2.0,"Work_or_Study_Hours_Per_Day":4.1,"Would_Recommend":"Yes"},{"User_ID":"U0102","Age":18.0,"Gender":"Male","Country":"Philippines","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Information Technology Student","Monthly_Income":0.0,"AI_Tool":"Google Gemini","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":1.6,"Monthly_AI_Cost":0.0,"Productivity_Score":3.3,"Accuracy_Rating":4.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":4.3,"Work_or_Study_Hours_Per_Day":3.2,"Would_Recommend":"Yes"},{"User_ID":"U0258","Age":16.0,"Gender":"Female","Country":"Unknown","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Unknown","Monthly_Income":63.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":1.9,"Monthly_AI_Cost":0.0,"Productivity_Score":3.5,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":3.0,"Work_or_Study_Hours_Per_Day":5.4,"Would_Recommend":"Maybe"},{"User_ID":"U0239","Age":45.0,"Gender":"Male","Country":"Pakistan","User_Type":"Professional","Education_Level":"Master's","Profession":"Senior Software Engineer","Monthly_Income":887.0,"AI_Tool":"Not Mentioned","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.5,"Monthly_AI_Cost":0.0,"Productivity_Score":5.3,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":5.3,"Work_or_Study_Hours_Per_Day":6.4,"Would_Recommend":"Maybe"},{"User_ID":"U0071","Age":30.0,"Gender":"Unknown","Country":"India","User_Type":"Professional","Education_Level":"Master's","Profession":"Data Analytics Manager","Monthly_Income":1699.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":5.5,"Monthly_AI_Cost":10.0,"Productivity_Score":null,"Accuracy_Rating":4.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":6.5,"Work_or_Study_Hours_Per_Day":7.5,"Would_Recommend":"Yes"},{"User_ID":"U0259","Age":43.0,"Gender":"Male","Country":"Brazil","User_Type":"Professional","Education_Level":"PhD","Profession":"Engenheiro de Software S\u00eanior / Tech Lead","Monthly_Income":null,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":0.6,"Monthly_AI_Cost":20.0,"Productivity_Score":4.0,"Accuracy_Rating":2.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":0.0,"Work_or_Study_Hours_Per_Day":10.1,"Would_Recommend":"Maybe"},{"User_ID":"U0075","Age":29.0,"Gender":"Male","Country":"United States","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Content Writer","Monthly_Income":5260.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":1.6,"Monthly_AI_Cost":0.0,"Productivity_Score":3.9,"Accuracy_Rating":4.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":5.2,"Work_or_Study_Hours_Per_Day":6.7,"Would_Recommend":"Unknown"},{"User_ID":"U0288","Age":36.0,"Gender":"Male","Country":"Pakistan","User_Type":"Professional","Education_Level":"Master's","Profession":"Senior Software Engineer / Technical Lead","Monthly_Income":513.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":3.7,"Monthly_AI_Cost":0.0,"Productivity_Score":5.7,"Accuracy_Rating":2.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":5.8,"Work_or_Study_Hours_Per_Day":10.1,"Would_Recommend":"Maybe"},{"User_ID":"U0271","Age":24.0,"Gender":"Female","Country":"India","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Software Developer","Monthly_Income":2307.0,"AI_Tool":"Grammarly","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":0.6,"Monthly_AI_Cost":0.0,"Productivity_Score":4.4,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":1.6,"Work_or_Study_Hours_Per_Day":12.0,"Would_Recommend":"Yes"},{"User_ID":"U0070","Age":17.0,"Gender":"Unknown","Country":"Brazil","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Unknown","Monthly_Income":234.0,"AI_Tool":"ChatGPT","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":5.1,"Monthly_AI_Cost":0.0,"Productivity_Score":8.3,"Accuracy_Rating":5.0,"Satisfaction_Score":9.0,"Time_Saved_Hours_Per_Week":11.4,"Work_or_Study_Hours_Per_Day":7.2,"Would_Recommend":"Yes"},{"User_ID":"U0054","Age":20.0,"Gender":"Male","Country":"India","User_Type":"Student","Education_Level":"High School","Profession":"Computer Science Student","Monthly_Income":206.0,"AI_Tool":"Google Gemini","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":2.4,"Monthly_AI_Cost":20.0,"Productivity_Score":5.5,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":7.3,"Work_or_Study_Hours_Per_Day":8.6,"Would_Recommend":"Yes"},{"User_ID":"U0164","Age":44.0,"Gender":"Female","Country":"Nigeria","User_Type":"Professional","Education_Level":"Master's","Profession":"Research Scientist/Senior Research Officer","Monthly_Income":384.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":0.9,"Monthly_AI_Cost":10.0,"Productivity_Score":3.1,"Accuracy_Rating":3.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":1.2,"Work_or_Study_Hours_Per_Day":7.9,"Would_Recommend":"No"},{"User_ID":"U0219","Age":21.0,"Gender":"Male","Country":"United Kingdom","User_Type":"Student","Education_Level":"Master's","Profession":"Artificial Intelligence and Machine Learning Student","Monthly_Income":206.0,"AI_Tool":"Google Gemini","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":9.1,"Monthly_AI_Cost":30.0,"Productivity_Score":6.5,"Accuracy_Rating":3.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":14.9,"Work_or_Study_Hours_Per_Day":5.4,"Would_Recommend":"Yes"},{"User_ID":"U0036","Age":34.0,"Gender":"Female","Country":"United States","User_Type":"Professional","Education_Level":"Master's","Profession":"Content Strategy Manager","Monthly_Income":5669.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":8.0,"Monthly_AI_Cost":0.0,"Productivity_Score":7.3,"Accuracy_Rating":2.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":16.3,"Work_or_Study_Hours_Per_Day":7.4,"Would_Recommend":"Yes"},{"User_ID":"U0057","Age":18.0,"Gender":"Male","Country":"Philippines","User_Type":"Student","Education_Level":"High School","Profession":"English Literature Student","Monthly_Income":198.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":null,"Monthly_AI_Cost":0.0,"Productivity_Score":6.9,"Accuracy_Rating":2.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":7.2,"Work_or_Study_Hours_Per_Day":7.2,"Would_Recommend":"Maybe"},{"User_ID":"U0060","Age":null,"Gender":"Female","Country":"Philippines","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Unknown","Monthly_Income":190.0,"AI_Tool":"ChatGPT","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":7.7,"Monthly_AI_Cost":null,"Productivity_Score":8.4,"Accuracy_Rating":5.0,"Satisfaction_Score":10.0,"Time_Saved_Hours_Per_Week":13.6,"Work_or_Study_Hours_Per_Day":6.8,"Would_Recommend":"Yes"},{"User_ID":"U0226","Age":32.0,"Gender":"Male","Country":"Nigeria","User_Type":"Professional","Education_Level":"High School","Profession":"Social Media Content Creator / Digital Marketer","Monthly_Income":376.0,"AI_Tool":"Claude","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":1.3,"Monthly_AI_Cost":20.0,"Productivity_Score":3.3,"Accuracy_Rating":4.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":3.2,"Work_or_Study_Hours_Per_Day":11.6,"Would_Recommend":"Maybe"},{"User_ID":"U0118","Age":44.0,"Gender":"Other","Country":"France","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Responsable de Contenu Digital","Monthly_Income":3477.0,"AI_Tool":"ChatGPT","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":2.2,"Monthly_AI_Cost":0.0,"Productivity_Score":5.0,"Accuracy_Rating":4.0,"Satisfaction_Score":null,"Time_Saved_Hours_Per_Week":2.8,"Work_or_Study_Hours_Per_Day":10.7,"Would_Recommend":"Yes"},{"User_ID":"U0028","Age":null,"Gender":"Other","Country":"Pakistan","User_Type":"Student","Education_Level":"Bachelor's","Profession":"English Literature Student","Monthly_Income":100.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":1.2,"Monthly_AI_Cost":50.0,"Productivity_Score":5.8,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":null,"Work_or_Study_Hours_Per_Day":5.7,"Would_Recommend":"Yes"},{"User_ID":"U0125","Age":26.0,"Gender":"Unknown","Country":"Nigeria","User_Type":"Student","Education_Level":"High School","Profession":"Computer Science Student","Monthly_Income":0.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":0.6,"Monthly_AI_Cost":0.0,"Productivity_Score":3.2,"Accuracy_Rating":2.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":2.2,"Work_or_Study_Hours_Per_Day":8.8,"Would_Recommend":"Yes"},{"User_ID":"U0223","Age":33.0,"Gender":"Female","Country":"Australia","User_Type":"Professional","Education_Level":"Diploma","Profession":"Marketing Communications Officer","Monthly_Income":6197.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":1.9,"Monthly_AI_Cost":null,"Productivity_Score":5.4,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":6.0,"Work_or_Study_Hours_Per_Day":11.0,"Would_Recommend":"Yes"},{"User_ID":"U0243","Age":31.0,"Gender":"Male","Country":"Australia","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Customer Support Specialist","Monthly_Income":5355.0,"AI_Tool":"Google Gemini","AI_Purpose":"Customer Support","AI_Usage_Hours_Per_Day":4.6,"Monthly_AI_Cost":0.0,"Productivity_Score":8.8,"Accuracy_Rating":2.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":11.5,"Work_or_Study_Hours_Per_Day":8.7,"Would_Recommend":"Yes"},{"User_ID":"U0165","Age":22.0,"Gender":"Male","Country":"Brazil","User_Type":"Student","Education_Level":"High School","Profession":"Mechanical Engineering Student","Monthly_Income":86.0,"AI_Tool":"Google Gemini","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":1.4,"Monthly_AI_Cost":0.0,"Productivity_Score":1.9,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":1.7,"Work_or_Study_Hours_Per_Day":null,"Would_Recommend":"Yes"},{"User_ID":"U0238","Age":21.0,"Gender":"Male","Country":"Pakistan","User_Type":"Student","Education_Level":"High School","Profession":"Digital Media Student","Monthly_Income":62.0,"AI_Tool":"ChatGPT","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":7.2,"Monthly_AI_Cost":10.0,"Productivity_Score":6.8,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":13.2,"Work_or_Study_Hours_Per_Day":6.1,"Would_Recommend":"Yes"},{"User_ID":"U0069","Age":32.0,"Gender":"Male","Country":"Canada","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Content Marketing Manager","Monthly_Income":3337.0,"AI_Tool":"ChatGPT","AI_Purpose":"Unknown","AI_Usage_Hours_Per_Day":1.3,"Monthly_AI_Cost":0.0,"Productivity_Score":3.8,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":2.9,"Work_or_Study_Hours_Per_Day":7.6,"Would_Recommend":"Yes"},{"User_ID":"U0092","Age":22.0,"Gender":"Male","Country":"Pakistan","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Computer Science Student","Monthly_Income":113.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":1.0,"Monthly_AI_Cost":0.0,"Productivity_Score":3.2,"Accuracy_Rating":3.0,"Satisfaction_Score":3.0,"Time_Saved_Hours_Per_Week":4.2,"Work_or_Study_Hours_Per_Day":6.5,"Would_Recommend":"No"},{"User_ID":"U0043","Age":21.0,"Gender":"Male","Country":"United Kingdom","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Computer Science Student","Monthly_Income":118.0,"AI_Tool":"Google Gemini","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":null,"Monthly_AI_Cost":0.0,"Productivity_Score":7.6,"Accuracy_Rating":2.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":12.4,"Work_or_Study_Hours_Per_Day":6.3,"Would_Recommend":"Yes"},{"User_ID":"U0084","Age":47.0,"Gender":"Male","Country":"Nigeria","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Business Intelligence Analyst","Monthly_Income":1104.0,"AI_Tool":"Grammarly","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":3.4,"Monthly_AI_Cost":20.0,"Productivity_Score":4.9,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":7.4,"Work_or_Study_Hours_Per_Day":7.3,"Would_Recommend":"No"},{"User_ID":"U0061","Age":33.0,"Gender":"Male","Country":"Brazil","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Desenvolvedor de Software S\u00eanior","Monthly_Income":552.0,"AI_Tool":"Google Gemini","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":0.5,"Monthly_AI_Cost":20.0,"Productivity_Score":2.9,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":0.1,"Work_or_Study_Hours_Per_Day":10.2,"Would_Recommend":"No"},{"User_ID":"U0116","Age":20.0,"Gender":"Male","Country":"India","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Digital Media and Communications Student","Monthly_Income":79.0,"AI_Tool":"Google Gemini","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":3.5,"Monthly_AI_Cost":20.0,"Productivity_Score":4.7,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":8.3,"Work_or_Study_Hours_Per_Day":6.2,"Would_Recommend":"Yes"},{"User_ID":"U0039","Age":23.0,"Gender":"Male","Country":"United Kingdom","User_Type":"Student","Education_Level":"Master's","Profession":"Bioinformatics Student","Monthly_Income":614.0,"AI_Tool":"Claude","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":1.0,"Monthly_AI_Cost":20.0,"Productivity_Score":2.5,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":0.7,"Work_or_Study_Hours_Per_Day":6.6,"Would_Recommend":"Maybe"},{"User_ID":"U0022","Age":37.0,"Gender":"Female","Country":"India","User_Type":"Professional","Education_Level":"Diploma","Profession":"Software Developer","Monthly_Income":1404.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.7,"Monthly_AI_Cost":null,"Productivity_Score":5.7,"Accuracy_Rating":5.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":3.4,"Work_or_Study_Hours_Per_Day":6.4,"Would_Recommend":"Yes"},{"User_ID":"U0137","Age":23.0,"Gender":"Other","Country":"Unknown","User_Type":"Student","Education_Level":"Master's","Profession":"Software Engineering Student","Monthly_Income":0.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.0,"Monthly_AI_Cost":20.0,"Productivity_Score":3.3,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":2.6,"Work_or_Study_Hours_Per_Day":6.2,"Would_Recommend":"Yes"},{"User_ID":"U0027","Age":20.0,"Gender":"Male","Country":"United Kingdom","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Computer Science Student","Monthly_Income":0.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.3,"Monthly_AI_Cost":0.0,"Productivity_Score":4.8,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":2.9,"Work_or_Study_Hours_Per_Day":8.1,"Would_Recommend":"Yes"},{"User_ID":"U0268","Age":31.0,"Gender":"Female","Country":"France","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Biology Student","Monthly_Income":302.0,"AI_Tool":"Google Gemini","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":0.7,"Monthly_AI_Cost":0.0,"Productivity_Score":3.4,"Accuracy_Rating":null,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":0.8,"Work_or_Study_Hours_Per_Day":4.5,"Would_Recommend":"Maybe"},{"User_ID":"U0131","Age":35.0,"Gender":"Unknown","Country":"United States","User_Type":"Professional","Education_Level":"Diploma","Profession":"Administrative Assistant","Monthly_Income":5966.0,"AI_Tool":"ChatGPT","AI_Purpose":"Office Work","AI_Usage_Hours_Per_Day":4.9,"Monthly_AI_Cost":20.0,"Productivity_Score":5.7,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":11.5,"Work_or_Study_Hours_Per_Day":9.3,"Would_Recommend":"Yes"},{"User_ID":"U0255","Age":28.0,"Gender":"Male","Country":"Australia","User_Type":"Professional","Education_Level":"Master's","Profession":"Senior Software Engineer","Monthly_Income":3610.0,"AI_Tool":"Google Gemini","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":4.3,"Monthly_AI_Cost":0.0,"Productivity_Score":6.1,"Accuracy_Rating":3.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":6.7,"Work_or_Study_Hours_Per_Day":8.1,"Would_Recommend":"Yes"},{"User_ID":"U0231","Age":22.0,"Gender":"Male","Country":"Nigeria","User_Type":"Professional","Education_Level":"Master's","Profession":"Data Analyst","Monthly_Income":1091.0,"AI_Tool":"Not Mentioned","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":2.4,"Monthly_AI_Cost":0.0,"Productivity_Score":5.4,"Accuracy_Rating":4.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":2.6,"Work_or_Study_Hours_Per_Day":8.0,"Would_Recommend":"Yes"},{"User_ID":"U0067","Age":22.0,"Gender":"Other","Country":"India","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Biotechnology Student","Monthly_Income":68.0,"AI_Tool":"ChatGPT","AI_Purpose":"Unknown","AI_Usage_Hours_Per_Day":0.7,"Monthly_AI_Cost":0.0,"Productivity_Score":4.1,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":2.1,"Work_or_Study_Hours_Per_Day":8.6,"Would_Recommend":"No"},{"User_ID":"U0234","Age":null,"Gender":"Female","Country":"Nigeria","User_Type":"Student","Education_Level":"Bachelor's","Profession":"English Literature Student","Monthly_Income":null,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":2.1,"Monthly_AI_Cost":0.0,"Productivity_Score":4.7,"Accuracy_Rating":5.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":null,"Work_or_Study_Hours_Per_Day":5.9,"Would_Recommend":"Yes"},{"User_ID":"U0184","Age":36.0,"Gender":"Female","Country":"Philippines","User_Type":"Professional","Education_Level":"PhD","Profession":"Senior Software Engineer / AI Solutions Architect","Monthly_Income":1378.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":2.1,"Monthly_AI_Cost":0.0,"Productivity_Score":3.8,"Accuracy_Rating":4.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":2.8,"Work_or_Study_Hours_Per_Day":7.8,"Would_Recommend":"Yes"},{"User_ID":"U0096","Age":17.0,"Gender":"Male","Country":"United States","User_Type":"Student","Education_Level":"High School","Profession":"Environmental Science Student","Monthly_Income":884.0,"AI_Tool":"Not Mentioned","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":7.0,"Monthly_AI_Cost":20.0,"Productivity_Score":9.7,"Accuracy_Rating":4.0,"Satisfaction_Score":10.0,"Time_Saved_Hours_Per_Week":12.8,"Work_or_Study_Hours_Per_Day":5.8,"Would_Recommend":"Yes"},{"User_ID":"U0274","Age":39.0,"Gender":"Female","Country":"United States","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Data Analyst","Monthly_Income":3204.0,"AI_Tool":"ChatGPT","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":2.6,"Monthly_AI_Cost":0.0,"Productivity_Score":null,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":3.6,"Work_or_Study_Hours_Per_Day":9.2,"Would_Recommend":"Yes"},{"User_ID":"U0192","Age":null,"Gender":"Male","Country":"Kenya","User_Type":"Professional","Education_Level":"High School","Profession":"Administrative Assistant","Monthly_Income":557.0,"AI_Tool":"ChatGPT","AI_Purpose":"Office Work","AI_Usage_Hours_Per_Day":9.9,"Monthly_AI_Cost":0.0,"Productivity_Score":8.8,"Accuracy_Rating":5.0,"Satisfaction_Score":9.0,"Time_Saved_Hours_Per_Week":16.2,"Work_or_Study_Hours_Per_Day":8.5,"Would_Recommend":"Yes"},{"User_ID":"U0113","Age":25.0,"Gender":"Female","Country":"Germany","User_Type":"Professional","Education_Level":"Master's","Profession":"Senior Software Developer / Softwareentwicklerin","Monthly_Income":6851.0,"AI_Tool":"Google Gemini","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":4.1,"Monthly_AI_Cost":0.0,"Productivity_Score":6.0,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":7.2,"Work_or_Study_Hours_Per_Day":null,"Would_Recommend":"Yes"},{"User_ID":"U0254","Age":46.0,"Gender":"Female","Country":"United Kingdom","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Customer Support Manager","Monthly_Income":3159.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Customer Support","AI_Usage_Hours_Per_Day":1.9,"Monthly_AI_Cost":0.0,"Productivity_Score":3.4,"Accuracy_Rating":null,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":4.1,"Work_or_Study_Hours_Per_Day":8.6,"Would_Recommend":"Yes"},{"User_ID":"U0171","Age":34.0,"Gender":"Female","Country":"United States","User_Type":"Professional","Education_Level":"High School","Profession":"Data Entry Specialist","Monthly_Income":3878.0,"AI_Tool":"Not Mentioned","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":4.8,"Monthly_AI_Cost":30.0,"Productivity_Score":7.7,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":5.7,"Work_or_Study_Hours_Per_Day":8.7,"Would_Recommend":"No"},{"User_ID":"U0088","Age":24.0,"Gender":"Male","Country":"India","User_Type":"Professional","Education_Level":"High School","Profession":"Data Entry Operator","Monthly_Income":1761.0,"AI_Tool":"Google Gemini","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":0.6,"Monthly_AI_Cost":50.0,"Productivity_Score":3.3,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":4.2,"Work_or_Study_Hours_Per_Day":10.5,"Would_Recommend":"Yes"},{"User_ID":"U0127","Age":25.0,"Gender":"Male","Country":"Canada","User_Type":"Student","Education_Level":"PhD","Profession":"Artificial Intelligence Research Student","Monthly_Income":0.0,"AI_Tool":"ChatGPT","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":1.9,"Monthly_AI_Cost":10.0,"Productivity_Score":5.5,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":2.9,"Work_or_Study_Hours_Per_Day":2.1,"Would_Recommend":"Maybe"},{"User_ID":"U0108","Age":29.0,"Gender":"Female","Country":"India","User_Type":"Professional","Education_Level":"Master's","Profession":"Digital Content Strategist","Monthly_Income":2090.0,"AI_Tool":"ChatGPT","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":1.3,"Monthly_AI_Cost":0.0,"Productivity_Score":4.3,"Accuracy_Rating":3.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":2.6,"Work_or_Study_Hours_Per_Day":9.9,"Would_Recommend":"Yes"},{"User_ID":"U0055","Age":30.0,"Gender":"Male","Country":"Philippines","User_Type":"Professional","Education_Level":"Master's","Profession":"Senior Software Engineer","Monthly_Income":579.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":3.8,"Monthly_AI_Cost":0.0,"Productivity_Score":6.1,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":9.4,"Work_or_Study_Hours_Per_Day":7.4,"Would_Recommend":"Maybe"},{"User_ID":"U0251","Age":24.0,"Gender":"Male","Country":"United Kingdom","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Molecular Biology Student","Monthly_Income":0.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":1.3,"Monthly_AI_Cost":0.0,"Productivity_Score":5.2,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":2.7,"Work_or_Study_Hours_Per_Day":4.8,"Would_Recommend":"Yes"},{"User_ID":"U0248","Age":97.0,"Gender":"Female","Country":"Australia","User_Type":"Professional","Education_Level":"Master's","Profession":"Senior Content Strategist","Monthly_Income":6779.0,"AI_Tool":"ChatGPT","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":2.3,"Monthly_AI_Cost":0.0,"Productivity_Score":4.8,"Accuracy_Rating":3.0,"Satisfaction_Score":null,"Time_Saved_Hours_Per_Week":2.4,"Work_or_Study_Hours_Per_Day":11.2,"Would_Recommend":"No"},{"User_ID":"U0107","Age":33.0,"Gender":"Male","Country":"United Kingdom","User_Type":"Professional","Education_Level":"PhD","Profession":"Senior Machine Learning Engineer","Monthly_Income":8205.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.5,"Monthly_AI_Cost":10.0,"Productivity_Score":5.0,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":1.8,"Work_or_Study_Hours_Per_Day":8.4,"Would_Recommend":"Yes"},{"User_ID":"U0194","Age":40.0,"Gender":"Male","Country":"India","User_Type":"Professional","Education_Level":"Master's","Profession":"Senior Data Scientist","Monthly_Income":1575.0,"AI_Tool":"ChatGPT","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":0.7,"Monthly_AI_Cost":0.0,"Productivity_Score":3.8,"Accuracy_Rating":4.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":0.6,"Work_or_Study_Hours_Per_Day":8.3,"Would_Recommend":"No"},{"User_ID":"U0026","Age":54.0,"Gender":"Female","Country":"India","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Administrative Assistant","Monthly_Income":2464.0,"AI_Tool":"Google Gemini","AI_Purpose":"Office Work","AI_Usage_Hours_Per_Day":3.9,"Monthly_AI_Cost":0.0,"Productivity_Score":7.7,"Accuracy_Rating":4.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":6.8,"Work_or_Study_Hours_Per_Day":7.6,"Would_Recommend":"Yes"},{"User_ID":"U0095","Age":43.0,"Gender":"Female","Country":"Pakistan","User_Type":"Professional","Education_Level":"Master's","Profession":"Content Strategist & Technical Writer","Monthly_Income":730.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":1.6,"Monthly_AI_Cost":20.0,"Productivity_Score":5.1,"Accuracy_Rating":4.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":4.7,"Work_or_Study_Hours_Per_Day":9.7,"Would_Recommend":"Maybe"},{"User_ID":"U0120","Age":31.0,"Gender":"Male","Country":"India","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Electronics Engineering Student","Monthly_Income":157.0,"AI_Tool":"ChatGPT","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":0.9,"Monthly_AI_Cost":25.0,"Productivity_Score":3.7,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":0.0,"Work_or_Study_Hours_Per_Day":6.4,"Would_Recommend":"Unknown"},{"User_ID":"U0049","Age":25.0,"Gender":"Female","Country":"United Kingdom","User_Type":"Professional","Education_Level":"Unknown","Profession":"Junior Software Developer","Monthly_Income":2945.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":null,"Monthly_AI_Cost":20.0,"Productivity_Score":9.4,"Accuracy_Rating":3.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":15.1,"Work_or_Study_Hours_Per_Day":11.3,"Would_Recommend":"Yes"},{"User_ID":"U0032","Age":null,"Gender":"Male","Country":"Germany","User_Type":"Student","Education_Level":"High School","Profession":"German Literature Student","Monthly_Income":366.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":0.6,"Monthly_AI_Cost":25.0,"Productivity_Score":4.1,"Accuracy_Rating":null,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":3.0,"Work_or_Study_Hours_Per_Day":7.6,"Would_Recommend":"Yes"},{"User_ID":"U0073","Age":null,"Gender":"Male","Country":"Canada","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Environmental Science Student","Monthly_Income":397.0,"AI_Tool":"Google Gemini","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":5.4,"Monthly_AI_Cost":0.0,"Productivity_Score":9.3,"Accuracy_Rating":3.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":13.1,"Work_or_Study_Hours_Per_Day":6.5,"Would_Recommend":"Yes"},{"User_ID":"U0007","Age":24.0,"Gender":"Male","Country":"Germany","User_Type":"Student","Education_Level":"Master's","Profession":"Machine Learning Research Student","Monthly_Income":134.0,"AI_Tool":"Claude","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":3.6,"Monthly_AI_Cost":20.0,"Productivity_Score":null,"Accuracy_Rating":2.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":5.2,"Work_or_Study_Hours_Per_Day":6.5,"Would_Recommend":"Maybe"},{"User_ID":"U0285","Age":35.0,"Gender":"Male","Country":"Philippines","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Content Writer","Monthly_Income":1354.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":5.0,"Monthly_AI_Cost":20.0,"Productivity_Score":6.2,"Accuracy_Rating":2.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":12.0,"Work_or_Study_Hours_Per_Day":6.9,"Would_Recommend":"Yes"},{"User_ID":"U0221","Age":31.0,"Gender":"Unknown","Country":"Brazil","User_Type":"Student","Education_Level":"High School","Profession":"Software Development Student","Monthly_Income":191.0,"AI_Tool":"Claude","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.9,"Monthly_AI_Cost":0.0,"Productivity_Score":4.8,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":4.8,"Work_or_Study_Hours_Per_Day":5.1,"Would_Recommend":"Yes"},{"User_ID":"U0279","Age":35.0,"Gender":"Male","Country":"Australia","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Senior Software Developer","Monthly_Income":6399.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.3,"Monthly_AI_Cost":20.0,"Productivity_Score":3.1,"Accuracy_Rating":3.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":4.3,"Work_or_Study_Hours_Per_Day":8.1,"Would_Recommend":"No"},{"User_ID":"U0222","Age":23.0,"Gender":"Female","Country":"United States","User_Type":"Student","Education_Level":"High School","Profession":"Biology Student","Monthly_Income":0.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":1.6,"Monthly_AI_Cost":0.0,"Productivity_Score":4.5,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":4.2,"Work_or_Study_Hours_Per_Day":7.0,"Would_Recommend":"Yes"},{"User_ID":"U0157","Age":20.0,"Gender":"Male","Country":"India","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Mechanical Engineering Student","Monthly_Income":126.0,"AI_Tool":"ChatGPT","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":0.9,"Monthly_AI_Cost":0.0,"Productivity_Score":3.2,"Accuracy_Rating":4.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":1.8,"Work_or_Study_Hours_Per_Day":6.3,"Would_Recommend":"Yes"},{"User_ID":"U0111","Age":47.0,"Gender":"Male","Country":"Canada","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Content Marketing Manager","Monthly_Income":2688.0,"AI_Tool":"Meta AI","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":0.9,"Monthly_AI_Cost":10.0,"Productivity_Score":3.9,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":1.5,"Work_or_Study_Hours_Per_Day":9.1,"Would_Recommend":"No"},{"User_ID":"U0029","Age":19.0,"Gender":"Male","Country":"France","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Mathematics Student","Monthly_Income":0.0,"AI_Tool":"Claude","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":2.0,"Monthly_AI_Cost":0.0,"Productivity_Score":4.8,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":3.0,"Work_or_Study_Hours_Per_Day":6.3,"Would_Recommend":"Maybe"},{"User_ID":"U0199","Age":30.0,"Gender":"Male","Country":"Nigeria","User_Type":"Professional","Education_Level":"Master's","Profession":"AI Customer Support Specialist","Monthly_Income":1262.0,"AI_Tool":"Google Gemini","AI_Purpose":"Customer Support","AI_Usage_Hours_Per_Day":8.5,"Monthly_AI_Cost":20.0,"Productivity_Score":8.7,"Accuracy_Rating":5.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":15.6,"Work_or_Study_Hours_Per_Day":null,"Would_Recommend":"Yes"},{"User_ID":"U0083","Age":31.0,"Gender":"Female","Country":"Canada","User_Type":"Professional","Education_Level":"PhD","Profession":"Senior Data Scientist","Monthly_Income":4815.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":4.9,"Monthly_AI_Cost":20.0,"Productivity_Score":8.6,"Accuracy_Rating":4.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":10.7,"Work_or_Study_Hours_Per_Day":12.4,"Would_Recommend":"Unknown"},{"User_ID":"U0286","Age":28.0,"Gender":"Female","Country":"Brazil","User_Type":"Professional","Education_Level":"Master's","Profession":"Especialista em Atendimento ao Cliente com IA","Monthly_Income":666.0,"AI_Tool":"ChatGPT","AI_Purpose":"Customer Support","AI_Usage_Hours_Per_Day":2.2,"Monthly_AI_Cost":0.0,"Productivity_Score":5.3,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":5.2,"Work_or_Study_Hours_Per_Day":8.6,"Would_Recommend":"Yes"},{"User_ID":"U0188","Age":27.0,"Gender":"Male","Country":"France","User_Type":"Student","Education_Level":"High School","Profession":"History Student","Monthly_Income":482.0,"AI_Tool":"DeepSeek","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":6.0,"Monthly_AI_Cost":0.0,"Productivity_Score":7.6,"Accuracy_Rating":5.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":13.1,"Work_or_Study_Hours_Per_Day":6.8,"Would_Recommend":"Yes"},{"User_ID":"U0237","Age":40.0,"Gender":"Female","Country":"Nigeria","User_Type":"Professional","Education_Level":"Master's","Profession":"Customer Experience Manager","Monthly_Income":942.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Customer Support","AI_Usage_Hours_Per_Day":1.3,"Monthly_AI_Cost":25.0,"Productivity_Score":2.4,"Accuracy_Rating":5.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":4.9,"Work_or_Study_Hours_Per_Day":9.7,"Would_Recommend":"Maybe"},{"User_ID":"U0195","Age":34.0,"Gender":"Male","Country":"India","User_Type":"Professional","Education_Level":"Diploma","Profession":"Administrative Executive","Monthly_Income":1188.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Office Work","AI_Usage_Hours_Per_Day":0.7,"Monthly_AI_Cost":0.0,"Productivity_Score":4.7,"Accuracy_Rating":2.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":0.6,"Work_or_Study_Hours_Per_Day":8.5,"Would_Recommend":"Unknown"},{"User_ID":"U0242","Age":56.0,"Gender":"Female","Country":"Pakistan","User_Type":"Professional","Education_Level":"High School","Profession":"Administrative Assistant","Monthly_Income":null,"AI_Tool":"Claude","AI_Purpose":"Office Work","AI_Usage_Hours_Per_Day":5.0,"Monthly_AI_Cost":10.0,"Productivity_Score":7.7,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":11.4,"Work_or_Study_Hours_Per_Day":7.8,"Would_Recommend":"Yes"},{"User_ID":"U0250","Age":23.0,"Gender":"Male","Country":"Kenya","User_Type":"Student","Education_Level":"Master's","Profession":"Data Science Student","Monthly_Income":137.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Unknown","AI_Usage_Hours_Per_Day":1.4,"Monthly_AI_Cost":25.0,"Productivity_Score":null,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":2.3,"Work_or_Study_Hours_Per_Day":null,"Would_Recommend":"No"},{"User_ID":"U0216","Age":23.0,"Gender":"Male","Country":"France","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Computer Science Student","Monthly_Income":137.0,"AI_Tool":"Not Mentioned","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.8,"Monthly_AI_Cost":10.0,"Productivity_Score":2.5,"Accuracy_Rating":4.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":4.1,"Work_or_Study_Hours_Per_Day":5.9,"Would_Recommend":"Yes"},{"User_ID":"U0193","Age":32.0,"Gender":"Male","Country":"Philippines","User_Type":"Professional","Education_Level":"Master's","Profession":"Customer Support Specialist / AI Support Operations Manager","Monthly_Income":1141.0,"AI_Tool":"Meta AI","AI_Purpose":"Customer Support","AI_Usage_Hours_Per_Day":0.5,"Monthly_AI_Cost":10.0,"Productivity_Score":5.8,"Accuracy_Rating":4.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":2.7,"Work_or_Study_Hours_Per_Day":8.7,"Would_Recommend":"Yes"},{"User_ID":"U0037","Age":63.0,"Gender":"Male","Country":"Brazil","User_Type":"Professional","Education_Level":"Diploma","Profession":"Unknown","Monthly_Income":418.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":1.6,"Monthly_AI_Cost":null,"Productivity_Score":4.9,"Accuracy_Rating":4.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":4.9,"Work_or_Study_Hours_Per_Day":8.5,"Would_Recommend":"No"},{"User_ID":"U0257","Age":41.0,"Gender":"Female","Country":"Brazil","User_Type":"Professional","Education_Level":"High School","Profession":"Desenvolvedora de Sistemas J\u00fanior","Monthly_Income":1002.0,"AI_Tool":"Meta AI","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":4.6,"Monthly_AI_Cost":0.0,"Productivity_Score":7.4,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":7.9,"Work_or_Study_Hours_Per_Day":8.8,"Would_Recommend":"Yes"},{"User_ID":"U0143","Age":20.0,"Gender":"Unknown","Country":"Pakistan","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Digital Marketing Student","Monthly_Income":0.0,"AI_Tool":"Claude","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":3.4,"Monthly_AI_Cost":10.0,"Productivity_Score":6.5,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":7.2,"Work_or_Study_Hours_Per_Day":4.6,"Would_Recommend":"Yes"},{"User_ID":"U0086","Age":23.0,"Gender":"Female","Country":"Pakistan","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Content Writer","Monthly_Income":965.0,"AI_Tool":"Grammarly","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":3.3,"Monthly_AI_Cost":0.0,"Productivity_Score":6.6,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":7.7,"Work_or_Study_Hours_Per_Day":9.6,"Would_Recommend":"Yes"},{"User_ID":"U0161","Age":25.0,"Gender":"Female","Country":"Canada","User_Type":"Professional","Education_Level":"Master's","Profession":"AI Customer Support Specialist","Monthly_Income":6171.0,"AI_Tool":"Google Gemini","AI_Purpose":"Customer Support","AI_Usage_Hours_Per_Day":1.9,"Monthly_AI_Cost":0.0,"Productivity_Score":3.7,"Accuracy_Rating":4.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":0.8,"Work_or_Study_Hours_Per_Day":7.6,"Would_Recommend":"Maybe"},{"User_ID":"U0214","Age":18.0,"Gender":"Male","Country":"Philippines","User_Type":"Student","Education_Level":"Bachelor's","Profession":"English Literature Student","Monthly_Income":192.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":3.8,"Monthly_AI_Cost":0.0,"Productivity_Score":6.5,"Accuracy_Rating":4.0,"Satisfaction_Score":9.0,"Time_Saved_Hours_Per_Week":7.0,"Work_or_Study_Hours_Per_Day":7.6,"Would_Recommend":"Yes"},{"User_ID":"U0089","Age":20.0,"Gender":"Male","Country":"United States","User_Type":"Student","Education_Level":"Master's","Profession":"Machine Learning Student","Monthly_Income":0.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.4,"Monthly_AI_Cost":0.0,"Productivity_Score":1.8,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":1.2,"Work_or_Study_Hours_Per_Day":5.6,"Would_Recommend":"Yes"},{"User_ID":"U0181","Age":63.0,"Gender":"Female","Country":"Germany","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Content Manager","Monthly_Income":4964.0,"AI_Tool":"Google Gemini","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":0.7,"Monthly_AI_Cost":20.0,"Productivity_Score":4.3,"Accuracy_Rating":4.0,"Satisfaction_Score":null,"Time_Saved_Hours_Per_Week":3.6,"Work_or_Study_Hours_Per_Day":7.3,"Would_Recommend":"Maybe"},{"User_ID":"U0154","Age":null,"Gender":"Male","Country":"Pakistan","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Software Engineering Student","Monthly_Income":83.0,"AI_Tool":"Claude","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":2.3,"Monthly_AI_Cost":20.0,"Productivity_Score":6.1,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":2.3,"Work_or_Study_Hours_Per_Day":6.4,"Would_Recommend":"Maybe"},{"User_ID":"U0099","Age":27.0,"Gender":"Male","Country":"Australia","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Mechanical Engineering Student","Monthly_Income":578.0,"AI_Tool":"ChatGPT","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":4.0,"Monthly_AI_Cost":0.0,"Productivity_Score":7.5,"Accuracy_Rating":3.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":7.9,"Work_or_Study_Hours_Per_Day":5.3,"Would_Recommend":"Yes"},{"User_ID":"U0030","Age":36.0,"Gender":"Female","Country":"United States","User_Type":"Professional","Education_Level":"PhD","Profession":"AI Customer Success Manager","Monthly_Income":9938.0,"AI_Tool":"Claude","AI_Purpose":"Unknown","AI_Usage_Hours_Per_Day":1.7,"Monthly_AI_Cost":0.0,"Productivity_Score":5.8,"Accuracy_Rating":null,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":7.1,"Work_or_Study_Hours_Per_Day":7.6,"Would_Recommend":"No"},{"User_ID":"U0233","Age":58.0,"Gender":"Male","Country":"Brazil","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Gerente de Atendimento ao Cliente","Monthly_Income":1469.0,"AI_Tool":"Not Mentioned","AI_Purpose":"Customer Support","AI_Usage_Hours_Per_Day":2.2,"Monthly_AI_Cost":0.0,"Productivity_Score":5.7,"Accuracy_Rating":2.0,"Satisfaction_Score":3.0,"Time_Saved_Hours_Per_Week":1.3,"Work_or_Study_Hours_Per_Day":7.1,"Would_Recommend":"Yes"},{"User_ID":"U0076","Age":17.0,"Gender":"Unknown","Country":"Philippines","User_Type":"Student","Education_Level":"Master's","Profession":"Creative Writing Student","Monthly_Income":130.0,"AI_Tool":"Claude","AI_Purpose":"Unknown","AI_Usage_Hours_Per_Day":2.4,"Monthly_AI_Cost":20.0,"Productivity_Score":4.8,"Accuracy_Rating":4.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":4.7,"Work_or_Study_Hours_Per_Day":3.2,"Would_Recommend":"Yes"},{"User_ID":"U0011","Age":23.0,"Gender":"Female","Country":"Unknown","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Customer Support Specialist","Monthly_Income":5268.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Customer Support","AI_Usage_Hours_Per_Day":1.2,"Monthly_AI_Cost":0.0,"Productivity_Score":2.4,"Accuracy_Rating":4.0,"Satisfaction_Score":null,"Time_Saved_Hours_Per_Week":0.4,"Work_or_Study_Hours_Per_Day":8.8,"Would_Recommend":"No"},{"User_ID":"U0093","Age":23.0,"Gender":"Male","Country":"United States","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Computer Science Student","Monthly_Income":221.0,"AI_Tool":"DeepSeek","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.3,"Monthly_AI_Cost":25.0,"Productivity_Score":4.5,"Accuracy_Rating":2.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":3.8,"Work_or_Study_Hours_Per_Day":6.3,"Would_Recommend":"No"},{"User_ID":"U0244","Age":26.0,"Gender":"Female","Country":"United States","User_Type":"Student","Education_Level":"Master's","Profession":"Data Science Student","Monthly_Income":520.0,"AI_Tool":"ChatGPT","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":2.7,"Monthly_AI_Cost":0.0,"Productivity_Score":5.7,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":8.4,"Work_or_Study_Hours_Per_Day":5.4,"Would_Recommend":"Yes"},{"User_ID":"U0017","Age":30.0,"Gender":"Unknown","Country":"Pakistan","User_Type":"Student","Education_Level":"Unknown","Profession":"Software Engineering Student","Monthly_Income":67.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.4,"Monthly_AI_Cost":20.0,"Productivity_Score":2.9,"Accuracy_Rating":3.0,"Satisfaction_Score":3.0,"Time_Saved_Hours_Per_Week":0.8,"Work_or_Study_Hours_Per_Day":5.6,"Would_Recommend":"No"},{"User_ID":"U0100","Age":20.0,"Gender":"Other","Country":"United States","User_Type":"Student","Education_Level":"Unknown","Profession":"Data Science Student","Monthly_Income":698.0,"AI_Tool":"Google Gemini","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":1.2,"Monthly_AI_Cost":0.0,"Productivity_Score":3.7,"Accuracy_Rating":3.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":1.7,"Work_or_Study_Hours_Per_Day":4.7,"Would_Recommend":"No"},{"User_ID":"U0189","Age":22.0,"Gender":"Male","Country":"United States","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Data Science Student","Monthly_Income":600.0,"AI_Tool":"ChatGPT","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":1.4,"Monthly_AI_Cost":25.0,"Productivity_Score":2.9,"Accuracy_Rating":4.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":4.6,"Work_or_Study_Hours_Per_Day":4.9,"Would_Recommend":"No"},{"User_ID":"U0063","Age":24.0,"Gender":"Male","Country":"Philippines","User_Type":"Student","Education_Level":"High School","Profession":"English Literature Student","Monthly_Income":63.0,"AI_Tool":"Claude","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":3.0,"Monthly_AI_Cost":0.0,"Productivity_Score":7.0,"Accuracy_Rating":4.0,"Satisfaction_Score":9.0,"Time_Saved_Hours_Per_Week":10.5,"Work_or_Study_Hours_Per_Day":6.4,"Would_Recommend":"Yes"},{"User_ID":"U0047","Age":26.0,"Gender":"Other","Country":"Philippines","User_Type":"Student","Education_Level":"PhD","Profession":"Computer Science PhD Student","Monthly_Income":0.0,"AI_Tool":"Google Gemini","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":0.8,"Monthly_AI_Cost":0.0,"Productivity_Score":null,"Accuracy_Rating":2.0,"Satisfaction_Score":3.0,"Time_Saved_Hours_Per_Week":0.0,"Work_or_Study_Hours_Per_Day":3.7,"Would_Recommend":"No"},{"User_ID":"U0144","Age":32.0,"Gender":"Female","Country":"United States","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Software Developer","Monthly_Income":7739.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":2.2,"Monthly_AI_Cost":0.0,"Productivity_Score":5.1,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":5.6,"Work_or_Study_Hours_Per_Day":5.1,"Would_Recommend":"No"},{"User_ID":"U0001","Age":29.0,"Gender":"Other","Country":"Kenya","User_Type":"Professional","Education_Level":"Diploma","Profession":"Data Analyst","Monthly_Income":898.0,"AI_Tool":"ChatGPT","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":2.3,"Monthly_AI_Cost":0.0,"Productivity_Score":4.5,"Accuracy_Rating":4.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":4.9,"Work_or_Study_Hours_Per_Day":6.4,"Would_Recommend":"Yes"},{"User_ID":"U0236","Age":49.0,"Gender":"Female","Country":"India","User_Type":"Professional","Education_Level":"Master's","Profession":"Senior Research Scientist","Monthly_Income":1057.0,"AI_Tool":"ChatGPT","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":2.0,"Monthly_AI_Cost":25.0,"Productivity_Score":5.2,"Accuracy_Rating":5.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":5.7,"Work_or_Study_Hours_Per_Day":7.5,"Would_Recommend":"No"},{"User_ID":"U0052","Age":21.0,"Gender":"Male","Country":"France","User_Type":"Student","Education_Level":"High School","Profession":"Business Administration Student","Monthly_Income":221.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":6.5,"Monthly_AI_Cost":10.0,"Productivity_Score":8.3,"Accuracy_Rating":2.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":14.2,"Work_or_Study_Hours_Per_Day":4.8,"Would_Recommend":"No"},{"User_ID":"U0024","Age":23.0,"Gender":"Male","Country":"United States","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Digital Marketing Student","Monthly_Income":237.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":2.2,"Monthly_AI_Cost":0.0,"Productivity_Score":4.5,"Accuracy_Rating":4.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":2.0,"Work_or_Study_Hours_Per_Day":null,"Would_Recommend":"Yes"},{"User_ID":"U0006","Age":31.0,"Gender":"Male","Country":"Brazil","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Content Creator/Gestor de Conte\u00fado Digital","Monthly_Income":1194.0,"AI_Tool":"Claude","AI_Purpose":"Unknown","AI_Usage_Hours_Per_Day":2.1,"Monthly_AI_Cost":0.0,"Productivity_Score":5.4,"Accuracy_Rating":2.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":2.0,"Work_or_Study_Hours_Per_Day":9.8,"Would_Recommend":"Yes"},{"User_ID":"U0187","Age":21.0,"Gender":"Female","Country":"Pakistan","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Computer Science Student","Monthly_Income":0.0,"AI_Tool":"DeepSeek","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":2.9,"Monthly_AI_Cost":20.0,"Productivity_Score":6.6,"Accuracy_Rating":2.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":null,"Work_or_Study_Hours_Per_Day":5.5,"Would_Recommend":"Unknown"},{"User_ID":"U0056","Age":34.0,"Gender":"Female","Country":"Philippines","User_Type":"Professional","Education_Level":"Diploma","Profession":"Junior Web Developer","Monthly_Income":874.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.9,"Monthly_AI_Cost":0.0,"Productivity_Score":5.1,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":4.9,"Work_or_Study_Hours_Per_Day":8.3,"Would_Recommend":"Yes"},{"User_ID":"U0182","Age":17.0,"Gender":"Female","Country":"Nigeria","User_Type":"Student","Education_Level":"High School","Profession":"English Literature Student","Monthly_Income":0.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":9.5,"Monthly_AI_Cost":25.0,"Productivity_Score":8.6,"Accuracy_Rating":3.0,"Satisfaction_Score":9.0,"Time_Saved_Hours_Per_Week":15.2,"Work_or_Study_Hours_Per_Day":5.7,"Would_Recommend":"Yes"},{"User_ID":"U0078","Age":22.0,"Gender":"Male","Country":"Philippines","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Information Technology Student","Monthly_Income":106.0,"AI_Tool":"ChatGPT","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":4.9,"Monthly_AI_Cost":20.0,"Productivity_Score":5.5,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":8.2,"Work_or_Study_Hours_Per_Day":8.1,"Would_Recommend":"Maybe"},{"User_ID":"U0041","Age":27.0,"Gender":"Female","Country":"Pakistan","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Digital Marketing Student","Monthly_Income":74.0,"AI_Tool":"ChatGPT","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":1.9,"Monthly_AI_Cost":0.0,"Productivity_Score":null,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":1.4,"Work_or_Study_Hours_Per_Day":7.4,"Would_Recommend":"Yes"},{"User_ID":"U0230","Age":40.0,"Gender":"Female","Country":"Germany","User_Type":"Professional","Education_Level":"High School","Profession":"Kundenbetreuerin mit KI-Unterst\u00fctzung","Monthly_Income":3054.0,"AI_Tool":"ChatGPT","AI_Purpose":"Customer Support","AI_Usage_Hours_Per_Day":1.5,"Monthly_AI_Cost":0.0,"Productivity_Score":4.0,"Accuracy_Rating":2.0,"Satisfaction_Score":3.0,"Time_Saved_Hours_Per_Week":7.1,"Work_or_Study_Hours_Per_Day":7.6,"Would_Recommend":"No"},{"User_ID":"U0178","Age":22.0,"Gender":"Female","Country":"Germany","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Computer Science Student","Monthly_Income":442.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.0,"Monthly_AI_Cost":0.0,"Productivity_Score":3.6,"Accuracy_Rating":2.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":0.0,"Work_or_Study_Hours_Per_Day":5.6,"Would_Recommend":"Yes"},{"User_ID":"U0272","Age":23.0,"Gender":"Male","Country":"India","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Data Science Student","Monthly_Income":77.0,"AI_Tool":"Grammarly","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":1.5,"Monthly_AI_Cost":0.0,"Productivity_Score":3.4,"Accuracy_Rating":2.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":2.2,"Work_or_Study_Hours_Per_Day":8.0,"Would_Recommend":"No"},{"User_ID":"U0253","Age":null,"Gender":"Female","Country":"Canada","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Customer Support Specialist","Monthly_Income":6705.0,"AI_Tool":"DeepSeek","AI_Purpose":"Customer Support","AI_Usage_Hours_Per_Day":9.7,"Monthly_AI_Cost":20.0,"Productivity_Score":7.7,"Accuracy_Rating":5.0,"Satisfaction_Score":9.0,"Time_Saved_Hours_Per_Week":null,"Work_or_Study_Hours_Per_Day":11.6,"Would_Recommend":"Yes"},{"User_ID":"U0045","Age":36.0,"Gender":"Male","Country":"India","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Senior Software Developer","Monthly_Income":987.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.5,"Monthly_AI_Cost":0.0,"Productivity_Score":4.2,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":1.8,"Work_or_Study_Hours_Per_Day":7.6,"Would_Recommend":"Maybe"},{"User_ID":"U0042","Age":23.0,"Gender":"Male","Country":"United Kingdom","User_Type":"Student","Education_Level":"High School","Profession":"Business Administration Student","Monthly_Income":109.0,"AI_Tool":"ChatGPT","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":0.6,"Monthly_AI_Cost":25.0,"Productivity_Score":2.1,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":0.1,"Work_or_Study_Hours_Per_Day":2.3,"Would_Recommend":"No"},{"User_ID":"U0150","Age":37.0,"Gender":"Female","Country":"Nigeria","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Content Writer","Monthly_Income":889.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":3.3,"Monthly_AI_Cost":0.0,"Productivity_Score":7.8,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":6.5,"Work_or_Study_Hours_Per_Day":8.9,"Would_Recommend":"Yes"},{"User_ID":"U0023","Age":21.0,"Gender":"Male","Country":"Unknown","User_Type":"Student","Education_Level":"High School","Profession":"English Literature Student","Monthly_Income":59.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":3.0,"Monthly_AI_Cost":25.0,"Productivity_Score":4.5,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":4.9,"Work_or_Study_Hours_Per_Day":8.4,"Would_Recommend":"Yes"},{"User_ID":"U0126","Age":55.0,"Gender":"Male","Country":"Brazil","User_Type":"Professional","Education_Level":"Master's","Profession":"Pesquisador S\u00eanior em Intelig\u00eancia Artificial e Ci\u00eancia de Dados","Monthly_Income":2116.0,"AI_Tool":"Google Gemini","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":1.4,"Monthly_AI_Cost":0.0,"Productivity_Score":3.9,"Accuracy_Rating":2.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":1.6,"Work_or_Study_Hours_Per_Day":8.3,"Would_Recommend":"Yes"},{"User_ID":"U0119","Age":29.0,"Gender":"Other","Country":"Philippines","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Business Intelligence Analyst","Monthly_Income":765.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":2.8,"Monthly_AI_Cost":0.0,"Productivity_Score":6.6,"Accuracy_Rating":4.0,"Satisfaction_Score":9.0,"Time_Saved_Hours_Per_Week":9.4,"Work_or_Study_Hours_Per_Day":11.3,"Would_Recommend":"Yes"},{"User_ID":"U0082","Age":63.0,"Gender":"Male","Country":"Australia","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Technical Writer","Monthly_Income":7178.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":2.3,"Monthly_AI_Cost":null,"Productivity_Score":4.8,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":2.0,"Work_or_Study_Hours_Per_Day":5.9,"Would_Recommend":"No"},{"User_ID":"U0104","Age":26.0,"Gender":"Male","Country":"Pakistan","User_Type":"Student","Education_Level":"Unknown","Profession":"Mechanical Engineering Student","Monthly_Income":54.0,"AI_Tool":"ChatGPT","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":2.7,"Monthly_AI_Cost":20.0,"Productivity_Score":null,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":5.0,"Work_or_Study_Hours_Per_Day":6.9,"Would_Recommend":"Maybe"},{"User_ID":"U0101","Age":21.0,"Gender":"Male","Country":"United States","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Biology Student","Monthly_Income":98.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Unknown","AI_Usage_Hours_Per_Day":4.1,"Monthly_AI_Cost":0.0,"Productivity_Score":6.2,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":4.3,"Work_or_Study_Hours_Per_Day":4.6,"Would_Recommend":"Yes"},{"User_ID":"U0085","Age":17.0,"Gender":"Female","Country":"Canada","User_Type":"Student","Education_Level":"PhD","Profession":"Theoretical Physics Student","Monthly_Income":518.0,"AI_Tool":"Not Mentioned","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":3.2,"Monthly_AI_Cost":20.0,"Productivity_Score":5.2,"Accuracy_Rating":4.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":4.8,"Work_or_Study_Hours_Per_Day":20.0,"Would_Recommend":"Yes"},{"User_ID":"U0074","Age":39.0,"Gender":"Male","Country":"Nigeria","User_Type":"Professional","Education_Level":"High School","Profession":"Research Assistant","Monthly_Income":488.0,"AI_Tool":"DeepSeek","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":1.2,"Monthly_AI_Cost":20.0,"Productivity_Score":3.4,"Accuracy_Rating":3.0,"Satisfaction_Score":null,"Time_Saved_Hours_Per_Week":2.9,"Work_or_Study_Hours_Per_Day":6.8,"Would_Recommend":"Maybe"},{"User_ID":"U0148","Age":17.0,"Gender":"Male","Country":"Pakistan","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Engineering Student","Monthly_Income":75.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":5.9,"Monthly_AI_Cost":0.0,"Productivity_Score":6.1,"Accuracy_Rating":2.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":12.1,"Work_or_Study_Hours_Per_Day":null,"Would_Recommend":"No"},{"User_ID":"U0004","Age":18.0,"Gender":"Female","Country":"India","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Information Technology Student","Monthly_Income":66.0,"AI_Tool":"ChatGPT","AI_Purpose":"Unknown","AI_Usage_Hours_Per_Day":1.1,"Monthly_AI_Cost":20.0,"Productivity_Score":4.1,"Accuracy_Rating":null,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":5.6,"Work_or_Study_Hours_Per_Day":6.3,"Would_Recommend":"Yes"},{"User_ID":"U0166","Age":null,"Gender":"Female","Country":"Australia","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Biomedical Science Student","Monthly_Income":133.0,"AI_Tool":"ChatGPT","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":1.2,"Monthly_AI_Cost":0.0,"Productivity_Score":2.6,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":5.3,"Work_or_Study_Hours_Per_Day":7.1,"Would_Recommend":"Yes"},{"User_ID":"U0224","Age":16.0,"Gender":"Male","Country":"India","User_Type":"Student","Education_Level":"Master's","Profession":"Physics Student","Monthly_Income":96.0,"AI_Tool":"ChatGPT","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":0.7,"Monthly_AI_Cost":0.0,"Productivity_Score":4.3,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":0.0,"Work_or_Study_Hours_Per_Day":null,"Would_Recommend":"Yes"},{"User_ID":"U0277","Age":23.0,"Gender":"Male","Country":"United Kingdom","User_Type":"Student","Education_Level":"Bachelor's","Profession":"English Literature Student","Monthly_Income":504.0,"AI_Tool":"ChatGPT","AI_Purpose":"Unknown","AI_Usage_Hours_Per_Day":0.6,"Monthly_AI_Cost":20.0,"Productivity_Score":1.9,"Accuracy_Rating":3.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":0.0,"Work_or_Study_Hours_Per_Day":4.5,"Would_Recommend":"Yes"},{"User_ID":"U0129","Age":24.0,"Gender":"Female","Country":"Pakistan","User_Type":"Student","Education_Level":"Unknown","Profession":"English Literature Student","Monthly_Income":95.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":3.7,"Monthly_AI_Cost":0.0,"Productivity_Score":7.7,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":9.9,"Work_or_Study_Hours_Per_Day":9.0,"Would_Recommend":"Maybe"},{"User_ID":"U0156","Age":20.0,"Gender":"Male","Country":"Brazil","User_Type":"Student","Education_Level":"PhD","Profession":"Artificial Intelligence & Digital Media Student","Monthly_Income":238.0,"AI_Tool":"Claude","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":1.0,"Monthly_AI_Cost":0.0,"Productivity_Score":null,"Accuracy_Rating":null,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":2.7,"Work_or_Study_Hours_Per_Day":6.2,"Would_Recommend":"Maybe"},{"User_ID":"U0033","Age":23.0,"Gender":"Female","Country":"Pakistan","User_Type":"Student","Education_Level":"High School","Profession":"Biology Student","Monthly_Income":0.0,"AI_Tool":"Google Gemini","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":0.8,"Monthly_AI_Cost":20.0,"Productivity_Score":4.3,"Accuracy_Rating":4.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":2.9,"Work_or_Study_Hours_Per_Day":8.6,"Would_Recommend":"Yes"},{"User_ID":"U0213","Age":22.0,"Gender":"Female","Country":"Unknown","User_Type":"Student","Education_Level":"Bachelor's","Profession":"German Literature and Comparative Studies Student","Monthly_Income":0.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":2.5,"Monthly_AI_Cost":10.0,"Productivity_Score":5.2,"Accuracy_Rating":2.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":4.4,"Work_or_Study_Hours_Per_Day":7.8,"Would_Recommend":"No"},{"User_ID":"U0208","Age":23.0,"Gender":"Female","Country":"India","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Digital Marketing Student","Monthly_Income":100.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":null,"Monthly_AI_Cost":25.0,"Productivity_Score":4.7,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":2.1,"Work_or_Study_Hours_Per_Day":6.0,"Would_Recommend":"Yes"},{"User_ID":"U0168","Age":61.0,"Gender":"Female","Country":"Brazil","User_Type":"Professional","Education_Level":"Master's","Profession":"Analista de Dados S\u00eanior","Monthly_Income":1884.0,"AI_Tool":"Google Gemini","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":1.5,"Monthly_AI_Cost":10.0,"Productivity_Score":4.9,"Accuracy_Rating":null,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":null,"Work_or_Study_Hours_Per_Day":7.7,"Would_Recommend":"Yes"},{"User_ID":"U0087","Age":17.0,"Gender":"Male","Country":"Unknown","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Digital Media & Film Production Student","Monthly_Income":387.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":1.5,"Monthly_AI_Cost":10.0,"Productivity_Score":6.2,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":7.5,"Work_or_Study_Hours_Per_Day":null,"Would_Recommend":"No"},{"User_ID":"U0175","Age":25.0,"Gender":"Male","Country":"Unknown","User_Type":"Professional","Education_Level":"PhD","Profession":"AI Content Strategist","Monthly_Income":1632.0,"AI_Tool":"ChatGPT","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":4.4,"Monthly_AI_Cost":0.0,"Productivity_Score":7.8,"Accuracy_Rating":4.0,"Satisfaction_Score":9.0,"Time_Saved_Hours_Per_Week":7.1,"Work_or_Study_Hours_Per_Day":5.8,"Would_Recommend":"Yes"},{"User_ID":"U0180","Age":49.0,"Gender":"Female","Country":"Philippines","User_Type":"Professional","Education_Level":"PhD","Profession":"Senior Research Scientist","Monthly_Income":1193.0,"AI_Tool":"ChatGPT","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":5.8,"Monthly_AI_Cost":20.0,"Productivity_Score":8.1,"Accuracy_Rating":2.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":13.5,"Work_or_Study_Hours_Per_Day":7.9,"Would_Recommend":"Maybe"},{"User_ID":"U0284","Age":27.0,"Gender":"Female","Country":"Germany","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Softwareentwicklerin (Software Developer)","Monthly_Income":3622.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":4.0,"Monthly_AI_Cost":0.0,"Productivity_Score":5.0,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":5.7,"Work_or_Study_Hours_Per_Day":8.6,"Would_Recommend":"Yes"},{"User_ID":"U0020","Age":26.0,"Gender":"Female","Country":"Australia","User_Type":"Student","Education_Level":"Master's","Profession":"Creative Writing Student","Monthly_Income":661.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":3.5,"Monthly_AI_Cost":0.0,"Productivity_Score":4.9,"Accuracy_Rating":3.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":7.0,"Work_or_Study_Hours_Per_Day":6.0,"Would_Recommend":"Yes"},{"User_ID":"U0169","Age":39.0,"Gender":"Female","Country":"Philippines","User_Type":"Professional","Education_Level":"Unknown","Profession":"Digital Content Creator / Social Media Manager","Monthly_Income":1192.0,"AI_Tool":"ChatGPT","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":1.4,"Monthly_AI_Cost":30.0,"Productivity_Score":3.5,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":3.8,"Work_or_Study_Hours_Per_Day":6.7,"Would_Recommend":"Yes"},{"User_ID":"U0153","Age":22.0,"Gender":"Male","Country":"United States","User_Type":"Student","Education_Level":"High School","Profession":"Computer Science Student","Monthly_Income":0.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Unknown","AI_Usage_Hours_Per_Day":5.5,"Monthly_AI_Cost":0.0,"Productivity_Score":8.3,"Accuracy_Rating":3.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":10.9,"Work_or_Study_Hours_Per_Day":7.4,"Would_Recommend":"Yes"},{"User_ID":"U0079","Age":22.0,"Gender":"Male","Country":"Australia","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Mechanical Engineering Student","Monthly_Income":613.0,"AI_Tool":"Google Gemini","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":1.9,"Monthly_AI_Cost":20.0,"Productivity_Score":5.6,"Accuracy_Rating":2.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":8.0,"Work_or_Study_Hours_Per_Day":7.4,"Would_Recommend":"No"},{"User_ID":"U0106","Age":48.0,"Gender":"Female","Country":"United Kingdom","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Customer Support Manager","Monthly_Income":5563.0,"AI_Tool":"ChatGPT","AI_Purpose":"Customer Support","AI_Usage_Hours_Per_Day":0.9,"Monthly_AI_Cost":25.0,"Productivity_Score":4.1,"Accuracy_Rating":5.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":3.9,"Work_or_Study_Hours_Per_Day":5.9,"Would_Recommend":"No"},{"User_ID":"U0241","Age":20.0,"Gender":"Male","Country":"Canada","User_Type":"Student","Education_Level":"High School","Profession":"Biology Student","Monthly_Income":670.0,"AI_Tool":"ChatGPT","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":3.7,"Monthly_AI_Cost":30.0,"Productivity_Score":7.9,"Accuracy_Rating":null,"Satisfaction_Score":9.0,"Time_Saved_Hours_Per_Week":7.5,"Work_or_Study_Hours_Per_Day":9.4,"Would_Recommend":"Yes"},{"User_ID":"U0151","Age":39.0,"Gender":"Female","Country":"India","User_Type":"Professional","Education_Level":"Master's","Profession":"Senior Software Developer","Monthly_Income":1106.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":4.4,"Monthly_AI_Cost":0.0,"Productivity_Score":6.1,"Accuracy_Rating":4.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":7.7,"Work_or_Study_Hours_Per_Day":6.4,"Would_Recommend":"Yes"},{"User_ID":"U0072","Age":23.0,"Gender":"Female","Country":"India","User_Type":"Student","Education_Level":"Unknown","Profession":"Computer Science Student","Monthly_Income":50.0,"AI_Tool":"Grammarly","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":9.8,"Monthly_AI_Cost":0.0,"Productivity_Score":9.1,"Accuracy_Rating":4.0,"Satisfaction_Score":9.0,"Time_Saved_Hours_Per_Week":15.8,"Work_or_Study_Hours_Per_Day":5.2,"Would_Recommend":"Yes"},{"User_ID":"U0245","Age":63.0,"Gender":"Female","Country":"India","User_Type":"Professional","Education_Level":"High School","Profession":"Unknown","Monthly_Income":1320.0,"AI_Tool":"Claude","AI_Purpose":"Office Work","AI_Usage_Hours_Per_Day":1.7,"Monthly_AI_Cost":null,"Productivity_Score":5.2,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":3.5,"Work_or_Study_Hours_Per_Day":9.4,"Would_Recommend":"Yes"},{"User_ID":"U0172","Age":22.0,"Gender":"Female","Country":"Pakistan","User_Type":"Student","Education_Level":"Bachelor's","Profession":"English Literature Student","Monthly_Income":0.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":3.9,"Monthly_AI_Cost":0.0,"Productivity_Score":6.9,"Accuracy_Rating":4.0,"Satisfaction_Score":9.0,"Time_Saved_Hours_Per_Week":6.7,"Work_or_Study_Hours_Per_Day":7.3,"Would_Recommend":"Yes"},{"User_ID":"U0133","Age":20.0,"Gender":"Female","Country":"Nigeria","User_Type":"Student","Education_Level":"Master's","Profession":"Biomedical Engineering Student","Monthly_Income":135.0,"AI_Tool":"Claude","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":1.6,"Monthly_AI_Cost":30.0,"Productivity_Score":4.5,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":3.5,"Work_or_Study_Hours_Per_Day":null,"Would_Recommend":"Maybe"},{"User_ID":"U0282","Age":41.0,"Gender":"Female","Country":"Canada","User_Type":"Professional","Education_Level":"Diploma","Profession":"Research Technician","Monthly_Income":3218.0,"AI_Tool":"Meta AI","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":2.7,"Monthly_AI_Cost":10.0,"Productivity_Score":4.8,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":6.4,"Work_or_Study_Hours_Per_Day":8.6,"Would_Recommend":"Yes"},{"User_ID":"U0025","Age":17.0,"Gender":"Other","Country":"Unknown","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Environmental Science Student","Monthly_Income":null,"AI_Tool":"ChatGPT","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":6.1,"Monthly_AI_Cost":30.0,"Productivity_Score":7.0,"Accuracy_Rating":4.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":8.9,"Work_or_Study_Hours_Per_Day":7.8,"Would_Recommend":"Yes"},{"User_ID":"U0122","Age":null,"Gender":"Female","Country":"Canada","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Psychology Student","Monthly_Income":624.0,"AI_Tool":"Google Gemini","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":0.9,"Monthly_AI_Cost":0.0,"Productivity_Score":4.4,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":0.1,"Work_or_Study_Hours_Per_Day":7.4,"Would_Recommend":"Yes"},{"User_ID":"U0031","Age":20.0,"Gender":"Male","Country":"Canada","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Unknown","Monthly_Income":415.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":3.0,"Monthly_AI_Cost":0.0,"Productivity_Score":4.4,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":3.1,"Work_or_Study_Hours_Per_Day":5.5,"Would_Recommend":"Yes"},{"User_ID":"U0062","Age":22.0,"Gender":"Male","Country":"Australia","User_Type":"Student","Education_Level":"Master's","Profession":"Data Science Student","Monthly_Income":0.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":5.9,"Monthly_AI_Cost":0.0,"Productivity_Score":8.1,"Accuracy_Rating":3.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":9.0,"Work_or_Study_Hours_Per_Day":7.3,"Would_Recommend":"Yes"},{"User_ID":"U0058","Age":32.0,"Gender":"Male","Country":"Germany","User_Type":"Professional","Education_Level":"High School","Profession":"Datenanalyst","Monthly_Income":4499.0,"AI_Tool":"Claude","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":1.3,"Monthly_AI_Cost":20.0,"Productivity_Score":2.7,"Accuracy_Rating":4.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":0.5,"Work_or_Study_Hours_Per_Day":6.2,"Would_Recommend":"Yes"},{"User_ID":"U0173","Age":30.0,"Gender":"Male","Country":"United Kingdom","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Software Developer","Monthly_Income":6437.0,"AI_Tool":"Google Gemini","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.9,"Monthly_AI_Cost":0.0,"Productivity_Score":4.9,"Accuracy_Rating":5.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":2.1,"Work_or_Study_Hours_Per_Day":6.7,"Would_Recommend":"Yes"},{"User_ID":"U0003","Age":17.0,"Gender":"Female","Country":"Australia","User_Type":"Student","Education_Level":"Master's","Profession":"Data Science Student","Monthly_Income":440.0,"AI_Tool":"ChatGPT","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":0.5,"Monthly_AI_Cost":10.0,"Productivity_Score":4.3,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":0.5,"Work_or_Study_Hours_Per_Day":7.5,"Would_Recommend":"No"},{"User_ID":"U0260","Age":25.0,"Gender":"Female","Country":"India","User_Type":"Student","Education_Level":"PhD","Profession":"Biotechnology PhD Student","Monthly_Income":60.0,"AI_Tool":"Grammarly","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":3.4,"Monthly_AI_Cost":50.0,"Productivity_Score":4.9,"Accuracy_Rating":4.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":7.2,"Work_or_Study_Hours_Per_Day":8.0,"Would_Recommend":"Yes"},{"User_ID":"U0117","Age":23.0,"Gender":"Female","Country":"India","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Biomedical Engineering Student","Monthly_Income":219.0,"AI_Tool":"Grammarly","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":1.4,"Monthly_AI_Cost":0.0,"Productivity_Score":4.8,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":3.6,"Work_or_Study_Hours_Per_Day":6.1,"Would_Recommend":"Yes"},{"User_ID":"U0280","Age":28.0,"Gender":"Female","Country":"Brazil","User_Type":"Student","Education_Level":"Master's","Profession":"Software Engineering Student","Monthly_Income":82.0,"AI_Tool":"Google Gemini","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":0.8,"Monthly_AI_Cost":0.0,"Productivity_Score":2.1,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":1.2,"Work_or_Study_Hours_Per_Day":8.3,"Would_Recommend":"Yes"},{"User_ID":"U0163","Age":48.0,"Gender":"Other","Country":"Australia","User_Type":"Professional","Education_Level":"Master's","Profession":"Research Analyst","Monthly_Income":5903.0,"AI_Tool":"ChatGPT","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":1.6,"Monthly_AI_Cost":20.0,"Productivity_Score":5.2,"Accuracy_Rating":3.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":6.5,"Work_or_Study_Hours_Per_Day":9.7,"Would_Recommend":"Yes"},{"User_ID":"U0019","Age":53.0,"Gender":"Male","Country":"France","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"D\u00e9veloppeur Logiciel (Software Developer)","Monthly_Income":3944.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.4,"Monthly_AI_Cost":0.0,"Productivity_Score":1.9,"Accuracy_Rating":3.0,"Satisfaction_Score":3.0,"Time_Saved_Hours_Per_Week":2.5,"Work_or_Study_Hours_Per_Day":9.5,"Would_Recommend":"No"},{"User_ID":"U0115","Age":55.0,"Gender":"Male","Country":"United States","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Business Analyst","Monthly_Income":4070.0,"AI_Tool":"Claude","AI_Purpose":"Office Work","AI_Usage_Hours_Per_Day":2.7,"Monthly_AI_Cost":20.0,"Productivity_Score":6.8,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":null,"Work_or_Study_Hours_Per_Day":10.7,"Would_Recommend":"Yes"},{"User_ID":"U0160","Age":17.0,"Gender":"Male","Country":"India","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Electronics and Communication Engineering Student","Monthly_Income":null,"AI_Tool":"ChatGPT","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":1.7,"Monthly_AI_Cost":0.0,"Productivity_Score":5.8,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":5.0,"Work_or_Study_Hours_Per_Day":7.0,"Would_Recommend":"Yes"},{"User_ID":"U0048","Age":null,"Gender":"Female","Country":"United States","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Unknown","Monthly_Income":null,"AI_Tool":"Not Mentioned","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":3.1,"Monthly_AI_Cost":30.0,"Productivity_Score":5.6,"Accuracy_Rating":3.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":5.2,"Work_or_Study_Hours_Per_Day":8.4,"Would_Recommend":"Yes"},{"User_ID":"U0112","Age":32.0,"Gender":"Female","Country":"Canada","User_Type":"Student","Education_Level":"Bachelor's","Profession":"English Literature Student","Monthly_Income":553.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":1.5,"Monthly_AI_Cost":25.0,"Productivity_Score":3.6,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":5.5,"Work_or_Study_Hours_Per_Day":5.9,"Would_Recommend":"Maybe"},{"User_ID":"U0012","Age":23.0,"Gender":"Male","Country":"France","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"D\u00e9veloppeur Full Stack Junior","Monthly_Income":3693.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":5.5,"Monthly_AI_Cost":20.0,"Productivity_Score":7.6,"Accuracy_Rating":3.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":9.3,"Work_or_Study_Hours_Per_Day":6.1,"Would_Recommend":"Yes"},{"User_ID":"U0204","Age":47.0,"Gender":"Female","Country":"United Kingdom","User_Type":"Professional","Education_Level":"PhD","Profession":"Senior Software Engineer / AI Systems Developer","Monthly_Income":7690.0,"AI_Tool":"Claude","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":0.5,"Monthly_AI_Cost":null,"Productivity_Score":2.0,"Accuracy_Rating":2.0,"Satisfaction_Score":3.0,"Time_Saved_Hours_Per_Week":2.7,"Work_or_Study_Hours_Per_Day":10.4,"Would_Recommend":"No"},{"User_ID":"U0091","Age":21.0,"Gender":"Male","Country":"Canada","User_Type":"Student","Education_Level":"High School","Profession":"English Literature Student","Monthly_Income":0.0,"AI_Tool":"Claude","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":2.9,"Monthly_AI_Cost":10.0,"Productivity_Score":5.7,"Accuracy_Rating":2.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":6.6,"Work_or_Study_Hours_Per_Day":6.4,"Would_Recommend":"No"},{"User_ID":"U0266","Age":28.0,"Gender":"Other","Country":"Unknown","User_Type":"Professional","Education_Level":"PhD","Profession":"Research Scientist / Data Analyst","Monthly_Income":1208.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Office Work","AI_Usage_Hours_Per_Day":1.0,"Monthly_AI_Cost":20.0,"Productivity_Score":2.6,"Accuracy_Rating":4.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":null,"Work_or_Study_Hours_Per_Day":8.3,"Would_Recommend":"No"},{"User_ID":"U0018","Age":null,"Gender":"Male","Country":"United States","User_Type":"Professional","Education_Level":"Master's","Profession":"Content Strategist","Monthly_Income":10311.0,"AI_Tool":"Google Gemini","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":2.1,"Monthly_AI_Cost":20.0,"Productivity_Score":4.2,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":5.4,"Work_or_Study_Hours_Per_Day":10.5,"Would_Recommend":"Maybe"},{"User_ID":"U0128","Age":41.0,"Gender":"Male","Country":"India","User_Type":"Professional","Education_Level":"Diploma","Profession":"Software Developer (Diploma Qualified)","Monthly_Income":1407.0,"AI_Tool":"Grammarly","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":0.6,"Monthly_AI_Cost":0.0,"Productivity_Score":3.3,"Accuracy_Rating":3.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":3.0,"Work_or_Study_Hours_Per_Day":9.5,"Would_Recommend":"No"},{"User_ID":"U0005","Age":64.0,"Gender":"Female","Country":"India","User_Type":"Professional","Education_Level":"Master's","Profession":"Content Strategy Manager","Monthly_Income":2050.0,"AI_Tool":"Meta AI","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":5.3,"Monthly_AI_Cost":50.0,"Productivity_Score":7.8,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":10.7,"Work_or_Study_Hours_Per_Day":9.5,"Would_Recommend":"Maybe"},{"User_ID":"U0210","Age":97.0,"Gender":"Female","Country":"United States","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Biology Student","Monthly_Income":243.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":0.8,"Monthly_AI_Cost":0.0,"Productivity_Score":2.5,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":1.3,"Work_or_Study_Hours_Per_Day":6.8,"Would_Recommend":"No"},{"User_ID":"U0218","Age":63.0,"Gender":"Male","Country":"Brazil","User_Type":"Professional","Education_Level":"Diploma","Profession":"Desenvolvedor de Sistemas Junior","Monthly_Income":1405.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":3.4,"Monthly_AI_Cost":null,"Productivity_Score":6.8,"Accuracy_Rating":5.0,"Satisfaction_Score":10.0,"Time_Saved_Hours_Per_Week":7.4,"Work_or_Study_Hours_Per_Day":7.5,"Would_Recommend":"Maybe"},{"User_ID":"U0038","Age":null,"Gender":"Male","Country":"Nigeria","User_Type":"Student","Education_Level":"Bachelor's","Profession":"English Literature Student","Monthly_Income":98.0,"AI_Tool":"Claude","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":1.7,"Monthly_AI_Cost":20.0,"Productivity_Score":3.5,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":2.9,"Work_or_Study_Hours_Per_Day":7.7,"Would_Recommend":"Yes"},{"User_ID":"U0064","Age":20.0,"Gender":"Male","Country":"India","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Data Science Student","Monthly_Income":104.0,"AI_Tool":"ChatGPT","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":6.8,"Monthly_AI_Cost":0.0,"Productivity_Score":6.9,"Accuracy_Rating":2.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":14.1,"Work_or_Study_Hours_Per_Day":6.4,"Would_Recommend":"No"},{"User_ID":"U0185","Age":null,"Gender":"Male","Country":"Brazil","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Digital Media Production Student","Monthly_Income":243.0,"AI_Tool":"Claude","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":2.8,"Monthly_AI_Cost":100.0,"Productivity_Score":5.4,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":6.8,"Work_or_Study_Hours_Per_Day":8.5,"Would_Recommend":"Yes"},{"User_ID":"U0273","Age":22.0,"Gender":"Female","Country":"United States","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Digital Media Student","Monthly_Income":0.0,"AI_Tool":"ChatGPT","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":5.9,"Monthly_AI_Cost":20.0,"Productivity_Score":5.5,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":12.4,"Work_or_Study_Hours_Per_Day":5.7,"Would_Recommend":"No"},{"User_ID":"U0247","Age":null,"Gender":"Female","Country":"Australia","User_Type":"Professional","Education_Level":"Master's","Profession":"Data Analyst / Business Intelligence Specialist","Monthly_Income":3462.0,"AI_Tool":"Google Gemini","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":4.5,"Monthly_AI_Cost":0.0,"Productivity_Score":5.6,"Accuracy_Rating":4.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":5.5,"Work_or_Study_Hours_Per_Day":6.7,"Would_Recommend":"Maybe"},{"User_ID":"U0220","Age":44.0,"Gender":"Female","Country":"Brazil","User_Type":"Professional","Education_Level":"Diploma","Profession":"Assistente Administrativo","Monthly_Income":1613.0,"AI_Tool":"Google Gemini","AI_Purpose":"Office Work","AI_Usage_Hours_Per_Day":4.2,"Monthly_AI_Cost":0.0,"Productivity_Score":5.9,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":5.6,"Work_or_Study_Hours_Per_Day":10.0,"Would_Recommend":"Yes"},{"User_ID":"U0050","Age":31.0,"Gender":"Female","Country":"Pakistan","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Content Writer","Monthly_Income":969.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":4.9,"Monthly_AI_Cost":0.0,"Productivity_Score":5.4,"Accuracy_Rating":3.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":6.5,"Work_or_Study_Hours_Per_Day":9.3,"Would_Recommend":"Yes"},{"User_ID":"U0190","Age":31.0,"Gender":"Male","Country":"Germany","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Content Manager","Monthly_Income":null,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":3.4,"Monthly_AI_Cost":0.0,"Productivity_Score":4.8,"Accuracy_Rating":2.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":6.0,"Work_or_Study_Hours_Per_Day":7.5,"Would_Recommend":"No"},{"User_ID":"U0249","Age":39.0,"Gender":"Female","Country":"Canada","User_Type":"Professional","Education_Level":"Diploma","Profession":"Software Developer","Monthly_Income":3579.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":4.4,"Monthly_AI_Cost":0.0,"Productivity_Score":7.3,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":5.7,"Work_or_Study_Hours_Per_Day":8.4,"Would_Recommend":"Yes"},{"User_ID":"U0124","Age":48.0,"Gender":"Male","Country":"Pakistan","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Digital Marketing Manager","Monthly_Income":210.0,"AI_Tool":"ChatGPT","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":1.8,"Monthly_AI_Cost":10.0,"Productivity_Score":3.6,"Accuracy_Rating":3.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":5.1,"Work_or_Study_Hours_Per_Day":9.5,"Would_Recommend":"No"},{"User_ID":"U0196","Age":19.0,"Gender":"Male","Country":"Pakistan","User_Type":"Student","Education_Level":"Bachelor's","Profession":"English Literature Student","Monthly_Income":58.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":6.3,"Monthly_AI_Cost":0.0,"Productivity_Score":8.8,"Accuracy_Rating":3.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":10.0,"Work_or_Study_Hours_Per_Day":7.3,"Would_Recommend":"Yes"},{"User_ID":"U0053","Age":21.0,"Gender":"Female","Country":"Philippines","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Psychology Research Student","Monthly_Income":88.0,"AI_Tool":"ChatGPT","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":1.6,"Monthly_AI_Cost":10.0,"Productivity_Score":3.4,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":5.9,"Work_or_Study_Hours_Per_Day":6.5,"Would_Recommend":"No"},{"User_ID":"U0240","Age":27.0,"Gender":"Female","Country":"United States","User_Type":"Student","Education_Level":"Master's","Profession":"Machine Learning Student","Monthly_Income":335.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.5,"Monthly_AI_Cost":20.0,"Productivity_Score":4.0,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":4.2,"Work_or_Study_Hours_Per_Day":4.9,"Would_Recommend":"No"},{"User_ID":"U0212","Age":22.0,"Gender":"Female","Country":"India","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Digital Marketing Student","Monthly_Income":0.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":0.7,"Monthly_AI_Cost":30.0,"Productivity_Score":3.4,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":5.9,"Work_or_Study_Hours_Per_Day":5.4,"Would_Recommend":"No"},{"User_ID":"U0155","Age":null,"Gender":"Male","Country":"United Kingdom","User_Type":"Professional","Education_Level":"Diploma","Profession":"Content Writer","Monthly_Income":2303.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":4.4,"Monthly_AI_Cost":20.0,"Productivity_Score":5.8,"Accuracy_Rating":5.0,"Satisfaction_Score":9.0,"Time_Saved_Hours_Per_Week":11.3,"Work_or_Study_Hours_Per_Day":7.8,"Would_Recommend":"Yes"},{"User_ID":"U0013","Age":null,"Gender":"Male","Country":"Canada","User_Type":"Professional","Education_Level":"High School","Profession":"Junior Web Developer","Monthly_Income":3779.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":5.7,"Monthly_AI_Cost":0.0,"Productivity_Score":6.7,"Accuracy_Rating":2.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":13.0,"Work_or_Study_Hours_Per_Day":6.6,"Would_Recommend":"Maybe"},{"User_ID":"U0139","Age":41.0,"Gender":"Male","Country":"Pakistan","User_Type":"Professional","Education_Level":"High School","Profession":"Digital Content Writer","Monthly_Income":672.0,"AI_Tool":"Claude","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":8.1,"Monthly_AI_Cost":0.0,"Productivity_Score":5.6,"Accuracy_Rating":5.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":16.5,"Work_or_Study_Hours_Per_Day":7.4,"Would_Recommend":"Yes"},{"User_ID":"U0275","Age":null,"Gender":"Male","Country":"India","User_Type":"Student","Education_Level":"High School","Profession":"Statistics Student","Monthly_Income":0.0,"AI_Tool":"Google Gemini","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":2.0,"Monthly_AI_Cost":0.0,"Productivity_Score":3.6,"Accuracy_Rating":5.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":3.6,"Work_or_Study_Hours_Per_Day":4.4,"Would_Recommend":"Maybe"},{"User_ID":"U0105","Age":19.0,"Gender":"Male","Country":"United States","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Business Administration Student","Monthly_Income":135.0,"AI_Tool":"Claude","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":3.9,"Monthly_AI_Cost":0.0,"Productivity_Score":5.2,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":9.8,"Work_or_Study_Hours_Per_Day":5.1,"Would_Recommend":"Yes"},{"User_ID":"U0065","Age":null,"Gender":"Male","Country":"United Kingdom","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Mechanical Engineering Student","Monthly_Income":334.0,"AI_Tool":"ChatGPT","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":4.1,"Monthly_AI_Cost":20.0,"Productivity_Score":5.2,"Accuracy_Rating":3.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":8.4,"Work_or_Study_Hours_Per_Day":5.9,"Would_Recommend":"Yes"},{"User_ID":"U0080","Age":22.0,"Gender":"Male","Country":"Unknown","User_Type":"Student","Education_Level":"High School","Profession":"Computer Science Student","Monthly_Income":158.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.6,"Monthly_AI_Cost":10.0,"Productivity_Score":3.1,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":5.9,"Work_or_Study_Hours_Per_Day":8.4,"Would_Recommend":"Yes"},{"User_ID":"U0261","Age":27.0,"Gender":"Female","Country":"Canada","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Software Engineering Student","Monthly_Income":0.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":4.9,"Monthly_AI_Cost":20.0,"Productivity_Score":5.8,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":9.0,"Work_or_Study_Hours_Per_Day":6.0,"Would_Recommend":"Yes"},{"User_ID":"U0015","Age":18.0,"Gender":"Male","Country":"Canada","User_Type":"Student","Education_Level":"Unknown","Profession":"Business Administration Student","Monthly_Income":56.0,"AI_Tool":"Google Gemini","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":1.7,"Monthly_AI_Cost":30.0,"Productivity_Score":4.9,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":1.9,"Work_or_Study_Hours_Per_Day":4.3,"Would_Recommend":"Yes"},{"User_ID":"U0090","Age":16.0,"Gender":"Female","Country":"United States","User_Type":"Student","Education_Level":"High School","Profession":"Environmental Science Student","Monthly_Income":118.0,"AI_Tool":"Meta AI","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":0.7,"Monthly_AI_Cost":0.0,"Productivity_Score":4.5,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":1.0,"Work_or_Study_Hours_Per_Day":5.9,"Would_Recommend":"Yes"},{"User_ID":"U0123","Age":18.0,"Gender":"Female","Country":"Pakistan","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Biomedical Engineering Student","Monthly_Income":80.0,"AI_Tool":"Grammarly","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":4.1,"Monthly_AI_Cost":20.0,"Productivity_Score":7.0,"Accuracy_Rating":5.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":10.5,"Work_or_Study_Hours_Per_Day":5.8,"Would_Recommend":"Yes"},{"User_ID":"U0103","Age":41.0,"Gender":"Male","Country":"India","User_Type":"Professional","Education_Level":"Diploma","Profession":"Unknown","Monthly_Income":627.0,"AI_Tool":"Grammarly","AI_Purpose":"Customer Support","AI_Usage_Hours_Per_Day":0.7,"Monthly_AI_Cost":0.0,"Productivity_Score":2.3,"Accuracy_Rating":4.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":3.0,"Work_or_Study_Hours_Per_Day":6.9,"Would_Recommend":"Yes"},{"User_ID":"U0265","Age":25.0,"Gender":"Female","Country":"Pakistan","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Content Writer","Monthly_Income":863.0,"AI_Tool":"Grammarly","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":1.8,"Monthly_AI_Cost":null,"Productivity_Score":5.1,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":2.7,"Work_or_Study_Hours_Per_Day":10.3,"Would_Recommend":"Maybe"},{"User_ID":"U0051","Age":22.0,"Gender":"Male","Country":"Canada","User_Type":"Student","Education_Level":"High School","Profession":"Business Administration Student","Monthly_Income":0.0,"AI_Tool":"Google Gemini","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":2.0,"Monthly_AI_Cost":0.0,"Productivity_Score":4.9,"Accuracy_Rating":null,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":4.3,"Work_or_Study_Hours_Per_Day":8.3,"Would_Recommend":"No"},{"User_ID":"U0281","Age":22.0,"Gender":"Female","Country":"India","User_Type":"Student","Education_Level":"Master's","Profession":"English Literature Student","Monthly_Income":167.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":8.6,"Monthly_AI_Cost":0.0,"Productivity_Score":7.6,"Accuracy_Rating":null,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":17.7,"Work_or_Study_Hours_Per_Day":5.5,"Would_Recommend":"No"},{"User_ID":"U0206","Age":26.0,"Gender":"Male","Country":"Brazil","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Literature Student","Monthly_Income":73.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":null,"Monthly_AI_Cost":0.0,"Productivity_Score":3.4,"Accuracy_Rating":2.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":1.5,"Work_or_Study_Hours_Per_Day":5.8,"Would_Recommend":"Yes"},{"User_ID":"U0262","Age":23.0,"Gender":"Male","Country":"India","User_Type":"Student","Education_Level":"Bachelor's","Profession":"English Literature Student","Monthly_Income":null,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":9.7,"Monthly_AI_Cost":0.0,"Productivity_Score":7.5,"Accuracy_Rating":4.0,"Satisfaction_Score":null,"Time_Saved_Hours_Per_Week":17.2,"Work_or_Study_Hours_Per_Day":4.1,"Would_Recommend":"Yes"},{"User_ID":"U0235","Age":38.0,"Gender":"Male","Country":"India","User_Type":"Professional","Education_Level":"Master's","Profession":"Senior Content Strategist","Monthly_Income":1114.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":null,"Monthly_AI_Cost":30.0,"Productivity_Score":3.8,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":1.5,"Work_or_Study_Hours_Per_Day":7.9,"Would_Recommend":"Yes"},{"User_ID":"U0142","Age":28.0,"Gender":"Male","Country":"United Kingdom","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Data Science Student","Monthly_Income":528.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":1.5,"Monthly_AI_Cost":10.0,"Productivity_Score":null,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":5.5,"Work_or_Study_Hours_Per_Day":5.7,"Would_Recommend":"Yes"},{"User_ID":"U0097","Age":32.0,"Gender":"Female","Country":"Australia","User_Type":"Student","Education_Level":"Master's","Profession":"Creative Writing Student","Monthly_Income":524.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":7.2,"Monthly_AI_Cost":100.0,"Productivity_Score":9.4,"Accuracy_Rating":3.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":11.7,"Work_or_Study_Hours_Per_Day":6.5,"Would_Recommend":"Yes"},{"User_ID":"U0034","Age":18.0,"Gender":"Male","Country":"Philippines","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Information Technology Student","Monthly_Income":0.0,"AI_Tool":"Grammarly","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":0.9,"Monthly_AI_Cost":null,"Productivity_Score":4.9,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":2.5,"Work_or_Study_Hours_Per_Day":6.1,"Would_Recommend":"No"},{"User_ID":"U0256","Age":39.0,"Gender":"Female","Country":"Pakistan","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Customer Service Executive","Monthly_Income":915.0,"AI_Tool":"ChatGPT","AI_Purpose":"Customer Support","AI_Usage_Hours_Per_Day":6.0,"Monthly_AI_Cost":0.0,"Productivity_Score":10.0,"Accuracy_Rating":2.0,"Satisfaction_Score":8.0,"Time_Saved_Hours_Per_Week":null,"Work_or_Study_Hours_Per_Day":6.6,"Would_Recommend":"Yes"},{"User_ID":"U0110","Age":39.0,"Gender":"Male","Country":"India","User_Type":"Professional","Education_Level":"Diploma","Profession":"Customer Support Executive","Monthly_Income":483.0,"AI_Tool":"DeepSeek","AI_Purpose":"Customer Support","AI_Usage_Hours_Per_Day":0.6,"Monthly_AI_Cost":25.0,"Productivity_Score":4.9,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":4.0,"Work_or_Study_Hours_Per_Day":7.1,"Would_Recommend":"Yes"},{"User_ID":"U0270","Age":41.0,"Gender":"Male","Country":"Germany","User_Type":"Professional","Education_Level":"Diploma","Profession":"Softwareentwickler (Software Developer)","Monthly_Income":3795.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":2.9,"Monthly_AI_Cost":20.0,"Productivity_Score":7.8,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":8.4,"Work_or_Study_Hours_Per_Day":6.8,"Would_Recommend":"Yes"},{"User_ID":"U0159","Age":23.0,"Gender":"Female","Country":"Germany","User_Type":"Professional","Education_Level":"Master's","Profession":"Projektmanagerin (Project Manager)","Monthly_Income":5976.0,"AI_Tool":"ChatGPT","AI_Purpose":"Office Work","AI_Usage_Hours_Per_Day":2.0,"Monthly_AI_Cost":0.0,"Productivity_Score":5.0,"Accuracy_Rating":2.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":5.8,"Work_or_Study_Hours_Per_Day":6.6,"Would_Recommend":"Maybe"},{"User_ID":"U0283","Age":35.0,"Gender":"Male","Country":"United Kingdom","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Business Analyst","Monthly_Income":3513.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":1.5,"Monthly_AI_Cost":0.0,"Productivity_Score":null,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":1.9,"Work_or_Study_Hours_Per_Day":8.0,"Would_Recommend":"Yes"},{"User_ID":"U0202","Age":32.0,"Gender":"Female","Country":"India","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Biotechnology Student","Monthly_Income":110.0,"AI_Tool":"ChatGPT","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":3.3,"Monthly_AI_Cost":0.0,"Productivity_Score":6.3,"Accuracy_Rating":5.0,"Satisfaction_Score":10.0,"Time_Saved_Hours_Per_Week":5.9,"Work_or_Study_Hours_Per_Day":8.2,"Would_Recommend":"Yes"},{"User_ID":"U0200","Age":49.0,"Gender":"Male","Country":"United States","User_Type":"Professional","Education_Level":"Diploma","Profession":"Software Support Technician","Monthly_Income":2690.0,"AI_Tool":"DeepSeek","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":0.6,"Monthly_AI_Cost":10.0,"Productivity_Score":1.6,"Accuracy_Rating":null,"Satisfaction_Score":3.0,"Time_Saved_Hours_Per_Week":2.2,"Work_or_Study_Hours_Per_Day":6.5,"Would_Recommend":"No"},{"User_ID":"U0040","Age":null,"Gender":"Male","Country":"United Kingdom","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Unknown","Monthly_Income":4102.0,"AI_Tool":"Google Gemini","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":2.5,"Monthly_AI_Cost":10.0,"Productivity_Score":6.1,"Accuracy_Rating":5.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":5.6,"Work_or_Study_Hours_Per_Day":7.5,"Would_Recommend":"Yes"},{"User_ID":"U0183","Age":null,"Gender":"Other","Country":"United States","User_Type":"Student","Education_Level":"Bachelor's","Profession":"English Literature Student","Monthly_Income":390.0,"AI_Tool":"DeepSeek","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":7.9,"Monthly_AI_Cost":0.0,"Productivity_Score":8.9,"Accuracy_Rating":4.0,"Satisfaction_Score":9.0,"Time_Saved_Hours_Per_Week":14.2,"Work_or_Study_Hours_Per_Day":6.0,"Would_Recommend":"Yes"},{"User_ID":"U0098","Age":23.0,"Gender":"Female","Country":"United Kingdom","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Computer Science Student","Monthly_Income":312.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":0.7,"Monthly_AI_Cost":0.0,"Productivity_Score":5.1,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":4.8,"Work_or_Study_Hours_Per_Day":4.1,"Would_Recommend":"No"},{"User_ID":"U0109","Age":17.0,"Gender":"Female","Country":"Canada","User_Type":"Student","Education_Level":"High School","Profession":"Computer Science Student","Monthly_Income":595.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":8.0,"Monthly_AI_Cost":0.0,"Productivity_Score":7.4,"Accuracy_Rating":3.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":15.8,"Work_or_Study_Hours_Per_Day":6.1,"Would_Recommend":"Yes"},{"User_ID":"U0170","Age":54.0,"Gender":"Other","Country":"India","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Customer Support Executive","Monthly_Income":983.0,"AI_Tool":"Claude","AI_Purpose":"Customer Support","AI_Usage_Hours_Per_Day":5.0,"Monthly_AI_Cost":20.0,"Productivity_Score":7.0,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":null,"Work_or_Study_Hours_Per_Day":9.9,"Would_Recommend":"Yes"},{"User_ID":"U0068","Age":23.0,"Gender":"Female","Country":"Brazil","User_Type":"Student","Education_Level":"High School","Profession":"Biology Student","Monthly_Income":0.0,"AI_Tool":"ChatGPT","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":null,"Monthly_AI_Cost":0.0,"Productivity_Score":3.8,"Accuracy_Rating":2.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":0.1,"Work_or_Study_Hours_Per_Day":2.6,"Would_Recommend":"Yes"},{"User_ID":"U0077","Age":16.0,"Gender":"Female","Country":"Philippines","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Information Technology Student","Monthly_Income":76.0,"AI_Tool":"ChatGPT","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":1.2,"Monthly_AI_Cost":0.0,"Productivity_Score":3.4,"Accuracy_Rating":3.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":3.7,"Work_or_Study_Hours_Per_Day":8.2,"Would_Recommend":"No"},{"User_ID":"U0203","Age":35.0,"Gender":"Female","Country":"Brazil","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Desenvolvedora de Software","Monthly_Income":1991.0,"AI_Tool":"Google Gemini","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":1.7,"Monthly_AI_Cost":10.0,"Productivity_Score":4.0,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":6.2,"Work_or_Study_Hours_Per_Day":7.3,"Would_Recommend":"Yes"},{"User_ID":"U0009","Age":22.0,"Gender":"Female","Country":"Kenya","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Software Engineering Student","Monthly_Income":0.0,"AI_Tool":"Google Gemini","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":3.3,"Monthly_AI_Cost":0.0,"Productivity_Score":6.0,"Accuracy_Rating":2.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":6.4,"Work_or_Study_Hours_Per_Day":5.5,"Would_Recommend":"Yes"},{"User_ID":"U0140","Age":19.0,"Gender":"Female","Country":"United States","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Molecular Biology Student","Monthly_Income":0.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":2.8,"Monthly_AI_Cost":20.0,"Productivity_Score":5.0,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":6.9,"Work_or_Study_Hours_Per_Day":6.5,"Would_Recommend":"Maybe"},{"User_ID":"U0121","Age":24.0,"Gender":"Female","Country":"Australia","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Business Analytics Student","Monthly_Income":435.0,"AI_Tool":"Claude","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":3.4,"Monthly_AI_Cost":10.0,"Productivity_Score":5.5,"Accuracy_Rating":null,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":7.7,"Work_or_Study_Hours_Per_Day":4.6,"Would_Recommend":"Yes"},{"User_ID":"U0201","Age":21.0,"Gender":"Male","Country":"Canada","User_Type":"Student","Education_Level":"Bachelor's","Profession":"English Literature Student","Monthly_Income":678.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":3.0,"Monthly_AI_Cost":0.0,"Productivity_Score":4.0,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":7.1,"Work_or_Study_Hours_Per_Day":6.7,"Would_Recommend":"No"},{"User_ID":"U0021","Age":24.0,"Gender":"Female","Country":"United Kingdom","User_Type":"Professional","Education_Level":"High School","Profession":"Junior Software Developer","Monthly_Income":4006.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":2.9,"Monthly_AI_Cost":25.0,"Productivity_Score":6.1,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":8.3,"Work_or_Study_Hours_Per_Day":7.8,"Would_Recommend":"Yes"},{"User_ID":"U0267","Age":16.0,"Gender":"Female","Country":"United States","User_Type":"Student","Education_Level":"PhD","Profession":"Unknown","Monthly_Income":707.0,"AI_Tool":"ChatGPT","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":1.1,"Monthly_AI_Cost":0.0,"Productivity_Score":5.1,"Accuracy_Rating":3.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":5.1,"Work_or_Study_Hours_Per_Day":4.9,"Would_Recommend":"Yes"},{"User_ID":"U0044","Age":31.0,"Gender":"Male","Country":"Germany","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Data Science Student","Monthly_Income":523.0,"AI_Tool":"Not Mentioned","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":2.0,"Monthly_AI_Cost":0.0,"Productivity_Score":5.6,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":3.8,"Work_or_Study_Hours_Per_Day":2.8,"Would_Recommend":"Yes"},{"User_ID":"U0276","Age":20.0,"Gender":"Female","Country":"Philippines","User_Type":"Student","Education_Level":"Unknown","Profession":"English Literature Student","Monthly_Income":93.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":2.3,"Monthly_AI_Cost":10.0,"Productivity_Score":4.2,"Accuracy_Rating":3.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":3.4,"Work_or_Study_Hours_Per_Day":6.1,"Would_Recommend":"No"},{"User_ID":"U0232","Age":29.0,"Gender":"Other","Country":"France","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Analyste de Donn\u00e9es / Data Analyst","Monthly_Income":5785.0,"AI_Tool":"Claude","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":1.7,"Monthly_AI_Cost":0.0,"Productivity_Score":6.0,"Accuracy_Rating":null,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":3.7,"Work_or_Study_Hours_Per_Day":6.4,"Would_Recommend":"Yes"},{"User_ID":"U0252","Age":35.0,"Gender":"Female","Country":"United Kingdom","User_Type":"Professional","Education_Level":"Master's","Profession":"Research Scientist","Monthly_Income":3114.0,"AI_Tool":"Perplexity AI","AI_Purpose":"Research","AI_Usage_Hours_Per_Day":5.7,"Monthly_AI_Cost":0.0,"Productivity_Score":5.9,"Accuracy_Rating":3.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":13.4,"Work_or_Study_Hours_Per_Day":9.0,"Would_Recommend":"Yes"},{"User_ID":"U0145","Age":27.0,"Gender":"Female","Country":"United Kingdom","User_Type":"Professional","Education_Level":"Master's","Profession":"Content Strategist","Monthly_Income":4186.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":0.8,"Monthly_AI_Cost":0.0,"Productivity_Score":3.9,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":4.3,"Work_or_Study_Hours_Per_Day":9.0,"Would_Recommend":"Maybe"},{"User_ID":"U0229","Age":20.0,"Gender":"Female","Country":"India","User_Type":"Student","Education_Level":"Bachelor's","Profession":"English Literature Student","Monthly_Income":0.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":1.6,"Monthly_AI_Cost":0.0,"Productivity_Score":5.2,"Accuracy_Rating":2.0,"Satisfaction_Score":5.0,"Time_Saved_Hours_Per_Week":5.3,"Work_or_Study_Hours_Per_Day":8.4,"Would_Recommend":"Yes"},{"User_ID":"U0010","Age":49.0,"Gender":"Female","Country":"Nigeria","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Content Writer","Monthly_Income":243.0,"AI_Tool":"ChatGPT","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":3.2,"Monthly_AI_Cost":0.0,"Productivity_Score":null,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":10.0,"Work_or_Study_Hours_Per_Day":7.2,"Would_Recommend":"Maybe"},{"User_ID":"U0146","Age":18.0,"Gender":"Female","Country":"United States","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Biology Student","Monthly_Income":540.0,"AI_Tool":"ChatGPT","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":4.3,"Monthly_AI_Cost":20.0,"Productivity_Score":5.8,"Accuracy_Rating":2.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":8.1,"Work_or_Study_Hours_Per_Day":5.2,"Would_Recommend":"No"},{"User_ID":"U0197","Age":32.0,"Gender":"Female","Country":"Brazil","User_Type":"Student","Education_Level":"High School","Profession":"English Literature Student","Monthly_Income":152.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":0.5,"Monthly_AI_Cost":10.0,"Productivity_Score":2.3,"Accuracy_Rating":5.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":3.1,"Work_or_Study_Hours_Per_Day":5.9,"Would_Recommend":"Yes"},{"User_ID":"U0186","Age":38.0,"Gender":"Male","Country":"Philippines","User_Type":"Professional","Education_Level":"PhD","Profession":"Academic Research Professor and Technical Writer","Monthly_Income":1148.0,"AI_Tool":"Grammarly","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":4.3,"Monthly_AI_Cost":50.0,"Productivity_Score":7.2,"Accuracy_Rating":5.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":4.8,"Work_or_Study_Hours_Per_Day":5.9,"Would_Recommend":"Yes"},{"User_ID":"U0287","Age":22.0,"Gender":"Other","Country":"India","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Mechanical Engineering Student","Monthly_Income":0.0,"AI_Tool":"Meta AI","AI_Purpose":"Studying","AI_Usage_Hours_Per_Day":2.4,"Monthly_AI_Cost":20.0,"Productivity_Score":3.4,"Accuracy_Rating":4.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":4.8,"Work_or_Study_Hours_Per_Day":6.2,"Would_Recommend":"No"},{"User_ID":"U0147","Age":39.0,"Gender":"Male","Country":"Brazil","User_Type":"Professional","Education_Level":"Diploma","Profession":"Analista de Dados","Monthly_Income":894.0,"AI_Tool":"ChatGPT","AI_Purpose":"Data Analysis","AI_Usage_Hours_Per_Day":2.8,"Monthly_AI_Cost":20.0,"Productivity_Score":7.9,"Accuracy_Rating":4.0,"Satisfaction_Score":9.0,"Time_Saved_Hours_Per_Week":3.9,"Work_or_Study_Hours_Per_Day":9.2,"Would_Recommend":"Yes"},{"User_ID":"U0134","Age":27.0,"Gender":"Other","Country":"Canada","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Digital Media Production Student","Monthly_Income":675.0,"AI_Tool":"Claude","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":1.2,"Monthly_AI_Cost":20.0,"Productivity_Score":4.1,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":1.1,"Work_or_Study_Hours_Per_Day":7.6,"Would_Recommend":"Yes"},{"User_ID":"U0158","Age":31.0,"Gender":"Male","Country":"Australia","User_Type":"Student","Education_Level":"Bachelor's","Profession":"Unknown","Monthly_Income":204.0,"AI_Tool":"Meta AI","AI_Purpose":"Writing","AI_Usage_Hours_Per_Day":0.6,"Monthly_AI_Cost":0.0,"Productivity_Score":3.3,"Accuracy_Rating":2.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":3.6,"Work_or_Study_Hours_Per_Day":5.6,"Would_Recommend":"No"},{"User_ID":"U0174","Age":32.0,"Gender":"Male","Country":"Canada","User_Type":"Student","Education_Level":"High School","Profession":"Computer Science Student","Monthly_Income":0.0,"AI_Tool":"Claude","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":3.9,"Monthly_AI_Cost":0.0,"Productivity_Score":5.7,"Accuracy_Rating":3.0,"Satisfaction_Score":6.0,"Time_Saved_Hours_Per_Week":7.3,"Work_or_Study_Hours_Per_Day":4.8,"Would_Recommend":"Maybe"},{"User_ID":"U0066","Age":null,"Gender":"Female","Country":"United States","User_Type":"Professional","Education_Level":"Bachelor's","Profession":"Unknown","Monthly_Income":8255.0,"AI_Tool":"Microsoft Copilot","AI_Purpose":"Unknown","AI_Usage_Hours_Per_Day":1.8,"Monthly_AI_Cost":0.0,"Productivity_Score":1.8,"Accuracy_Rating":3.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":null,"Work_or_Study_Hours_Per_Day":12.2,"Would_Recommend":"No"},{"User_ID":"U0094","Age":43.0,"Gender":"Male","Country":"Nigeria","User_Type":"Professional","Education_Level":"Diploma","Profession":"Multimedia Content Producer","Monthly_Income":null,"AI_Tool":"ChatGPT","AI_Purpose":"Content Creation","AI_Usage_Hours_Per_Day":1.2,"Monthly_AI_Cost":0.0,"Productivity_Score":4.7,"Accuracy_Rating":3.0,"Satisfaction_Score":null,"Time_Saved_Hours_Per_Week":1.0,"Work_or_Study_Hours_Per_Day":10.9,"Would_Recommend":"No"},{"User_ID":"U0136","Age":48.0,"Gender":"Male","Country":"Brazil","User_Type":"Professional","Education_Level":"Diploma","Profession":"Desenvolvedor de Sistemas (Systems Developer)","Monthly_Income":544.0,"AI_Tool":"Google Gemini","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":5.5,"Monthly_AI_Cost":0.0,"Productivity_Score":7.8,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":11.5,"Work_or_Study_Hours_Per_Day":8.4,"Would_Recommend":"Yes"},{"User_ID":"U0002","Age":31.0,"Gender":"Female","Country":"Pakistan","User_Type":"Professional","Education_Level":"Diploma","Profession":"Junior Software Developer","Monthly_Income":448.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":0.7,"Monthly_AI_Cost":0.0,"Productivity_Score":4.3,"Accuracy_Rating":3.0,"Satisfaction_Score":4.0,"Time_Saved_Hours_Per_Week":1.7,"Work_or_Study_Hours_Per_Day":9.5,"Would_Recommend":"No"},{"User_ID":"U0130","Age":36.0,"Gender":"Male","Country":"United States","User_Type":"Professional","Education_Level":"Diploma","Profession":"Software Developer","Monthly_Income":6766.0,"AI_Tool":"ChatGPT","AI_Purpose":"Coding","AI_Usage_Hours_Per_Day":2.8,"Monthly_AI_Cost":0.0,"Productivity_Score":5.4,"Accuracy_Rating":4.0,"Satisfaction_Score":7.0,"Time_Saved_Hours_Per_Week":6.2,"Work_or_Study_Hours_Per_Day":8.2,"Would_Recommend":"Yes"}],"filters":{"userTypes":["Professional","Student"],"genders":["Female","Male","Other","Unknown"],"countries":["Australia","Brazil","Canada","France","Germany","India","Kenya","Nigeria","Pakistan","Philippines","United Kingdom","United States","Unknown"],"eduLevels":["Bachelor's","Diploma","High School","Master's","PhD","Unknown"],"tools":["ChatGPT","Claude","DeepSeek","Google Gemini","Grammarly","Meta AI","Microsoft Copilot","Not Mentioned","Perplexity AI"],"purposes":["Coding","Content Creation","Customer Support","Data Analysis","Office Work","Research","Studying","Unknown","Writing"],"recommends":["Maybe","No","Unknown","Yes"]}};
+
+const COLORS = {
+  blue: '#2563eb', indigo: '#4f46e5', sky: '#0ea5e9', green: '#059669',
+  amber: '#d97706', rose: '#e11d48', violet: '#7c3aed', teal: '#0d9488',
+  slate: '#64748b', cyan: '#06b6d4'
+};
+const PALETTE = [COLORS.blue, COLORS.indigo, COLORS.sky, COLORS.green, COLORS.amber, COLORS.rose, COLORS.violet, COLORS.teal, COLORS.cyan, COLORS.slate];
+
+Chart.defaults.color = '#64748b';
+Chart.defaults.borderColor = '#e2e8f0';
+Chart.defaults.font.family = "Inter, system-ui, sans-serif";
+
+let charts = {};
+let filtered = [...RAW.records];
+let professionFilter = null; // set by clicking profession bars
+
+// Map chart id -> filter field for cross-filtering
+const CHART_FILTER_MAP = {
+  cUserType: 'User_Type',
+  cGender: 'Gender',
+  cEdu: 'Education_Level',
+  cCountry: 'Country',
+  cTool: 'AI_Tool',
+  cPurpose: 'AI_Purpose',
+  cPurposeByType: 'AI_Purpose',
+  cProdByTool: 'AI_Tool',
+  cRec: 'Would_Recommend'
+};
+
+const FILTER_SELECT = {
+  User_Type: 'fUserType',
+  Gender: 'fGender',
+  Education_Level: 'fEdu',
+  Country: 'fCountry',
+  AI_Tool: 'fTool',
+  AI_Purpose: 'fPurpose',
+  Would_Recommend: 'fRec'
+};
+
+function fillSelect(id, opts) {
+  const el = document.getElementById(id);
+  el.innerHTML = '';
+  const all = document.createElement('option');
+  all.value = ''; all.textContent = 'All';
+  el.appendChild(all);
+  opts.forEach(o => {
+    const opt = document.createElement('option');
+    opt.value = o; opt.textContent = o;
+    el.appendChild(opt);
+  });
+}
+
+function val(id) { return document.getElementById(id).value; }
+function num(id) {
+  const v = document.getElementById(id).value;
+  return v === '' ? null : parseFloat(v);
+}
+
+function avg(arr, key) {
+  const vals = arr.map(r => r[key]).filter(v => v != null && !isNaN(v));
+  if (!vals.length) return null;
+  return vals.reduce((a,b)=>a+b,0) / vals.length;
+}
+
+function countBy(arr, key) {
+  const m = {};
+  arr.forEach(r => {
+    const k = r[key] || 'Unknown';
+    m[k] = (m[k] || 0) + 1;
+  });
+  return m;
+}
+
+function sortEntries(obj, desc=true) {
+  return Object.entries(obj).sort((a,b) => desc ? b[1]-a[1] : a[1]-b[1]);
+}
+
+function destroyChart(id) {
+  if (charts[id]) { charts[id].destroy(); delete charts[id]; }
+}
+
+function setFilterFromChart(field, label) {
+  const selId = FILTER_SELECT[field];
+  if (!selId) return;
+  const el = document.getElementById(selId);
+  // toggle: if already selected, clear
+  if (el.value === label) {
+    el.value = '';
+  } else {
+    // ensure option exists
+    let found = false;
+    for (const o of el.options) if (o.value === label) { found = true; break; }
+    if (!found && label) {
+      const opt = document.createElement('option');
+      opt.value = label; opt.textContent = label;
+      el.appendChild(opt);
+    }
+    el.value = label;
+  }
+  applyFilters();
+}
+
+function onChartClick(chartId) {
+  return (evt, elements) => {
+    if (!elements.length) return;
+    const chart = charts[chartId];
+    if (!chart) return;
+    const idx = elements[0].index;
+    const label = chart.data.labels[idx];
+    const field = CHART_FILTER_MAP[chartId];
+    if (field && label != null) setFilterFromChart(field, label);
+  };
+}
+
+function applyFilters() {
+  document.getElementById('loading').classList.add('show');
+  setTimeout(() => {
+    const ut = val('fUserType');
+    const g = val('fGender');
+    const c = val('fCountry');
+    const e = val('fEdu');
+    const t = val('fTool');
+    const p = val('fPurpose');
+    const r = val('fRec');
+    const ageMin = num('fAgeMin');
+    const ageMax = num('fAgeMax');
+    const hrsMin = num('fHoursMin');
+    const prodMin = num('fProdMin');
+
+    filtered = RAW.records.filter(row => {
+      if (ut && row.User_Type !== ut) return false;
+      if (g && row.Gender !== g) return false;
+      if (c && row.Country !== c) return false;
+      if (e && row.Education_Level !== e) return false;
+      if (t && row.AI_Tool !== t) return false;
+      if (p && row.AI_Purpose !== p) return false;
+      if (r && row.Would_Recommend !== r) return false;
+      if (professionFilter && row.Profession !== professionFilter) return false;
+      if (ageMin != null && (row.Age == null || row.Age < ageMin)) return false;
+      if (ageMax != null && (row.Age == null || row.Age > ageMax)) return false;
+      if (hrsMin != null && (row.AI_Usage_Hours_Per_Day == null || row.AI_Usage_Hours_Per_Day < hrsMin)) return false;
+      if (prodMin != null && (row.Productivity_Score == null || row.Productivity_Score < prodMin)) return false;
+      return true;
+    });
+    renderActiveChips();
+    renderAll();
+    document.getElementById('loading').classList.remove('show');
+  }, 20);
+}
+
+function resetFilters() {
+  ['fUserType','fGender','fCountry','fEdu','fTool','fPurpose','fRec'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  ['fAgeMin','fAgeMax','fHoursMin','fProdMin'].forEach(id => document.getElementById(id).value = '');
+  professionFilter = null;
+  filtered = [...RAW.records];
+  renderActiveChips();
+  renderAll();
+}
+
+function renderActiveChips() {
+  const pairs = [
+    ['User Type', 'fUserType'],
+    ['Gender', 'fGender'],
+    ['Country', 'fCountry'],
+    ['Education', 'fEdu'],
+    ['Tool', 'fTool'],
+    ['Purpose', 'fPurpose'],
+    ['Recommend', 'fRec']
+  ];
+  const box = document.getElementById('activeFilters');
+  box.innerHTML = '';
+  pairs.forEach(([label, id]) => {
+    const v = val(id);
+    if (!v) return;
+    const chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.innerHTML = `${label}: ${v} <button type="button" title="Clear" aria-label="Clear">×</button>`;
+    chip.querySelector('button').onclick = () => {
+      document.getElementById(id).value = '';
+      applyFilters();
+    };
+    box.appendChild(chip);
+  });
+  if (professionFilter) {
+    const chip = document.createElement('span');
+    chip.className = 'chip';
+    const short = professionFilter.length > 36 ? professionFilter.slice(0,36)+'…' : professionFilter;
+    chip.innerHTML = `Profession: ${short} <button type="button" title="Clear">×</button>`;
+    chip.querySelector('button').onclick = () => { professionFilter = null; applyFilters(); };
+    box.appendChild(chip);
+  }
+  const amin = val('fAgeMin'), amax = val('fAgeMax');
+  if (amin || amax) {
+    const chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.innerHTML = `Age: ${amin||'…'}–${amax||'…'} <button type="button" title="Clear">×</button>`;
+    chip.querySelector('button').onclick = () => {
+      document.getElementById('fAgeMin').value = '';
+      document.getElementById('fAgeMax').value = '';
+      applyFilters();
+    };
+    box.appendChild(chip);
+  }
+  if (val('fHoursMin')) {
+    const chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.innerHTML = `Min hrs/day: ${val('fHoursMin')} <button type="button" title="Clear">×</button>`;
+    chip.querySelector('button').onclick = () => {
+      document.getElementById('fHoursMin').value = '';
+      applyFilters();
+    };
+    box.appendChild(chip);
+  }
+  if (val('fProdMin')) {
+    const chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.innerHTML = `Min prod: ${val('fProdMin')} <button type="button" title="Clear">×</button>`;
+    chip.querySelector('button').onclick = () => {
+      document.getElementById('fProdMin').value = '';
+      applyFilters();
+    };
+    box.appendChild(chip);
+  }
+}
+
+function fmt(n, d=1) {
+  if (n == null || isNaN(n)) return '—';
+  return Number(n).toFixed(d);
+}
+
+function renderKPIs() {
+  const n = filtered.length;
+  const stu = filtered.filter(r => r.User_Type === 'Student').length;
+  const pro = filtered.filter(r => r.User_Type === 'Professional').length;
+  document.getElementById('kN').textContent = n;
+  document.getElementById('kStu').textContent = stu;
+  document.getElementById('kStuPct').textContent = n ? (100*stu/n).toFixed(0) + '% of filtered' : '—';
+  document.getElementById('kPro').textContent = pro;
+  document.getElementById('kProPct').textContent = n ? (100*pro/n).toFixed(0) + '% of filtered' : '—';
+  document.getElementById('kHrs').textContent = fmt(avg(filtered, 'AI_Usage_Hours_Per_Day'));
+  document.getElementById('kProd').textContent = fmt(avg(filtered, 'Productivity_Score'));
+  document.getElementById('kSat').textContent = fmt(avg(filtered, 'Satisfaction_Score'));
+  document.getElementById('kSaved').textContent = fmt(avg(filtered, 'Time_Saved_Hours_Per_Week'));
+  const yes = filtered.filter(r => r.Would_Recommend === 'Yes').length;
+  document.getElementById('kRec').textContent = n ? (100*yes/n).toFixed(0) + '%' : '—';
+  document.getElementById('shownN').textContent = n;
+  document.getElementById('allN').textContent = RAW.records.length;
+  document.getElementById('totalN').textContent = RAW.records.length;
+}
+
+function doughnut(id, labels, values, insightId, insightFn) {
+  destroyChart(id);
+  const ctx = document.getElementById(id).getContext('2d');
+  charts[id] = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [{ data: values, backgroundColor: PALETTE.slice(0, labels.length), borderWidth: 2, borderColor: '#fff' }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      onClick: onChartClick(id),
+      plugins: {
+        legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 }, color: '#475569' } },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const total = ctx.dataset.data.reduce((a,b)=>a+b,0) || 1;
+              return ` ${ctx.label}: ${ctx.raw} (${(100*ctx.raw/total).toFixed(1)}%)`;
+            }
+          }
+        }
+      }
+    }
+  });
+  if (insightId && insightFn) document.getElementById(insightId).innerHTML = insightFn(labels, values);
+}
+
+function barH(id, labels, values, insightId, insightFn, color, valueLabel) {
+  destroyChart(id);
+  const ctx = document.getElementById(id).getContext('2d');
+  charts[id] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{ data: values, backgroundColor: color || COLORS.blue, borderRadius: 6, barThickness: 14 }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      onClick: onChartClick(id),
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => valueLabel
+              ? ` ${valueLabel}: ${Number(ctx.raw).toFixed(2)}`
+              : ` Count: ${ctx.raw}`
+          }
+        }
+      },
+      scales: {
+        x: { grid: { color: '#f1f5f9' }, ticks: { precision: 0, color: '#64748b' } },
+        y: { grid: { display: false }, ticks: { color: '#475569' } }
+      }
+    }
+  });
+  if (insightId && insightFn) document.getElementById(insightId).innerHTML = insightFn(labels, values);
+}
+
+function barV(id, labels, datasets, insightId, insightFn, clickField) {
+  destroyChart(id);
+  const ctx = document.getElementById(id).getContext('2d');
+  charts[id] = new Chart(ctx, {
+    type: 'bar',
+    data: { labels, datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      onClick: (evt, elements) => {
+        if (!elements.length) return;
+        const idx = elements[0].index;
+        const label = charts[id].data.labels[idx];
+        const field = clickField || CHART_FILTER_MAP[id];
+        if (field && label != null) setFilterFromChart(field, label);
+      },
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 }, color: '#475569' } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#64748b' } },
+        y: { grid: { color: '#f1f5f9' }, beginAtZero: true, ticks: { color: '#64748b' } }
+      }
+    }
+  });
+  if (insightId && insightFn) document.getElementById(insightId).innerHTML = insightFn();
+}
+
+function renderAll() {
+  renderKPIs();
+
+  const ut = countBy(filtered, 'User_Type');
+  doughnut('cUserType', Object.keys(ut), Object.values(ut), 'iUserType', (l,v) => {
+    const total = v.reduce((a,b)=>a+b,0) || 1;
+    const stu = ut['Student'] || 0, pro = ut['Professional'] || 0;
+    return `In the current filter, <strong>${(100*stu/total).toFixed(0)}%</strong> are students and <strong>${(100*pro/total).toFixed(0)}%</strong> are professionals.`;
+  });
+
+  const gen = countBy(filtered, 'Gender');
+  doughnut('cGender', Object.keys(gen), Object.values(gen), 'iGender', (l,v) => {
+    const total = v.reduce((a,b)=>a+b,0) || 1;
+    const top = sortEntries(gen)[0];
+    return `<strong>${top[0]}</strong> is the largest group (${(100*top[1]/total).toFixed(0)}%).`;
+  });
+
+  const edu = countBy(filtered, 'Education_Level');
+  const eduS = sortEntries(edu);
+  barH('cEdu', eduS.map(x=>x[0]), eduS.map(x=>x[1]), 'iEdu', (l,v) => {
+    return `Most respondents hold a <strong>${l[0]}</strong> (${v[0]} people).`;
+  }, COLORS.indigo);
+
+  const cty = countBy(filtered, 'Country');
+  const ctyS = sortEntries(cty).slice(0, 12);
+  barH('cCountry', ctyS.map(x=>x[0]), ctyS.map(x=>x[1]), 'iCountry', (l,v) => {
+    return `Leading countries: <strong>${l.slice(0,3).join(', ')}</strong>.`;
+  }, COLORS.sky);
+
+  const tool = countBy(filtered, 'AI_Tool');
+  const toolS = sortEntries(tool);
+  barH('cTool', toolS.map(x=>x[0]), toolS.map(x=>x[1]), 'iTool', (l,v) => {
+    const share = (100 * v[0] / (v.reduce((a,b)=>a+b,0)||1)).toFixed(0);
+    return `<strong>${l[0]}</strong> leads with ~${share}% share.`;
+  }, COLORS.blue);
+
+  const pur = countBy(filtered, 'AI_Purpose');
+  const purS = sortEntries(pur);
+  barH('cPurpose', purS.map(x=>x[0]), purS.map(x=>x[1]), 'iPurpose', (l,v) => {
+    return `Top use-case is <strong>${l[0]}</strong>, followed by ${l[1] || '—'}.`;
+  }, COLORS.green);
+
+  const purposes = [...new Set(filtered.map(r => r.AI_Purpose || 'Unknown'))].sort();
+  const types = ['Student', 'Professional'];
+  const ds = types.map((t, i) => ({
+    label: t,
+    data: purposes.map(p => filtered.filter(r => r.User_Type === t && (r.AI_Purpose||'Unknown') === p).length),
+    backgroundColor: i === 0 ? COLORS.sky : COLORS.blue,
+    borderRadius: 4
+  }));
+  barV('cPurposeByType', purposes, ds, 'iPurposeByType', () => {
+    const stuTop = purposes.map(p => ({p, n: filtered.filter(r => r.User_Type==='Student' && r.AI_Purpose===p).length})).sort((a,b)=>b.n-a.n)[0];
+    const proTop = purposes.map(p => ({p, n: filtered.filter(r => r.User_Type==='Professional' && r.AI_Purpose===p).length})).sort((a,b)=>b.n-a.n)[0];
+    return `Students lean toward <strong>${stuTop?.p || '—'}</strong>; professionals toward <strong>${proTop?.p || '—'}</strong>.`;
+  }, 'AI_Purpose');
+
+  const metrics = ['Productivity_Score','Accuracy_Rating','Satisfaction_Score','Time_Saved_Hours_Per_Week'];
+  const metricLabels = ['Productivity','Accuracy','Satisfaction','Time Saved (hrs/wk)'];
+  const impactDS = types.map((t, i) => ({
+    label: t,
+    data: metrics.map(m => {
+      const a = avg(filtered.filter(r => r.User_Type === t), m);
+      return a == null ? 0 : +a.toFixed(2);
+    }),
+    backgroundColor: i === 0 ? COLORS.sky : COLORS.blue,
+    borderRadius: 4
+  }));
+  destroyChart('cImpactByType');
+  charts['cImpactByType'] = new Chart(document.getElementById('cImpactByType').getContext('2d'), {
+    type: 'bar',
+    data: { labels: metricLabels, datasets: impactDS },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      onClick: (evt, els) => {
+        if (!els.length) return;
+        const dsIndex = els[0].datasetIndex;
+        const typeLabel = impactDS[dsIndex] && impactDS[dsIndex].label;
+        if (typeLabel) setFilterFromChart('User_Type', typeLabel);
+      },
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 }, color: '#475569' } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#64748b' } },
+        y: { grid: { color: '#f1f5f9' }, beginAtZero: true, ticks: { color: '#64748b' } }
+      }
+    }
+  });
+  {
+    const sProd = avg(filtered.filter(r=>r.User_Type==='Student'), 'Productivity_Score');
+    const pProd = avg(filtered.filter(r=>r.User_Type==='Professional'), 'Productivity_Score');
+    document.getElementById('iImpactByType').innerHTML = (sProd == null || pProd == null)
+      ? 'Insufficient data for comparison.'
+      : `Professionals avg productivity <strong>${fmt(pProd)}</strong> vs students <strong>${fmt(sProd)}</strong>. Click Student or Professional bars to filter.`;
+  }
+
+  // Productivity by tool — accurate mean + n in tooltip
+  const toolsSorted = sortEntries(tool).map(x => x[0]);
+  const prodMeans = [];
+  const prodNs = [];
+  toolsSorted.forEach(t => {
+    const rows = filtered.filter(r => r.AI_Tool === t && r.Productivity_Score != null);
+    prodNs.push(rows.length);
+    prodMeans.push(rows.length ? rows.reduce((a,r)=>a+r.Productivity_Score,0)/rows.length : 0);
+  });
+  destroyChart('cProdByTool');
+  charts['cProdByTool'] = new Chart(document.getElementById('cProdByTool').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: toolsSorted,
+      datasets: [{ data: prodMeans.map(x=>+x.toFixed(2)), backgroundColor: COLORS.amber, borderRadius: 6, barThickness: 14 }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      onClick: onChartClick('cProdByTool'),
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const i = ctx.dataIndex;
+              return ` Avg productivity: ${ctx.raw} (n=${prodNs[i]})`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: { grid: { color: '#f1f5f9' }, ticks: { color: '#64748b' }, title: { display: true, text: 'Avg Productivity Score', color: '#64748b' } },
+        y: { grid: { display: false }, ticks: { color: '#475569' } }
+      }
+    }
+  });
+  const maxI = prodMeans.indexOf(Math.max(...prodMeans));
+  document.getElementById('iProdByTool').innerHTML =
+    `Highest average productivity: <strong>${toolsSorted[maxI]}</strong> (${prodMeans[maxI].toFixed(2)}, n=${prodNs[maxI]}). Overall filtered mean: <strong>${fmt(avg(filtered,'Productivity_Score'))}</strong>.`;
+
+  destroyChart('cScatter');
+  const pts = filtered.filter(r => r.AI_Usage_Hours_Per_Day != null && r.Time_Saved_Hours_Per_Week != null)
+    .map(r => ({ x: r.AI_Usage_Hours_Per_Day, y: r.Time_Saved_Hours_Per_Week }));
+  charts['cScatter'] = new Chart(document.getElementById('cScatter').getContext('2d'), {
+    type: 'scatter',
+    data: {
+      datasets: [{
+        label: 'Users', data: pts,
+        backgroundColor: 'rgba(37,99,235,.5)', borderColor: COLORS.blue,
+        pointRadius: 5, pointHoverRadius: 7
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { title: { display: true, text: 'AI hours / day', color: '#64748b' }, grid: { color: '#f1f5f9' }, ticks: { color: '#64748b' } },
+        y: { title: { display: true, text: 'Time saved (hrs / week)', color: '#64748b' }, grid: { color: '#f1f5f9' }, ticks: { color: '#64748b' } }
+      }
+    }
+  });
+  let corrNote = 'No clear pattern with current filters.';
+  if (pts.length >= 8) {
+    const xs = pts.map(p=>p.x), ys = pts.map(p=>p.y);
+    const mx = xs.reduce((a,b)=>a+b,0)/xs.length, my = ys.reduce((a,b)=>a+b,0)/ys.length;
+    let nume=0, dx=0, dy=0;
+    for (let i=0;i<xs.length;i++){ nume+=(xs[i]-mx)*(ys[i]-my); dx+=(xs[i]-mx)**2; dy+=(ys[i]-my)**2; }
+    const r = nume / Math.sqrt(dx*dy || 1);
+    corrNote = `Correlation ≈ <strong>${r.toFixed(2)}</strong> (${pts.length} points). ${r > 0.25 ? 'Higher daily use tends to pair with more weekly time saved.' : r < -0.15 ? 'Weak or inverse link.' : 'Weak relationship; task type and skill likely dominate.'}`;
+  }
+  document.getElementById('iScatter').innerHTML = corrNote;
+
+  const recCats = ['Yes','Maybe','No','Unknown'];
+  const recDS = types.map((t,i) => ({
+    label: t,
+    data: recCats.map(rc => filtered.filter(r => r.User_Type === t && (r.Would_Recommend||'Unknown') === rc).length),
+    backgroundColor: i===0 ? COLORS.sky : COLORS.blue,
+    borderRadius: 4
+  }));
+  barV('cRec', recCats, recDS, 'iRec', () => {
+    const yesPct = filtered.length ? (100 * filtered.filter(r=>r.Would_Recommend==='Yes').length / filtered.length).toFixed(0) : 0;
+    return `Overall, <strong>${yesPct}%</strong> of filtered users would recommend AI tools.`;
+  }, 'Would_Recommend');
+
+  const ages = filtered.map(r => r.Age).filter(v => v != null);
+  const ageBins = ['16-20','21-25','26-30','31-40','41-50','51+'];
+  const ageCounts = [0,0,0,0,0,0];
+  ages.forEach(a => {
+    if (a<=20) ageCounts[0]++;
+    else if (a<=25) ageCounts[1]++;
+    else if (a<=30) ageCounts[2]++;
+    else if (a<=40) ageCounts[3]++;
+    else if (a<=50) ageCounts[4]++;
+    else ageCounts[5]++;
+  });
+  destroyChart('cAge');
+  const ageRanges = [[16,20],[21,25],[26,30],[31,40],[41,50],[51,100]];
+  charts['cAge'] = new Chart(document.getElementById('cAge').getContext('2d'), {
+    type: 'bar',
+    data: { labels: ageBins, datasets: [{ data: ageCounts, backgroundColor: COLORS.teal, borderRadius: 6 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      onClick: (evt, els) => {
+        if (!els.length) return;
+        const i = els[0].index;
+        const [lo, hi] = ageRanges[i];
+        const curMin = val('fAgeMin'), curMax = val('fAgeMax');
+        if (curMin === String(lo) && curMax === String(hi)) {
+          document.getElementById('fAgeMin').value = '';
+          document.getElementById('fAgeMax').value = '';
+        } else {
+          document.getElementById('fAgeMin').value = lo;
+          document.getElementById('fAgeMax').value = hi;
+        }
+        applyFilters();
+      },
+      plugins: { legend: { display: false } },
+      scales: { x: { grid: { display: false }, ticks: { color: '#64748b' } }, y: { grid: { color: '#f1f5f9' }, ticks: { precision: 0, color: '#64748b' } } }
+    }
+  });
+  document.getElementById('iAge').innerHTML = ages.length
+    ? `Median age ≈ <strong>${ages.sort((a,b)=>a-b)[Math.floor(ages.length/2)].toFixed(0)}</strong>.`
+    : 'No age data in current filter.';
+
+  const hrs = filtered.map(r => r.AI_Usage_Hours_Per_Day).filter(v => v != null);
+  const hBins = ['0–1','1–2','2–4','4–6','6+'];
+  const hCounts = [0,0,0,0,0];
+  hrs.forEach(h => {
+    if (h<=1) hCounts[0]++;
+    else if (h<=2) hCounts[1]++;
+    else if (h<=4) hCounts[2]++;
+    else if (h<=6) hCounts[3]++;
+    else hCounts[4]++;
+  });
+  destroyChart('cHours');
+  const hoursMins = [0, 1.01, 2.01, 4.01, 6.01];
+  charts['cHours'] = new Chart(document.getElementById('cHours').getContext('2d'), {
+    type: 'bar',
+    data: { labels: hBins, datasets: [{ data: hCounts, backgroundColor: COLORS.rose, borderRadius: 6 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      onClick: (evt, els) => {
+        if (!els.length) return;
+        const i = els[0].index;
+        const minV = hoursMins[i];
+        const cur = val('fHoursMin');
+        // toggle: same bin clears; else set floor of bin
+        if (cur !== '' && Math.abs(parseFloat(cur) - minV) < 0.02) {
+          document.getElementById('fHoursMin').value = '';
+        } else {
+          document.getElementById('fHoursMin').value = minV === 0 ? 0 : minV;
+        }
+        applyFilters();
+      },
+      plugins: { legend: { display: false } },
+      scales: { x: { grid: { display: false }, ticks: { color: '#64748b' } }, y: { grid: { color: '#f1f5f9' }, ticks: { precision: 0, color: '#64748b' } } }
+    }
+  });
+  document.getElementById('iHours').innerHTML = hrs.length
+    ? `Mean daily use is <strong>${fmt(avg(filtered,'AI_Usage_Hours_Per_Day'))} hrs</strong>.`
+    : 'No usage-hour data.';
+
+  const inc = filtered.map(r => r.Monthly_Income).filter(v => v != null && v >= 0);
+  const iBins = ['0','1–500','501–2k','2k–5k','5k+'];
+  const iCounts = [0,0,0,0,0];
+  inc.forEach(x => {
+    if (x===0) iCounts[0]++;
+    else if (x<=500) iCounts[1]++;
+    else if (x<=2000) iCounts[2]++;
+    else if (x<=5000) iCounts[3]++;
+    else iCounts[4]++;
+  });
+  destroyChart('cIncome');
+  charts['cIncome'] = new Chart(document.getElementById('cIncome').getContext('2d'), {
+    type: 'bar',
+    data: { labels: iBins, datasets: [{ data: iCounts, backgroundColor: COLORS.amber, borderRadius: 6 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+      scales: { x: { grid: { display: false }, ticks: { color: '#64748b' } }, y: { grid: { color: '#f1f5f9' }, ticks: { precision: 0, color: '#64748b' } } } }
+  });
+  document.getElementById('iIncome').innerHTML = inc.length
+    ? `Income bands reflect many students near zero and a wide professional range.`
+    : 'No income data.';
+
+  const prof = countBy(filtered, 'Profession');
+  const profS = sortEntries(prof).filter(x => x[0] !== 'Unknown').slice(0, 12);
+  {
+    const profLabelsFull = profS.map(x => x[0]);
+    const profLabelsShort = profS.map(x => x[0].length > 42 ? x[0].slice(0,42)+'…' : x[0]);
+    const profVals = profS.map(x => x[1]);
+    destroyChart('cProf');
+    charts['cProf'] = new Chart(document.getElementById('cProf').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: profLabelsShort,
+        datasets: [{ data: profVals, backgroundColor: COLORS.violet, borderRadius: 6, barThickness: 14 }]
+      },
+      options: {
+        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+        onClick: (evt, els) => {
+          if (!els.length) return;
+          const full = profLabelsFull[els[0].index];
+          professionFilter = (professionFilter === full) ? null : full;
+          applyFilters();
+        },
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { color: '#f1f5f9' }, ticks: { precision: 0, color: '#64748b' } },
+          y: { grid: { display: false }, ticks: { color: '#475569' } }
+        }
+      }
+    });
+    document.getElementById('iProf').innerHTML = `Most frequent: <strong>${profLabelsFull[0] || '—'}</strong>. Click a bar to filter.`;
+  }
+
+  const topTools = sortEntries(tool).slice(0,6).map(x=>x[0]);
+  const topPurps = sortEntries(pur).slice(0,7).map(x=>x[0]);
+  let heatHtml = '<table><thead><tr><th>Purpose \\ Tool</th>';
+  topTools.forEach(t => heatHtml += `<th>${t}</th>`);
+  heatHtml += '</tr></thead><tbody>';
+  topPurps.forEach(p => {
+    heatHtml += `<tr><td>${p}</td>`;
+    topTools.forEach(t => {
+      const n = filtered.filter(r => (r.AI_Purpose||'')===p && (r.AI_Tool||'')===t).length;
+      heatHtml += `<td class="num">${n || '·'}</td>`;
+    });
+    heatHtml += '</tr>';
+  });
+  heatHtml += '</tbody></table>';
+  document.getElementById('heatTable').innerHTML = heatHtml;
+  document.getElementById('iHeat').innerHTML = `Cross-tab of purpose × tool counts in the current filter.`;
+
+}
+
+fillSelect('fUserType', RAW.filters.userTypes);
+fillSelect('fGender', RAW.filters.genders);
+fillSelect('fCountry', RAW.filters.countries);
+fillSelect('fEdu', RAW.filters.eduLevels);
+fillSelect('fTool', RAW.filters.tools);
+fillSelect('fPurpose', RAW.filters.purposes);
+fillSelect('fRec', RAW.filters.recommends);
+
+['fUserType','fGender','fCountry','fEdu','fTool','fPurpose','fRec'].forEach(id => {
+  document.getElementById(id).addEventListener('change', applyFilters);
+});
+
+renderAll();
+</script>
+</body>
+</html>
