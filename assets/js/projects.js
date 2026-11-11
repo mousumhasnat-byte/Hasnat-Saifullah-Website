@@ -93,39 +93,49 @@ function toggleGameFullscreen() {
   });
 });
 
-// ── AI Usage Dashboard: full-window expand ────────────────────────────────────
-// The preview iframe is never re-created, so any filters the visitor sets inside
-// the dashboard survive the expand/collapse. Esc, the toggle button and a click
-// on the dark backdrop all close the overlay.
-function aiDashSetExpanded(on) {
-  const card = document.getElementById('aiDashCard');
-  const btn = document.getElementById('aiDashExpandBtn');
-  if (!card || !btn) return;
-  card.classList.toggle('ai-dash-fullscreen', on);
-  document.body.classList.toggle('ai-dash-locked', on);
-  btn.setAttribute('aria-pressed', String(on));
-  btn.setAttribute('aria-label', on ? 'Exit full window' : 'Expand dashboard to full window');
-  btn.title = on ? 'Exit full window (Esc)' : 'Expand dashboard to full window';
-  const icon = btn.querySelector('i');
-  if (icon) icon.className = on ? 'fas fa-compress-alt' : 'fas fa-expand-alt';
-  if (on) btn.focus();
+// ── Embedded dashboard previews: full-window expand ───────────────────────────
+// Shared by every case-study card that embeds a live dashboard. The preview
+// iframe is never re-created, so any filters the visitor sets inside the
+// dashboard survive the expand/collapse. Esc, the toggle button and a click on
+// the dark backdrop all close the overlay.
+function dashSetExpanded(cardId, on) {
+  const card = document.getElementById(cardId);
+  if (!card) return;
+  const btn = card.querySelector('[data-dash-toggle]');
+  card.classList.toggle('dash-fullscreen', on);
+  document.body.classList.toggle('dash-locked', on);
+  if (btn) {
+    btn.setAttribute('aria-pressed', String(on));
+    btn.setAttribute('aria-label', on ? 'Exit full window' : 'Expand dashboard to full window');
+    btn.title = on ? 'Exit full window (Esc)' : 'Expand dashboard to full window';
+    const icon = btn.querySelector('i');
+    if (icon) icon.className = on ? 'fas fa-compress-alt' : 'fas fa-expand-alt';
+    if (on) btn.focus();
+  }
 }
 
-function toggleAiDashFullscreen() {
-  const card = document.getElementById('aiDashCard');
+function toggleDashFullscreen(cardId) {
+  const card = document.getElementById(cardId);
   if (!card) return;
-  aiDashSetExpanded(!card.classList.contains('ai-dash-fullscreen'));
+  dashSetExpanded(cardId, !card.classList.contains('dash-fullscreen'));
+}
+
+function closeOpenDash() {
+  document.querySelectorAll('.dash-card.dash-fullscreen').forEach(card => {
+    dashSetExpanded(card.id, false);
+  });
 }
 
 document.addEventListener('keydown', e => {
-  if (e.key !== 'Escape') return;
-  const card = document.getElementById('aiDashCard');
-  if (card && card.classList.contains('ai-dash-fullscreen')) aiDashSetExpanded(false);
+  if (e.key === 'Escape') closeOpenDash();
 });
 
-// Clicks inside the iframe don't bubble here — only the dark padding closes it.
-document.getElementById('aiDashCard')?.addEventListener('click', e => {
-  if (e.target.id === 'aiDashCard') aiDashSetExpanded(false);
+// Clicks inside an iframe don't bubble here — only the dark padding closes it.
+document.addEventListener('click', e => {
+  const card = e.target;
+  if (card && card.classList && card.classList.contains('dash-card') && card.classList.contains('dash-fullscreen')) {
+    dashSetExpanded(card.id, false);
+  }
 });
 
 // ── Image Modal (Fullscreen) ───────────────────────────────────────────────────

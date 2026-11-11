@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Projects | Hasnat Saifullah</title>
-  <meta name="description" content="Projects by Hasnat Saifullah: Bike Lifecycle Tracker, MIS Dashboard Suite (Loan &amp; Deposit), AI usage analytics on the Kaggle dataset, and corporate branding case studies.">
+  <meta name="description" content="Projects by Hasnat Saifullah: Bike Lifecycle Tracker, MIS Dashboard Suite (Loan &amp; Deposit), global video game sales analysis on the Maven Analytics dataset, AI usage analytics on the Kaggle dataset, and corporate branding case studies.">
   <link rel="canonical" href="https://hasnat-saifullah.example/projects.html" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta property="og:title" content="Projects | Hasnat Saifullah" />
@@ -63,6 +63,17 @@
             "position": 3,
             "item": {
               "@type": "CreativeWork",
+              "name": "Global Video Game Sales & Industry Trends — Case Study",
+              "url": "https://hasnat-saifullah.example/projects.html#video-game-sales",
+              "creator": { "@type": "Person", "name": "Hasnat Saifullah" },
+              "about": "Interactive exploratory data analysis dashboard on 17,463 video game sales records covering 11,934 titles, 39 consoles and 20 genres from 1977 to 2020, built with Apache ECharts and vanilla JavaScript"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "item": {
+              "@type": "CreativeWork",
               "name": "AI Usage & Impact on Students & Professionals — Case Study",
               "url": "https://hasnat-saifullah.example/projects.html#ai-usage-impact",
               "creator": { "@type": "Person", "name": "Hasnat Saifullah" },
@@ -71,7 +82,7 @@
           },
           {
             "@type": "ListItem",
-            "position": 4,
+            "position": 5,
             "item": {
               "@type": "CreativeWork",
               "name": "Corporate Branding & Creative Design",
@@ -82,7 +93,7 @@
           },
           {
             "@type": "ListItem",
-            "position": 5,
+            "position": 6,
             "item": {
               "@type": "VideoGame",
               "name": "Flying Tesla of BD — Mission Impossible",
@@ -364,7 +375,97 @@
     </div>
   </section>
 
-  <!-- 3: AI Usage & Impact (Kaggle case study) -->
+  <!-- 3: Video Game Sales (Maven Analytics case study) -->
+  <section id="video-game-sales" class="grid lg:grid-cols-2 gap-12 lg:items-stretch bg-white/50 p-8 rounded-3xl border border-slate-200 shadow-lg hover:shadow-xl transition project-card-hover">
+    <div data-aos="fade-up">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-md">
+          Maven Analytics Case Study
+        </span>
+        <span class="text-blue-600 font-bold uppercase text-sm tracking-wide">Data Analytics</span>
+      </div>
+      <h2 class="text-3xl font-bold mb-4">Global Video Game Sales &amp; Industry Trends</h2>
+      <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 mb-6">
+        <p class="text-slate-600 text-sm leading-relaxed">
+          An interactive EDA dashboard built on the <strong>Maven Analytics Video Game Sales</strong> playground (Kaggle's 2024 VGChartz snapshot). The source lists 64,016 titles released 1971&ndash;2024; this build charts the <strong>17,463 platform-title records that carry sales figures</strong> &mdash; 11,934 distinct titles across 39 consoles and 20 genres, with releases running 1977&ndash;2020. It answers the playground's four core questions: which titles sold the most, which year peaked, whether consoles specialize by genre, and which games win one region while flopping in another.
+        </p>
+      </div>
+
+      <p class="font-semibold text-slate-800 flex items-center gap-2 mb-3"><i class="fas fa-lightbulb text-amber-500"></i>Key Findings</p>
+      <ul class="space-y-3 text-slate-700 text-sm mb-6">
+        <li class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+          <i class="fas fa-trophy text-amber-500 text-lg mt-1"></i>
+          <div><span class="font-bold block">GTA V is the best-seller by a wide margin</span><span class="text-xs text-slate-600">64.29M units across four platforms — about 1% of all tracked units. Its biggest single release is the PS3 version at 20.32M, ahead of every other SKU in the dataset.</span></div>
+        </li>
+        <li class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+          <i class="fas fa-chart-simple text-blue-500 text-lg mt-1"></i>
+          <div><span class="font-bold block">A long tail, not a handful of hits</span><span class="text-xs text-slate-600">The top 10 titles take just 4.6% of the 6.59B units sold and the top 100 take 19.5% — the market is carried by thousands of mid-sized titles rather than a few blockbusters.</span></div>
+        </li>
+        <li class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+          <i class="fas fa-arrow-trend-down text-emerald-500 text-lg mt-1"></i>
+          <div><span class="font-bold block">Sales peaked in 2008 and the disc era is over</span><span class="text-xs text-slate-600">2008 releases alone moved 537.84M units; the 2000s produced 3.32B vs 2.52B in the 2010s (down 24%). Part of the fall is an artefact — these are lifetime <em>physical</em> units, so recent years haven't finished accumulating.</span></div>
+        </li>
+        <li class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+          <i class="fas fa-earth-americas text-indigo-500 text-lg mt-1"></i>
+          <div><span class="font-bold block">North America is half the global market</span><span class="text-xs text-slate-600">NA 50.7%, Europe/PAL 29.0%, Japan 10.3% and the rest of the world 9.9% of 6.59B units.</span></div>
+        </li>
+        <li class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+          <i class="fas fa-gamepad text-purple-500 text-lg mt-1"></i>
+          <div><span class="font-bold block">Consoles really do specialize by genre</span><span class="text-xs text-slate-600">Wii U leans Music (11% of its units vs 0.8% market-wide, 13.9&times;) and Action-Adventure (8.9&times;); Game Boy leans Puzzle (7.1&times;); DS leans Simulation (19%, 4.3&times;); X360, PS4 and Xbox One lean Shooter (27&ndash;34%).</span></div>
+        </li>
+        <li class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+          <i class="fas fa-arrows-left-right text-red-500 text-lg mt-1"></i>
+          <div><span class="font-bold block">Regional hits and flops are stark</span><span class="text-xs text-slate-600">Hot Shots Golf sold 76% of its units in Japan (2.13M) against 0.29M in North America; FIFA 15 took 69% in Europe (12.45M) but only 0.15M in Japan; GTA V did 26.19M in NA and just 1.66M in Japan. Xbox One drew only 0.1% of its units from Japan, the PSP 21.1%.</span></div>
+        </li>
+        <li class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+          <i class="fas fa-star-half-stroke text-amber-500 text-lg mt-1"></i>
+          <div><span class="font-bold block">Critic scores barely move units</span><span class="text-xs text-slate-600">Only 22.8% of records carry a score (3,984 of 17,463) and the correlation with sales is moderate at best (r = 0.29). The 50 best-sellers average 8.84/10 vs 7.11/10 overall — reviews help at the top, but brand and IP do the selling.</span></div>
+        </li>
+        <li class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+          <i class="fas fa-building text-sky-600 text-lg mt-1"></i>
+          <div><span class="font-bold block">Publishing power is concentrated</span><span class="text-xs text-slate-600">Activision leads with 11.0% of all units, then Electronic Arts (9.8%) and EA Sports (7.4%) — the top three control 28.1% across 672 publishers, with a very long tail behind them.</span></div>
+        </li>
+      </ul>
+
+      <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6 text-xs text-slate-600">
+        <strong class="text-slate-800">Method note:</strong> units are lifetime <em>physical</em> copies in millions (VGChartz 2024 snapshot) — digital and mobile sales aren't counted, which is why 2019 and 2020 look almost empty (2.55M and 3.45M). Averages and correlations use only the 3,984 records that have a critic score. A further 5,955 titles are listed in the source without sales figures and are excluded from every total.
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4">
+        <div class="flex flex-wrap gap-2">
+          <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded">Maven Dataset</span>
+          <span class="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-semibold rounded">Data Cleaning</span>
+          <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded">EDA</span>
+          <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-semibold rounded">Apache ECharts</span>
+          <span class="px-3 py-1 bg-sky-100 text-sky-700 text-xs font-semibold rounded">Vanilla JS</span>
+          <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded">Interactive Filtering</span>
+        </div>
+        <a href="https://mavenanalytics.io/data-playground/video-game-sales" target="_blank" rel="noopener noreferrer" class="text-blue-600 font-bold text-sm hover:underline flex items-center gap-2">
+          Maven dataset <i class="fas fa-external-link-alt"></i>
+        </a>
+      </div>
+    </div>
+
+    <div id="videoGameCard" class="dash-card rounded-xl shadow-xl border border-slate-200 overflow-hidden bg-slate-100">
+      <iframe
+        id="videoGameFrame"
+        src="assets/docs/video-games-dashboard.html"
+        title="Global Video Game Sales — interactive dashboard preview"
+        class="dash-frame"
+        loading="lazy"></iframe>
+      <span class="dash-badge">Live View</span>
+      <div class="dash-toolbar">
+        <button id="videoGameExpandBtn" type="button" data-dash-toggle onclick="toggleDashFullscreen('videoGameCard')" aria-label="Expand dashboard to full window" aria-pressed="false" title="Expand dashboard to full window" class="dash-btn">
+          <i class="fas fa-expand-alt"></i>
+        </button>
+        <a href="assets/docs/video-games-dashboard.html" target="_blank" rel="noopener noreferrer" aria-label="Open dashboard in a new tab" title="Open in new tab" class="dash-btn">
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4: AI Usage & Impact (Kaggle case study) -->
   <section id="ai-usage-impact" class="grid lg:grid-cols-2 gap-12 lg:items-stretch bg-white/50 p-8 rounded-3xl border border-slate-200 shadow-lg hover:shadow-xl transition project-card-hover">
     <div data-aos="fade-up">
       <div class="flex items-center gap-3 mb-4">
@@ -435,26 +536,26 @@
       </div>
     </div>
 
-    <div id="aiDashCard" class="relative rounded-xl shadow-xl border border-slate-200 overflow-hidden bg-slate-100">
+    <div id="aiDashCard" class="dash-card rounded-xl shadow-xl border border-slate-200 overflow-hidden bg-slate-100">
       <iframe
         id="aiDashFrame"
         src="assets/docs/AI_Usage_Impact_Dashboard.html"
-        title="AI Usage & Impact Dashboard — interactive preview"
-        class="ai-dash-frame"
+        title="AI Usage &amp; Impact Dashboard — interactive preview"
+        class="dash-frame"
         loading="lazy"></iframe>
-      <span class="ai-dash-badge">Live View</span>
-      <div class="ai-dash-toolbar">
-        <button id="aiDashExpandBtn" type="button" onclick="toggleAiDashFullscreen()" aria-label="Expand dashboard to full window" aria-pressed="false" title="Expand dashboard to full window" class="ai-dash-btn">
+      <span class="dash-badge">Live View</span>
+      <div class="dash-toolbar">
+        <button id="aiDashExpandBtn" type="button" data-dash-toggle onclick="toggleDashFullscreen('aiDashCard')" aria-label="Expand dashboard to full window" aria-pressed="false" title="Expand dashboard to full window" class="dash-btn">
           <i class="fas fa-expand-alt"></i>
         </button>
-        <a href="assets/docs/AI_Usage_Impact_Dashboard.html" target="_blank" rel="noopener noreferrer" aria-label="Open dashboard in a new tab" title="Open in new tab" class="ai-dash-btn">
+        <a href="assets/docs/AI_Usage_Impact_Dashboard.html" target="_blank" rel="noopener noreferrer" aria-label="Open dashboard in a new tab" title="Open in new tab" class="dash-btn">
           <i class="fas fa-external-link-alt"></i>
         </a>
       </div>
     </div>
   </section>
 
-  <!-- 4: Volt Flyer (web game) -->
+  <!-- 5: Volt Flyer (web game) -->
   <section id="volt-flyer" class="grid lg:grid-cols-2 gap-12 items-center bg-white/50 backdrop-blur-sm p-8 rounded-3xl border border-slate-200 shadow-lg hover:shadow-xl transition project-card-hover" data-aos="fade-up">
     <div>
       <span class="text-amber-600 font-bold uppercase text-sm">Interactive Web Game</span>
@@ -497,7 +598,7 @@
     </div>
   </section>
 
-  <!-- 5: Portfolio Monitoring -->
+  <!-- 6: Portfolio Monitoring -->
   <section id="portfolio-monitoring" class="grid lg:grid-cols-2 gap-12 items-center bg-white/50 backdrop-blur-sm p-8 rounded-3xl border border-slate-200 shadow-lg hover:shadow-xl transition project-card-hover" data-aos="fade-up">
     <div class="relative rounded-xl shadow-xl border overflow-hidden group">
       <div id="slider-project-1" class="flex transition-transform duration-500 ease-in-out w-full" style="transform:translateX(0%);">
@@ -543,7 +644,7 @@
     </div>
   </section>
 
-  <!-- 6: Creative Design -->
+  <!-- 7: Creative Design -->
   <section id="creative-design" class="grid lg:grid-cols-2 gap-12 items-center bg-white/50 backdrop-blur-sm p-8 rounded-3xl border border-slate-200 shadow-lg hover:shadow-xl transition project-card-hover" data-aos="fade-up">
     <div class="order-2 lg:order-1">
       <span class="text-indigo-600 font-bold uppercase text-sm">Visual Communication</span>
@@ -594,7 +695,7 @@
     </div>
   </section>
 
-  <!-- 7: Bifold Brochure -->
+  <!-- 8: Bifold Brochure -->
   <section id="corporate-branding" class="grid lg:grid-cols-2 gap-12 items-center bg-white/50 backdrop-blur-sm p-8 rounded-3xl border border-slate-200 shadow-lg hover:shadow-xl transition project-card-hover" data-aos="fade-up">
     <div class="relative rounded-xl shadow-xl border overflow-hidden bg-slate-200 h-[500px] md:h-[600px]">
       <iframe
