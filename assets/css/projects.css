@@ -99,3 +99,36 @@ body.dash-locked { overflow: hidden; }
   .dash-card.dash-fullscreen .dash-badge { top: 14px; left: 14px; }
   .dash-card.dash-fullscreen .dash-toolbar { top: 14px; right: 14px; }
 }
+
+/* ── Bifold brochure viewer (projects page) ─────────────────────────────────────
+   The brochure is shown as pre-rendered page images instead of an embedded PDF,
+   so it always displays even when the browser is set to download PDFs rather
+   than open them. Pages stack vertically and scroll inside the card, like a PDF
+   reader. Own rules are used (not Tailwind utilities) because tailwind.css is a
+   precompiled build that only contains classes used when it was generated. */
+.bifold-viewer {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: rgba(203, 213, 225, .6);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, .45) transparent;
+}
+
+.bifold-viewer > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+  background: #fff;
+}
+
+.bifold-viewer > img + img { margin-top: 8px; }
+
+.bifold-viewer::-webkit-scrollbar { width: 8px; }
+.bifold-viewer::-webkit-scrollbar-track { background: transparent; }
+.bifold-viewer::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, .45);
+  border-radius: 999px;
+}
+.bifold-viewer::-webkit-scrollbar-thumb:hover { background: rgba(100, 116, 139, .7); }

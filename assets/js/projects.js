@@ -140,16 +140,16 @@ document.addEventListener('click', e => {
 
 // ── Image Modal (Fullscreen) ───────────────────────────────────────────────────
 const webDashImages = [
-  'assets/images/loan_dashboard_executive_summary.png',
-  'assets/images/loan_dashboard_overview.png',
-  'assets/images/loan_dashboard_graphics.png',
-  'assets/images/loan_dashboard_recovery.png',
-  'assets/images/deposit_dashboard_executive_summary.png',
-  'assets/images/deposit_dashboard_overview.png',
-  'assets/images/deposit_dashboard_graphics.png',
-  'assets/images/deposit_dashboard_liability_team.png',
-  'assets/images/deposit_dashboard_encashments.png',
-  'assets/images/deposit_dashboard_maturity.png',
+  'assets/images/loan_dashboard_executive_summary.webp',
+  'assets/images/loan_dashboard_overview.webp',
+  'assets/images/loan_dashboard_graphics.webp',
+  'assets/images/loan_dashboard_recovery.webp',
+  'assets/images/deposit_dashboard_executive_summary.webp',
+  'assets/images/deposit_dashboard_overview.webp',
+  'assets/images/deposit_dashboard_graphics.webp',
+  'assets/images/deposit_dashboard_liability_team.webp',
+  'assets/images/deposit_dashboard_encashments.webp',
+  'assets/images/deposit_dashboard_maturity.webp',
 ];
 
 const webDashAlts = [

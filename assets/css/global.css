@@ -11,7 +11,13 @@ body > section:first-of-type p, body > section:first-of-type li { text-align: ce
 :focus-visible {
   outline: 2px solid #2563eb;
   outline-offset: 3px;
-  border-radius: 4px;
+}
+
+/* Lighter ring on dark surfaces (heroes, contact band, footers) for contrast */
+[class*="from-slate-900"] :focus-visible,
+[class*="to-slate-900"] :focus-visible,
+[class*="bg-slate-900"] :focus-visible {
+  outline-color: #93c5fd;
 }
 
 /* ── Accessibility: honour reduced-motion preference ───────────────────────── */
