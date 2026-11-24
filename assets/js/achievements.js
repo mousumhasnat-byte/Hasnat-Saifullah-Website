@@ -23,6 +23,48 @@ function renderDots(dotsId, total, goToFn) {
   setDots(dotsId, 0);
 }
 
+// Horizontal swipe for image sliders. Vertical scrolling is left to the browser
+// via `touch-action: pan-y` in global.css; a swipe only counts when the
+// horizontal movement clearly beats the vertical movement.
+function attachSliderSwipe(sliderId, moveFn) {
+  const slider = document.getElementById(sliderId);
+  if (!slider) return;
+  // Bind to the container: the visible tap often lands on an overlay child,
+  // while arrows and dots are siblings. The movement threshold ignores taps.
+  const target = slider.parentElement || slider;
+
+  let startX = null;
+  let startY = null;
+  let swiped = false;
+
+  target.addEventListener('touchstart', e => {
+    if (e.touches.length !== 1) { startX = startY = null; return; }
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    swiped = false;
+  }, { passive: true });
+
+  target.addEventListener('touchend', e => {
+    if (startX === null || startY === null || !e.changedTouches.length) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    startX = startY = null;
+    if (Math.abs(dx) < 40 || Math.abs(dx) <= Math.abs(dy)) return;
+    swiped = true;
+    moveFn(dx < 0 ? 1 : -1);
+    setTimeout(() => { swiped = false; }, 350);
+  }, { passive: true });
+
+  target.addEventListener('touchcancel', () => { startX = startY = null; }, { passive: true });
+
+  // A completed swipe must not also trigger the slide's click handler.
+  target.addEventListener('click', e => {
+    if (!swiped) return;
+    e.preventDefault();
+    e.stopPropagation();
+  }, true);
+}
+
 let bibmStep = 0;
 const bibmTotal = 3;
 function moveBibmSlider(direction) {
@@ -162,3 +204,9 @@ renderDots('dots-blfca', blfcaTotal, goToBlfcaSlide);
 renderDots('dots-regulatory', regTotal, goToRegSlide);
 renderDots('dots-bibm', bibmTotal, goToBibmSlide);
 renderDots('dots-grc', grcTotal, goToGrcSlide);
+
+attachSliderSwipe('slider-ostad-unbolt', moveOstadUnboltSlider);
+attachSliderSwipe('slider-blfca', moveBlfcaSlider);
+attachSliderSwipe('slider-regulatory', moveRegSlider);
+attachSliderSwipe('slider-bibm', moveBibmSlider);
+attachSliderSwipe('slider-grc', moveGrcSlider);

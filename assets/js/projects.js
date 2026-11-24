@@ -23,6 +23,48 @@ function renderDots(dotsId, total, goToFn) {
   setDots(dotsId, 0);
 }
 
+// Horizontal swipe for image sliders. Vertical scrolling is left to the browser
+// via `touch-action: pan-y` in global.css; a swipe only counts when the
+// horizontal movement clearly beats the vertical movement.
+function attachSliderSwipe(sliderId, moveFn) {
+  const slider = document.getElementById(sliderId);
+  if (!slider) return;
+  // Bind to the container: the visible tap often lands on an overlay child,
+  // while arrows and dots are siblings. The movement threshold ignores taps.
+  const target = slider.parentElement || slider;
+
+  let startX = null;
+  let startY = null;
+  let swiped = false;
+
+  target.addEventListener('touchstart', e => {
+    if (e.touches.length !== 1) { startX = startY = null; return; }
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    swiped = false;
+  }, { passive: true });
+
+  target.addEventListener('touchend', e => {
+    if (startX === null || startY === null || !e.changedTouches.length) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    startX = startY = null;
+    if (Math.abs(dx) < 40 || Math.abs(dx) <= Math.abs(dy)) return;
+    swiped = true;
+    moveFn(dx < 0 ? 1 : -1);
+    setTimeout(() => { swiped = false; }, 350);
+  }, { passive: true });
+
+  target.addEventListener('touchcancel', () => { startX = startY = null; }, { passive: true });
+
+  // A completed swipe must not also open the click-to-zoom modal.
+  target.addEventListener('click', e => {
+    if (!swiped) return;
+    e.preventDefault();
+    e.stopPropagation();
+  }, true);
+}
+
 let projectStep = 0;
 const projectTotal = 4;
 function moveProjectSlider(direction) {
@@ -347,6 +389,10 @@ backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior:
 renderDots('dots-web-dash', webDashTotal, goToWebDashSlide);
 renderDots('dots-project-1', projectTotal, goToProjectSlide);
 renderDots('dots-project-creative', creativeTotal, goToCreativeSlide);
+
+attachSliderSwipe('slider-web-dash', moveWebDashSlider);
+attachSliderSwipe('slider-project-1', moveProjectSlider);
+attachSliderSwipe('slider-project-creative', moveCreativeSlider);
 
 AOS.init({ duration: 700, once: true });
 

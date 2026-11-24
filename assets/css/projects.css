@@ -100,6 +100,11 @@ body.dash-locked { overflow: hidden; }
   .dash-card.dash-fullscreen .dash-toolbar { top: 14px; right: 14px; }
 }
 
+/* Touch screens get a full 44px toolbar target; desktop keeps the 38px button. */
+@media (hover: none), (pointer: coarse) {
+  .dash-btn { width: 44px; height: 44px; }
+}
+
 /* ── Bifold brochure viewer (projects page) ─────────────────────────────────────
    The brochure is shown as pre-rendered page images instead of an embedded PDF,
    so it always displays even when the browser is set to download PDFs rather
